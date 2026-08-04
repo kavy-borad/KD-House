@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://karmadude.in/sitemap.xml
