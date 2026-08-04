@@ -10,6 +10,8 @@ import {
   Award,
   Sparkles,
   ChevronDown,
+  ChevronLeft,
+  ChevronRight,
   Star,
   MessageSquare,
   ArrowRight,
@@ -22,6 +24,8 @@ import {
   FileCheck,
   ExternalLink,
   Download,
+  BookOpen,
+  CircleDot,
 } from "lucide-react";
 
 const WHATSAPP_URL =
@@ -1114,7 +1118,11 @@ export const Testers: React.FC = () => {
               return (
                 <div
                   key={idx}
-                  className="rounded-2xl bg-white border border-gray-200 overflow-hidden transition-all shadow-xs"
+                  className={`rounded-2xl bg-white border overflow-hidden transition-all duration-300 ${
+                    isOpen
+                      ? "border-[#2f8ecd]/40 shadow-md"
+                      : "border-gray-200 shadow-xs hover:border-gray-300"
+                  }`}
                 >
                   <button
                     onClick={() => setActiveFaq(isOpen ? null : idx)}
@@ -1127,16 +1135,18 @@ export const Testers: React.FC = () => {
                     />
                   </button>
 
-                  <AnimatePresence>
+                  <AnimatePresence initial={false}>
                     {isOpen && (
                       <motion.div
                         initial={{ height: 0, opacity: 0 }}
                         animate={{ height: "auto", opacity: 1 }}
                         exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.3 }}
-                        className="px-6 pb-6 text-gray-600 text-sm sm:text-base leading-relaxed border-t border-gray-100 pt-4"
+                        transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+                        className="overflow-hidden"
                       >
-                        {faq.a}
+                        <div className="px-6 pb-6 text-gray-600 text-sm sm:text-base leading-relaxed border-t border-gray-100 pt-4">
+                          {faq.a}
+                        </div>
                       </motion.div>
                     )}
                   </AnimatePresence>
@@ -1149,105 +1159,266 @@ export const Testers: React.FC = () => {
         {/* COMPLETE DEVELOPER GUIDE (12 CHAPTERS) */}
         <section className="py-12 md:py-24 px-4 md:px-12 max-w-[1600px] mx-auto bg-gray-50 rounded-[2.5rem] border border-gray-200/80">
           <div className="max-w-7xl mx-auto">
-            <div className="text-center max-w-3xl mx-auto mb-16">
-              <span className="text-xs font-bold tracking-[0.2em] text-[#2f8ecd] uppercase mb-3 block">
-                Comprehensive Knowledge Base
+            {/* Section Header — Editorial style with watermark */}
+            <div className="relative mb-10 md:mb-14 overflow-hidden">
+              {/* Faint watermark numeral */}
+              <span
+                aria-hidden
+                className="absolute -top-12 right-0 sm:-top-16 sm:right-2 text-[10rem] sm:text-[15rem] md:text-[18rem] font-black text-[#2f8ecd]/[0.06] leading-none select-none pointer-events-none"
+              >
+                12
               </span>
-              <h2 className="text-3xl sm:text-5xl font-bold text-gray-900 tracking-tight">
-                Complete Developer Guide (12 Chapters)
-              </h2>
-              <p className="text-gray-500 text-base sm:text-lg mt-3">
-                Everything you need to know about Google Play Closed Testing requirements and production access.
-              </p>
-            </div>
 
-            {/* Chapter Index Navigation Tabs */}
-            <div className="flex overflow-x-auto pb-4 gap-2 no-scrollbar mb-10 border-b border-gray-200">
-              {chapters.map((ch) => (
-                <button
-                  key={ch.id}
-                  onClick={() => setActiveChapter(ch.id)}
-                  className={`px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold whitespace-nowrap transition-all cursor-pointer ${activeChapter === ch.id
-                      ? "bg-[#2f8ecd] text-white shadow-md"
-                      : "bg-white text-gray-600 hover:bg-gray-200 border border-gray-200"
-                    }`}
-                >
-                  {ch.title}
-                </button>
-              ))}
-            </div>
-
-            {/* Active Chapter Display Card */}
-            <motion.div
-              key={currentChapterData.id}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3 }}
-              className="p-8 sm:p-12 rounded-3xl bg-white border border-gray-200/80 shadow-sm"
-            >
-              <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8 pb-6 border-b border-gray-100">
-                <div>
-                  <span className="text-[#2f8ecd] font-extrabold text-xs uppercase tracking-widest">
-                    Chapter {currentChapterData.id} of 12
+              <div className="relative">
+                {/* Eyebrow with accent dot */}
+                <div className="flex items-center gap-2.5 mb-4">
+                  <span className="w-2 h-2 rounded-full bg-[#2f8ecd]" />
+                  <span className="text-xs font-bold tracking-[0.2em] text-[#2f8ecd] uppercase">
+                    Comprehensive Knowledge Base
                   </span>
-                  <h3 className="text-2xl sm:text-3xl font-bold text-gray-900 mt-1">
-                    {currentChapterData.subtitle}
-                  </h3>
                 </div>
-                <button
-                  onClick={openWhatsApp}
-                  className="px-5 py-2.5 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold uppercase tracking-wider transition-all flex items-center gap-2 cursor-pointer shrink-0"
-                >
-                  <MessageSquare className="w-4 h-4" />
-                  <span>Ask Expert on WhatsApp</span>
-                </button>
-              </div>
 
-              <p className="text-gray-600 text-base sm:text-lg leading-relaxed mb-8">
-                {currentChapterData.intro}
-              </p>
+                <h2 className="text-3xl sm:text-5xl md:text-6xl font-bold text-gray-900 tracking-tight leading-[1.05] max-w-3xl">
+                  Complete Developer Guide{" "}
+                  <span className="font-serif italic text-[#2f8ecd] font-light">
+                    (12 Chapters)
+                  </span>
+                </h2>
 
-              {/* Key Facts Box */}
-              <div className="mb-8 p-6 rounded-2xl bg-blue-50/50 border border-blue-100">
-                <h4 className="text-xs font-bold text-[#2f8ecd] uppercase tracking-wider mb-4 flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-[#2f8ecd]" />
-                  <span>Key Chapter Facts</span>
-                </h4>
-                <ul className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm text-gray-700">
-                  {currentChapterData.keyFacts.map((fact, idx) => (
-                    <li key={idx} className="flex items-start gap-2.5">
-                      <div className="w-1.5 h-1.5 rounded-full bg-[#2f8ecd] mt-2 shrink-0" />
-                      <span>{fact}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              {/* Details & Important Notes */}
-              <div className="p-6 rounded-2xl bg-amber-50/50 border border-amber-200/80 mb-8">
-                <h4 className="text-xs font-bold text-amber-800 uppercase tracking-wider mb-2 flex items-center gap-2">
-                  <AlertTriangle className="w-4 h-4 text-amber-600" />
-                  <span>Important Note for Developers</span>
-                </h4>
-                <p className="text-amber-900/80 text-sm leading-relaxed">
-                  {currentChapterData.details}
+                <p className="text-gray-500 text-base sm:text-lg mt-4 max-w-xl leading-relaxed">
+                  Everything you need to know about Google Play Closed Testing requirements and production access.
                 </p>
               </div>
+            </div>
 
-              {/* Chapter Footer CTA */}
-              <div className="pt-6 border-t border-gray-100 flex flex-wrap items-center justify-between gap-4">
-                <span className="text-gray-500 text-sm">
-                  Need compliance help for Chapter {currentChapterData.id}?
+            {/* Progress Bar — 12 clickable segments */}
+            <div className="mb-8 md:mb-10">
+              <div className="flex items-center justify-between mb-3">
+                <span className="text-xs font-bold tracking-[0.15em] text-gray-500 uppercase">
+                  Your Progress
                 </span>
-                <button
-                  onClick={openWhatsApp}
-                  className="px-6 py-3 rounded-full bg-[#001F3F] hover:bg-[#2f8ecd] text-white font-bold text-xs uppercase tracking-widest transition-all flex items-center gap-2 cursor-pointer"
-                >
-                  <span>Start Testing Now</span>
-                  <ArrowRight className="w-4 h-4" />
-                </button>
+                <span className="text-xs font-bold text-[#2f8ecd]">
+                  Chapter {activeChapter} of 12 · {Math.round((activeChapter / 12) * 100)}%
+                </span>
               </div>
-            </motion.div>
+              <div className="flex gap-1.5 sm:gap-2">
+                {chapters.map((ch) => {
+                  const isActive = activeChapter === ch.id;
+                  const isCompleted = activeChapter > ch.id;
+                  return (
+                    <button
+                      key={ch.id}
+                      onClick={() => setActiveChapter(ch.id)}
+                      title={ch.subtitle}
+                      className={`group relative flex-1 h-2.5 sm:h-3 rounded-full overflow-hidden transition-all cursor-pointer ${
+                        isActive
+                          ? "bg-[#2f8ecd] shadow-[0_0_12px_rgba(47,142,205,0.4)]"
+                          : isCompleted
+                          ? "bg-[#2f8ecd]/40"
+                          : "bg-gray-200 hover:bg-gray-300"
+                      }`}
+                    >
+                      <span className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                        <span className="hidden lg:block absolute -top-9 left-1/2 -translate-x-1/2 px-2.5 py-1 rounded-lg bg-gray-900 text-white text-[10px] font-bold whitespace-nowrap z-20 pointer-events-none">
+                          Ch. {ch.id}
+                        </span>
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* 3-Column Layout: Sidebar | Content | Key Facts */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 lg:gap-6">
+              {/* LEFT SIDEBAR — Chapter Index (Sticky) */}
+              <aside className="lg:col-span-3">
+                <div className="lg:sticky lg:top-28 bg-white border border-gray-200/80 rounded-2xl p-3 shadow-sm">
+                  <div className="px-2 pt-2 pb-3 mb-2 border-b border-gray-100">
+                    <div className="flex items-center gap-2">
+                      <BookOpen className="w-4 h-4 text-[#2f8ecd]" />
+                      <span className="text-xs font-bold tracking-[0.15em] text-gray-500 uppercase">
+                        Chapters
+                      </span>
+                    </div>
+                  </div>
+                  <div className="space-y-1 max-h-[420px] overflow-y-auto no-scrollbar pr-1">
+                    {chapters.map((ch) => {
+                      const isActive = activeChapter === ch.id;
+                      return (
+                        <button
+                          key={ch.id}
+                          onClick={() => setActiveChapter(ch.id)}
+                          className={`w-full flex items-center gap-3 p-2.5 rounded-xl text-left transition-all cursor-pointer ${
+                            isActive
+                              ? "bg-blue-50 border-l-4 border-[#2f8ecd]"
+                              : "hover:bg-gray-50 border-l-4 border-transparent"
+                          }`}
+                        >
+                          <span
+                            className={`shrink-0 w-8 h-8 rounded-lg flex items-center justify-center text-xs font-black transition-colors ${
+                              isActive
+                                ? "bg-[#2f8ecd] text-white"
+                                : "bg-gray-100 text-gray-600"
+                            }`}
+                          >
+                            {String(ch.id).padStart(2, "0")}
+                          </span>
+                          <span
+                            className={`text-xs sm:text-sm font-bold leading-snug line-clamp-2 ${
+                              isActive ? "text-[#2f8ecd]" : "text-gray-700"
+                            }`}
+                          >
+                            {ch.subtitle}
+                          </span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              </aside>
+
+              {/* MAIN CONTENT — Active Chapter */}
+              <main className="lg:col-span-6">
+                <motion.div
+                  key={currentChapterData.id}
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                  className="relative p-6 sm:p-8 lg:p-10 rounded-3xl bg-white border border-gray-200/80 shadow-sm overflow-hidden"
+                >
+                  {/* Decorative large chapter number watermark */}
+                  <span
+                    aria-hidden
+                    className="absolute -top-4 -right-2 sm:top-2 sm:right-4 text-[7rem] sm:text-[9rem] lg:text-[10rem] font-black text-[#2f8ecd]/[0.06] leading-none select-none pointer-events-none"
+                  >
+                    {String(currentChapterData.id).padStart(2, "0")}
+                  </span>
+
+                  {/* Header row */}
+                  <div className="relative flex flex-col sm:flex-row justify-between items-start gap-4 mb-6 pb-6 border-b border-gray-100">
+                    <div>
+                      <span className="text-[#2f8ecd] font-extrabold text-xs uppercase tracking-[0.2em]">
+                        Chapter {currentChapterData.id} of 12
+                      </span>
+                      <h3 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mt-1.5 leading-tight">
+                        {currentChapterData.subtitle}
+                      </h3>
+                    </div>
+                    <button
+                      onClick={openWhatsApp}
+                      className="px-4 py-2.5 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold uppercase tracking-wider transition-all flex items-center gap-2 cursor-pointer shrink-0 shadow-md shadow-emerald-600/20"
+                    >
+                      <MessageSquare className="w-4 h-4" />
+                      <span className="hidden sm:inline">Ask Expert on WhatsApp</span>
+                      <span className="sm:hidden">Ask Expert</span>
+                    </button>
+                  </div>
+
+                  {/* Intro paragraph */}
+                  <div className="relative mb-6">
+                    <div className="flex items-center gap-2 mb-3">
+                      <CircleDot className="w-4 h-4 text-[#2f8ecd]" />
+                      <span className="text-xs font-bold uppercase tracking-[0.15em] text-gray-500">
+                        Overview
+                      </span>
+                    </div>
+                    <p className="text-gray-700 text-base sm:text-lg leading-relaxed">
+                      {currentChapterData.intro}
+                    </p>
+                  </div>
+
+                  {/* Important Note */}
+                  <div className="relative p-5 sm:p-6 rounded-2xl bg-amber-50/60 border border-amber-200/80 mb-6">
+                    <h4 className="text-xs font-bold text-amber-800 uppercase tracking-[0.15em] mb-2 flex items-center gap-2">
+                      <AlertTriangle className="w-4 h-4 text-amber-600" />
+                      <span>Important Note for Developers</span>
+                    </h4>
+                    <p className="text-amber-900/85 text-sm leading-relaxed">
+                      {currentChapterData.details}
+                    </p>
+                  </div>
+
+                  {/* Prev / Next Navigation */}
+                  <div className="relative pt-6 border-t border-gray-100 flex flex-wrap items-center justify-between gap-3">
+                    <button
+                      onClick={() => activeChapter > 1 && setActiveChapter(activeChapter - 1)}
+                      disabled={activeChapter === 1}
+                      className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all ${
+                        activeChapter === 1
+                          ? "bg-gray-50 text-gray-300 cursor-not-allowed"
+                          : "bg-white border border-gray-200 text-gray-700 hover:border-[#2f8ecd] hover:text-[#2f8ecd] cursor-pointer"
+                      }`}
+                    >
+                      <ChevronLeft className="w-4 h-4" />
+                      <span>Previous</span>
+                    </button>
+
+                    <span className="text-xs text-gray-400 font-medium order-first sm:order-none w-full sm:w-auto text-center">
+                      {currentChapterData.id} / 12
+                    </span>
+
+                    <button
+                      onClick={() => activeChapter < 12 && setActiveChapter(activeChapter + 1)}
+                      disabled={activeChapter === 12}
+                      className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all ${
+                        activeChapter === 12
+                          ? "bg-gray-50 text-gray-300 cursor-not-allowed"
+                          : "bg-[#001F3F] hover:bg-[#2f8ecd] text-white cursor-pointer shadow-md"
+                      }`}
+                    >
+                      <span>Next Chapter</span>
+                      <ChevronRight className="w-4 h-4" />
+                    </button>
+                  </div>
+                </motion.div>
+              </main>
+
+              {/* RIGHT SIDEBAR — Key Facts (Sticky) */}
+              <aside className="lg:col-span-3">
+                <div className="lg:sticky lg:top-28 bg-gradient-to-b from-blue-50/60 to-white border border-blue-100 rounded-2xl p-5 shadow-sm">
+                  <div className="flex items-center gap-2 mb-4 pb-3 border-b border-blue-100">
+                    <div className="w-8 h-8 rounded-lg bg-[#2f8ecd] text-white flex items-center justify-center">
+                      <CheckCircle2 className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <h4 className="text-xs font-bold text-gray-900 uppercase tracking-[0.15em]">
+                        Key Facts
+                      </h4>
+                      <p className="text-[10px] text-gray-500 font-medium">
+                        Chapter {currentChapterData.id}
+                      </p>
+                    </div>
+                  </div>
+                  <ul className="space-y-2.5">
+                    {currentChapterData.keyFacts.map((fact, idx) => (
+                      <li
+                        key={idx}
+                        className="group p-3.5 rounded-xl bg-white border border-blue-100 hover:border-[#2f8ecd]/40 hover:shadow-sm transition-all"
+                      >
+                        <div className="flex items-start gap-2.5">
+                          <span className="shrink-0 w-5 h-5 rounded-full bg-blue-50 border border-blue-100 flex items-center justify-center mt-0.5">
+                            <Check className="w-3 h-3 text-[#2f8ecd]" strokeWidth={3} />
+                          </span>
+                          <span className="text-xs sm:text-sm text-gray-700 leading-relaxed">
+                            {fact}
+                          </span>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+
+                  {/* Sidebar CTA */}
+                  <button
+                    onClick={openWhatsApp}
+                    className="w-full mt-5 px-4 py-3 rounded-xl bg-[#2f8ecd] hover:bg-[#001F3F] text-white text-xs font-bold uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer shadow-md"
+                  >
+                    <MessageSquare className="w-3.5 h-3.5" />
+                    <span>Discuss with Expert</span>
+                  </button>
+                </div>
+              </aside>
+            </div>
           </div>
         </section>
 
