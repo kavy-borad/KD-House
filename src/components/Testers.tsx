@@ -76,8 +76,8 @@ const LaptopHeroBackground: React.FC = () => {
             <div className="w-1 h-1 bg-blue-500/60 rounded-full" />
           </div>
 
-          {/* Neon Green Bezel Accent Frame */}
-          <div className="w-full h-full bg-[#A3E635]/25 p-2.5 sm:p-4 rounded-xl md:rounded-2xl border-4 border-[#A3E635] relative overflow-hidden shadow-[0_0_40px_rgba(163,230,53,0.4)]">
+          {/* Inner Screen Frame */}
+          <div className="w-full h-full p-2.5 sm:p-4 rounded-xl md:rounded-2xl relative overflow-hidden">
             {/* Play Console Inner Screen */}
             <div className="w-full h-full bg-[#121212] text-white p-4 sm:p-7 rounded-lg md:rounded-xl flex flex-col justify-between text-left font-sans no-scrollbar">
               <div>
@@ -324,7 +324,7 @@ const ReviewCard: React.FC<{ t: Testimonial }> = ({ t }) => (
 );
 
 export const Testers: React.FC = () => {
-  const [activeFaq, setActiveFaq] = useState<number | null>(0);
+  const [activeFaq, setActiveFaq] = useState<number | null>(null);
   const [activeChapter, setActiveChapter] = useState<number>(1);
   const [selectedPlan, setSelectedPlan] = useState<"starter" | "pro">("starter");
 
@@ -410,35 +410,35 @@ export const Testers: React.FC = () => {
   const faqs = [
     {
       q: "How do I get 12 testers?",
-      a: "Simply select your plan (Starter or Pro), complete payment, and send us your Google Play Console opting-in link or email list. Within 6 hours, our team assigns verified Android device testers who will opt-in and actively engage with your app daily for 14 continuous days.",
+      a: "Getting started is simple. Choose either the Starter or Pro plan, complete your payment, and share your Google Play Console closed testing opt-in link or tester email list with our team. Within 6 hours, we assign verified Android users who join your testing program using real devices and genuine Google accounts. Throughout the required 14-day testing period, testers actively install, launch, and interact with your application so it meets Google's engagement requirements for Production Access.",
     },
     {
       q: "How long does testing take?",
-      a: "Google requires closed testing to run continuously for 14 full days. We run testing for 14-16 days to ensure seamless buffer time so Google's automated systems register complete daily engagement before you apply for Production Access.",
+      a: "Google requires every new developer account to complete 14 consecutive days of closed testing before requesting Production Access. To provide an additional safety margin, we typically continue testing for 14–16 days, ensuring there are no interruptions and Google's automated review system receives consistent engagement data. This greatly improves the likelihood of a successful production approval.",
     },
     {
-      q: "What is included in Starter?",
-      a: "The Starter plan (₹999) includes 15 Android Testers, setup within 6 hours, full 14-day closed testing, Production Access Guarantee, detailed real-device feedback reports, tailored answers for Google's Production Application form, and 24/7 Email Support.",
+      q: "What is included in the Starter plan?",
+      a: "The Starter Plan (₹999) includes everything required to complete Google's Closed Testing requirement successfully. You'll receive 15 verified Android testers, tester assignment within 6 hours, continuous testing for 14 days, a Production Access Guarantee, detailed tester feedback reports, guidance for answering Google's Production Access questionnaire, and dedicated email support throughout the testing period. It's the ideal solution for most new Android applications.",
     },
     {
-      q: "Starter vs Pro?",
-      a: "Starter (₹999) gives you 15 testers and full testing support. Pro (₹1,699) adds 25 Android Testers (ideal for complex or large apps), Priority WhatsApp Support, a complete ASO (App Store Optimization) report, and expert store listing suggestions to maximize post-approval downloads.",
+      q: "What's the difference between Starter and Pro?",
+      a: "The Starter Plan is designed for standard applications and includes 15 Android testers with all essential testing services. The Pro Plan (₹1,699) is recommended for larger or more complex applications, offering 25 Android testers, Priority WhatsApp Support, a professional App Store Optimization (ASO) Report, store listing recommendations, and faster assistance throughout the testing process. Both plans include our Production Access Guarantee.",
     },
     {
-      q: "What if Google rejects my app?",
-      a: "We offer a 100% Production Access Guarantee! If Google rejects your production application due to testing engagement issues, we will run another full 14-day testing cycle with new testers completely free of charge until your app is approved.",
+      q: "What happens if Google rejects my app?",
+      a: "Our goal is to help you successfully publish your application. If Google rejects your Production Access request specifically due to testing engagement issues, we'll launch a new 14-day testing cycle with a fresh group of verified testers at no additional cost. Our team also reviews your submission, identifies potential issues, and provides guidance to improve your next application before resubmission.",
     },
     {
-      q: "Can you test any language?",
-      a: "Yes! Our international pool of testers supports apps in English, Spanish, French, German, Hindi, Japanese, Portuguese, and 20+ other major languages across different regions worldwide.",
+      q: "Can you test apps in different languages?",
+      a: "Yes. Our network includes testers from multiple countries using real Android devices. We support applications in English, Hindi, Spanish, French, German, Portuguese, Japanese, and many other languages. Whether your application targets local or international users, we assign suitable testers based on your requirements to ensure authentic testing and meaningful engagement.",
     },
     {
       q: "When does testing start?",
-      a: "Testing begins within 6 hours of receiving your app details and closed testing track access link. You will receive notification as soon as testers start downloading and opening your app.",
+      a: "Testing typically begins within 6 hours after we receive your payment, application details, and Google Play Console closed testing invitation. Once testers are assigned, they immediately join the testing program, install your application, and begin regular engagement. You'll be notified when testing starts so you can monitor participation directly from your Google Play Console.",
     },
     {
-      q: "What apps are accepted?",
-      a: "We accept all standard Android apps, games, utility tools, SaaS products, and business applications that comply with Google Play Developer Program Policies.",
+      q: "What types of apps do you accept?",
+      a: "We support almost every category of Android application that complies with Google Play Developer Program Policies. This includes productivity apps, business applications, SaaS platforms, educational apps, finance tools, health & fitness apps, e-commerce solutions, entertainment apps, utilities, and mobile games. Applications containing prohibited, illegal, or policy-violating content cannot be accepted for testing.",
     },
   ];
 
