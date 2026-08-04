@@ -148,6 +148,89 @@ type Testimonial = {
   appName: string;
 };
 
+/* Horizontal click-and-drag scroller for the chapter pill bar */
+const DragScrollRow: React.FC<{ children: React.ReactNode; className?: string }> = ({
+  children,
+  className = "",
+}) => {
+  const trackRef = React.useRef<HTMLDivElement>(null);
+  const isDown = React.useRef(false);
+  const isDragging = React.useRef(false);
+  const startX = React.useRef(0);
+  const scrollLeftStart = React.useRef(0);
+
+  const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    const el = trackRef.current;
+    if (!el) return;
+    isDown.current = true;
+    isDragging.current = false;
+    startX.current = e.pageX - el.offsetLeft;
+    scrollLeftStart.current = el.scrollLeft;
+    el.setPointerCapture(e.pointerId);
+  };
+
+  const onPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!isDown.current) return;
+    const el = trackRef.current;
+    if (!el) return;
+    const x = e.pageX - el.offsetLeft;
+    const walk = x - startX.current;
+    // Only start "dragging" after crossing a threshold so taps still work
+    if (!isDragging.current && Math.abs(walk) > 5) {
+      isDragging.current = true;
+    }
+    if (isDragging.current) {
+      e.preventDefault();
+      el.scrollLeft = scrollLeftStart.current - walk;
+    }
+  };
+
+  const onPointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
+    const el = trackRef.current;
+    if (!el) return;
+    isDown.current = false;
+    try {
+      el.releasePointerCapture(e.pointerId);
+    } catch {
+      /* no-op */
+    }
+    // Clear dragging flag on next tick so onClick can decide
+    setTimeout(() => {
+      isDragging.current = false;
+    }, 0);
+  };
+
+  // Suppress click that would fire after a real drag
+  const onClickCapture = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (isDragging.current) {
+      e.stopPropagation();
+      e.preventDefault();
+    }
+  };
+
+  return (
+    <div
+      ref={trackRef}
+      onPointerDown={onPointerDown}
+      onPointerMove={onPointerMove}
+      onPointerUp={onPointerUp}
+      onPointerLeave={onPointerUp}
+      onPointerCancel={onPointerUp}
+      onClickCapture={onClickCapture}
+      className={`flex gap-2 overflow-x-auto snap-x snap-mandatory cursor-grab select-none ${className}`}
+      style={{
+        WebkitOverflowScrolling: "touch",
+        scrollbarWidth: "none",
+        msOverflowStyle: "none",
+        touchAction: "pan-x pan-y",
+        userSelect: "none",
+      }}
+    >
+      {children}
+    </div>
+  );
+};
+
 const ReviewCard: React.FC<{ t: Testimonial }> = ({ t }) => (
   <div className="w-[340px] sm:w-[380px] shrink-0 p-6 rounded-2xl bg-white border border-gray-200/80 shadow-xs flex flex-col justify-between hover:shadow-md transition-shadow">
     <div>
@@ -1224,10 +1307,10 @@ export const Testers: React.FC = () => {
           <div className="max-w-7xl mx-auto">
             {/* Section Header — Editorial style with watermark */}
             <div className="relative mb-10 md:mb-14 overflow-hidden">
-              {/* Faint watermark numeral */}
+              {/* Faint watermark numeral — small on mobile, large on desktop */}
               <span
                 aria-hidden
-                className="absolute -top-12 right-0 sm:-top-16 sm:right-2 text-[10rem] sm:text-[15rem] md:text-[18rem] font-black text-[#2f8ecd]/[0.06] leading-none select-none pointer-events-none"
+                className="absolute -top-10 right-2 text-[5rem] sm:text-[10rem] md:text-[18rem] font-black text-[#2f8ecd]/[0.07] leading-none select-none pointer-events-none"
               >
                 12
               </span>
@@ -1294,16 +1377,58 @@ export const Testers: React.FC = () => {
 
             {/* 3-Column Layout: Sidebar | Content | Key Facts */}
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 lg:gap-6">
-              {/* LEFT SIDEBAR — Chapter Index (Sticky) */}
+              {/* LEFT SIDEBAR — Chapter Index (Sticky vertical on desktop, horizontal pills on mobile) */}
               <aside className="lg:col-span-3">
-                <div className="lg:sticky lg:top-28 bg-white border border-gray-200/80 rounded-2xl p-3 shadow-sm">
-                  <div className="px-2 pt-2 pb-3 mb-2 border-b border-gray-100">
-                    <div className="flex items-center gap-2">
-                      <BookOpen className="w-4 h-4 text-[#2f8ecd]" />
-                      <span className="text-xs font-bold tracking-[0.15em] text-gray-500 uppercase">
-                        Chapters
-                      </span>
-                    </div>
+                {/* Mobile horizontal pill scroller (sits outside the desktop card so it gets full width) */}
+                <div className="lg:hidden -mx-4 mb-5">
+                  <div className="flex items-center gap-2 px-4 mb-2">
+                    <BookOpen className="w-4 h-4 text-[#2f8ecd]" />
+                    <span className="text-xs font-bold tracking-[0.15em] text-gray-500 uppercase">
+                      Chapters
+                    </span>
+                  </div>
+                  <DragScrollRow className="px-4 pb-2 no-scrollbar">
+                    {/* Left spacer so first snap aligns cleanly to the start */}
+                    <div className="shrink-0 w-0" aria-hidden />
+                    {chapters.map((ch) => {
+                      const isActive = activeChapter === ch.id;
+                      return (
+                        <button
+                          key={ch.id}
+                          onClick={() => setActiveChapter(ch.id)}
+                          style={{ WebkitTapHighlightColor: "transparent" }}
+                          className={`snap-start shrink-0 flex items-center gap-2 px-3 py-2 rounded-full border transition-all cursor-pointer max-w-[260px] ${
+                            isActive
+                              ? "bg-blue-50 border-[#2f8ecd] text-[#2f8ecd] shadow-sm"
+                              : "bg-white border-gray-200 hover:bg-gray-50 text-gray-700"
+                          }`}
+                        >
+                          <span
+                            className={`shrink-0 w-6 h-6 rounded-md flex items-center justify-center text-[10px] font-black ${
+                              isActive
+                                ? "bg-[#2f8ecd] text-white"
+                                : "bg-gray-100 text-gray-600"
+                            }`}
+                          >
+                            {String(ch.id).padStart(2, "0")}
+                          </span>
+                          <span className="text-xs font-bold truncate">
+                            {ch.subtitle}
+                          </span>
+                        </button>
+                      );
+                    })}
+                    <div className="shrink-0 w-4" aria-hidden />
+                  </DragScrollRow>
+                </div>
+
+                {/* Desktop vertical sticky list (unchanged) */}
+                <div className="hidden lg:block lg:sticky lg:top-28 bg-white border border-gray-200/80 rounded-2xl p-3 shadow-sm">
+                  <div className="flex px-2 pt-2 pb-3 mb-2 border-b border-gray-100 items-center gap-2">
+                    <BookOpen className="w-4 h-4 text-[#2f8ecd]" />
+                    <span className="text-xs font-bold tracking-[0.15em] text-gray-500 uppercase">
+                      Chapters
+                    </span>
                   </div>
                   <div className="space-y-1 max-h-[420px] overflow-y-auto no-scrollbar pr-1">
                     {chapters.map((ch) => {
