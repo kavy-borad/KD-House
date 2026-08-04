@@ -148,16 +148,35 @@ type Testimonial = {
   appName: string;
 };
 
-/* Horizontal click-and-drag scroller for the chapter pill bar */
-const DragScrollRow: React.FC<{ children: React.ReactNode; className?: string }> = ({
-  children,
-  className = "",
-}) => {
+/* Horizontal click-and-drag scroller for the chapter pill bar.
+   Pass `activeId` to auto-scroll the matching pill into the center of the viewport. */
+const DragScrollRow: React.FC<{
+  children: React.ReactNode;
+  className?: string;
+  activeId?: number | string;
+}> = ({ children, className = "", activeId }) => {
   const trackRef = React.useRef<HTMLDivElement>(null);
   const isDown = React.useRef(false);
   const isDragging = React.useRef(false);
   const startX = React.useRef(0);
   const scrollLeftStart = React.useRef(0);
+
+  // When activeId changes, scroll the matching pill into the center of the track
+  React.useEffect(() => {
+    const el = trackRef.current;
+    if (!el || activeId === undefined) return;
+    const item = el.querySelector<HTMLElement>(
+      `[data-id="${activeId}"]`,
+    );
+    if (!item) return;
+    const trackRect = el.getBoundingClientRect();
+    const itemRect = item.getBoundingClientRect();
+    const offset = itemRect.left + itemRect.width / 2 - (trackRect.left + trackRect.width / 2);
+    el.scrollTo({
+      left: el.scrollLeft + offset,
+      behavior: "smooth",
+    });
+  }, [activeId]);
 
   const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
     const el = trackRef.current;
@@ -224,6 +243,7 @@ const DragScrollRow: React.FC<{ children: React.ReactNode; className?: string }>
         msOverflowStyle: "none",
         touchAction: "pan-x pan-y",
         userSelect: "none",
+        scrollPaddingInline: "20%",
       }}
     >
       {children}
@@ -656,10 +676,10 @@ export const Testers: React.FC = () => {
                       <a
                         href="#pricing"
                         onClick={scrollToPricing}
-                        className="inline-flex items-center gap-2 px-6 py-3.5 md:px-8 md:py-4 bg-gray-100 text-gray-800 rounded-full text-xs sm:text-sm font-bold uppercase tracking-widest hover:bg-gray-200 transition-all duration-300 cursor-pointer"
+                        className="group inline-flex items-center gap-2 px-6 py-3.5 md:px-8 md:py-4 bg-white border border-gray-200 text-gray-800 rounded-full text-xs sm:text-sm font-bold uppercase tracking-widest hover:bg-[#2f8ecd] hover:text-white hover:border-[#2f8ecd] hover:shadow-lg hover:shadow-[#2f8ecd]/25 hover:-translate-y-0.5 transition-all duration-300 cursor-pointer"
                       >
                         <span>Pricing</span>
-                        <ArrowDown className="w-4 h-4 text-gray-500" />
+                        <ArrowDown className="w-4 h-4 text-gray-500 group-hover:text-white transition-colors duration-300" />
                       </a>
                     </div>
                   </div>
@@ -766,107 +786,108 @@ export const Testers: React.FC = () => {
               {selectedPlan === "starter" ? (
                 <motion.div
                   key="starter-plan"
-                  initial={{ opacity: 0, y: 15 }}
+                  initial={{ opacity: 0, y: 12 }}
                   animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -15 }}
+                  exit={{ opacity: 0, y: -12 }}
                   transition={{ duration: 0.3 }}
-                  className="bg-white border-2 border-gray-200/80 rounded-[2.5rem] p-6 sm:p-10 shadow-xl relative flex flex-col lg:flex-row gap-8 lg:gap-12 justify-between items-stretch"
+                  className="relative bg-white border border-gray-200 rounded-2xl shadow-sm hover:shadow-md transition-shadow duration-300 flex flex-col lg:flex-row overflow-hidden"
                 >
-                  {/* Floating Badge Sitting Cleanly on Top Border */}
-                  <div className="absolute -top-3.5 right-6 sm:right-10 bg-[#FEF3C7] text-[#92400E] border border-[#FDE68A] text-[10px] font-black uppercase px-3.5 py-1 rounded-full tracking-widest shadow-xs z-20">
-                    Lowest Price
+                  {/* Badge — minimal, top-right */}
+                  <div className="absolute top-5 right-5 z-10 inline-flex items-center bg-gray-100 text-gray-700 text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-md">
+                    Best Value
                   </div>
 
-                  {/* Left Column: Icon + Pricing + CTA */}
-                  <div className="lg:w-5/12 flex flex-col justify-between">
-                    <div>
-                      <div className="flex items-center gap-3 mb-4">
-                        <div className="w-12 h-12 rounded-2xl bg-blue-50 border border-blue-100 flex items-center justify-center text-[#2f8ecd]">
-                          <Smartphone className="w-6 h-6" />
-                        </div>
-                        <div>
-                          <h3 className="text-2xl font-bold text-gray-900">Starter</h3>
-                          <span className="text-xs font-semibold text-gray-400">Standard Package</span>
-                        </div>
+                  {/* LEFT — Plan summary */}
+                  <div className="lg:w-[40%] p-7 sm:p-9 flex flex-col gap-6 border-b lg:border-b-0 lg:border-r border-gray-100">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center text-gray-700">
+                        <Smartphone className="w-5 h-5" strokeWidth={2} />
                       </div>
+                      <div>
+                        <h3 className="text-xl font-semibold text-gray-900">Starter</h3>
+                        <p className="text-xs text-gray-500">For solo developers</p>
+                      </div>
+                    </div>
 
-                      <div className="my-4">
-                        <div className="flex items-baseline gap-1">
-                          <span className="text-5xl font-black text-gray-900">₹999</span>
-                          <span className="text-gray-400 font-medium text-sm">/app</span>
-                        </div>
-                        <p className="text-xs text-gray-500 mt-2 leading-relaxed font-light">
-                          Everything you need to pass Google Play's 14-day testing requirement, at our most affordable price.
-                        </p>
+                    <div>
+                      <div className="flex items-baseline gap-1">
+                        <span className="text-4xl font-semibold text-gray-900 tracking-tight">₹999</span>
+                        <span className="text-sm text-gray-500">/ app</span>
                       </div>
+                      <p className="text-sm text-gray-500 mt-2">
+                        One-time payment. No subscription.
+                      </p>
                     </div>
 
                     <button
                       onClick={openWhatsApp}
-                      className="w-full py-4 rounded-full bg-[#001F3F] hover:bg-[#2f8ecd] text-white font-bold text-xs uppercase tracking-widest transition-all cursor-pointer flex items-center justify-center gap-2 shadow-lg mt-6"
+                      className="w-full py-3 rounded-lg bg-gray-900 hover:bg-gray-800 text-white text-sm font-medium transition-colors cursor-pointer flex items-center justify-center gap-2"
                     >
-                      <span>Get Started Now</span>
+                      Get started
                       <ArrowRight className="w-4 h-4" />
                     </button>
                   </div>
 
-                  {/* Right Column: Feature Specs Grid */}
-                  <div className="lg:w-7/12 border-t lg:border-t-0 lg:border-l border-gray-100 pt-6 lg:pt-0 lg:pl-10 grid grid-cols-1 sm:grid-cols-2 gap-5 text-left font-sans">
-                    <div className="flex items-start gap-3">
-                      <CheckCircle2 className="w-5 h-5 text-gray-900 shrink-0 mt-0.5" />
-                      <div>
-                        <h4 className="text-xs font-bold text-gray-900">15 Android testers</h4>
-                        <p className="text-[11px] text-gray-500 mt-0.5">Verified testers from our global network</p>
-                      </div>
-                    </div>
-
-                    <div className="flex items-start gap-3">
-                      <CheckCircle2 className="w-5 h-5 text-gray-900 shrink-0 mt-0.5" />
-                      <div>
-                        <h4 className="text-xs font-bold text-gray-900">Testers in 6 hours</h4>
-                        <p className="text-[11px] text-gray-500 mt-0.5">Fast access vs 24 to 48h elsewhere</p>
-                      </div>
-                    </div>
-
-                    <div className="flex items-start gap-3">
-                      <CheckCircle2 className="w-5 h-5 text-gray-900 shrink-0 mt-0.5" />
-                      <div>
-                        <h4 className="text-xs font-bold text-gray-900">14-day testing period</h4>
-                        <p className="text-[11px] text-gray-500 mt-0.5">Meets Google Play requirements</p>
-                      </div>
-                    </div>
-
-                    <div className="flex items-start gap-3">
-                      <CheckCircle2 className="w-5 h-5 text-gray-900 shrink-0 mt-0.5" />
-                      <div>
-                        <h4 className="text-xs font-bold text-gray-900">Production access guarantee</h4>
-                        <p className="text-[11px] text-gray-500 mt-0.5">Approved for production access, or free re-test</p>
-                      </div>
-                    </div>
-
-                    <div className="flex items-start gap-3 sm:col-span-2">
-                      <CheckCircle2 className="w-5 h-5 text-gray-900 shrink-0 mt-0.5" />
-                      <div className="flex-1">
-                        <div className="flex items-center justify-between gap-2">
-                          <h4 className="text-xs font-bold text-gray-900">Comprehensive reports</h4>
-                          <button
-                            onClick={() => setShowSampleModal(true)}
-                            className="text-[#2f8ecd] hover:underline text-[11px] font-bold cursor-pointer"
-                          >
-                            View sample
-                          </button>
-                        </div>
-                        <p className="text-[11px] text-gray-500 mt-0.5">Testers feedback report and Production Access form answers</p>
-                      </div>
-                    </div>
-
-                    <div className="flex items-start gap-3 sm:col-span-2">
-                      <CheckCircle2 className="w-5 h-5 text-gray-900 shrink-0 mt-0.5" />
-                      <div>
-                        <h4 className="text-xs font-bold text-gray-900">Standard support</h4>
-                        <p className="text-[11px] text-gray-500 mt-0.5">24/7 email and chat support from our team</p>
-                      </div>
-                    </div>
+                  {/* RIGHT — Feature list */}
+                  <div className="lg:w-[60%] p-7 sm:p-9">
+                    <p className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-4">
+                      Includes
+                    </p>
+                    <ul className="space-y-3.5">
+                      {[
+                        {
+                          title: "15 verified Android testers",
+                          detail: "Real users on physical Samsung, Pixel, OnePlus devices.",
+                        },
+                        {
+                          title: "Setup within 6 hours",
+                          detail: "Compared to 24–48h you'd wait elsewhere.",
+                        },
+                        {
+                          title: "Full 14-day closed testing",
+                          detail: "Continuous active sessions across the full window.",
+                        },
+                        {
+                          title: "Production access guarantee",
+                          detail: "Approved by Google, or we re-test for free.",
+                        },
+                        {
+                          title: "Pre-written Production Access answers",
+                          detail: "Tailored responses for every Google question.",
+                          hasSample: true,
+                        },
+                        {
+                          title: "Email and chat support, 24/7",
+                          detail: "Real people, no chatbots.",
+                        },
+                      ].map((feature) => (
+                        <li key={feature.title} className="flex items-start gap-3">
+                          <CheckCircle2
+                            className="w-4 h-4 text-[#2f8ecd] shrink-0 mt-0.5"
+                            strokeWidth={2.5}
+                          />
+                          <div className="flex-1">
+                            <div className="flex items-center justify-between gap-2 flex-wrap">
+                              <span className="text-sm text-gray-900 font-medium">
+                                {feature.title}
+                              </span>
+                              {feature.hasSample && (
+                                <button
+                                  onClick={() => setShowSampleModal(true)}
+                                  className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#2f8ecd] hover:text-[#001F3F] cursor-pointer transition-colors"
+                                >
+                                  View sample
+                                  <ExternalLink className="w-3 h-3" />
+                                </button>
+                              )}
+                            </div>
+                            <p className="text-xs text-gray-500 mt-0.5 leading-snug">
+                              {feature.detail}
+                            </p>
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
                   </div>
                 </motion.div>
               ) : (
@@ -876,105 +897,100 @@ export const Testers: React.FC = () => {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -15 }}
                   transition={{ duration: 0.3 }}
-                  className="bg-gradient-to-b from-blue-50/70 via-white to-emerald-50/50 border-2 border-[#2f8ecd] rounded-[2.5rem] p-6 sm:p-10 shadow-2xl relative flex flex-col lg:flex-row gap-8 lg:gap-12 justify-between items-stretch"
+                  className="relative bg-white border-2 border-[#2f8ecd] rounded-2xl shadow-md flex flex-col lg:flex-row overflow-hidden"
                 >
-                  {/* Floating Badge Sitting Cleanly on Top Border */}
-                  <div className="absolute -top-3.5 right-6 sm:right-10 bg-[#2f8ecd] text-white text-[10px] font-black uppercase px-3.5 py-1 rounded-full tracking-widest shadow-md z-20">
-                    Most Popular Choice
+                  {/* Badge — top-right, restrained */}
+                  <div className="absolute top-5 right-5 z-10 inline-flex items-center bg-[#2f8ecd] text-white text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-md">
+                    Most popular
                   </div>
 
-                  {/* Left Column: Icon + Pricing + CTA */}
-                  <div className="lg:w-5/12 flex flex-col justify-between">
-                    <div>
-                      <div className="flex items-center gap-3 mb-4">
-                        <div className="w-12 h-12 rounded-2xl bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-600">
-                          <Sparkles className="w-6 h-6" />
-                        </div>
-                        <div>
-                          <h3 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-                            <span>Pro</span>
-                          </h3>
-                          <span className="text-xs font-semibold text-emerald-600">Recommended for High Priority</span>
-                        </div>
+                  {/* LEFT — Plan summary */}
+                  <div className="lg:w-[40%] p-7 sm:p-9 flex flex-col gap-6 border-b lg:border-b-0 lg:border-r border-gray-100">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center text-[#2f8ecd]">
+                        <Sparkles className="w-5 h-5" strokeWidth={2} />
                       </div>
+                      <div>
+                        <h3 className="text-xl font-semibold text-gray-900">Pro</h3>
+                        <p className="text-xs text-gray-500">For studios and high-priority apps</p>
+                      </div>
+                    </div>
 
-                      <div className="my-4">
-                        <div className="flex items-baseline gap-1">
-                          <span className="text-5xl font-black text-gray-900">₹1,699</span>
-                          <span className="text-gray-400 font-medium text-sm">/app</span>
-                        </div>
-                        <p className="text-xs text-gray-500 mt-2 leading-relaxed font-light">
-                          Expanded 25-tester coverage, priority WhatsApp line, complete ASO audit & 1-on-1 review.
-                        </p>
+                    <div>
+                      <div className="flex items-baseline gap-1">
+                        <span className="text-4xl font-semibold text-gray-900 tracking-tight">₹1,699</span>
+                        <span className="text-sm text-gray-500">/ app</span>
                       </div>
+                      <p className="text-sm text-gray-500 mt-2">
+                        One-time payment. Includes everything in Starter plus ASO, priority support, and 25 testers.
+                      </p>
                     </div>
 
                     <button
                       onClick={openWhatsApp}
-                      className="w-full py-4 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs uppercase tracking-widest transition-all cursor-pointer flex items-center justify-center gap-2 shadow-lg shadow-emerald-600/25 mt-6"
+                      className="w-full py-3 rounded-lg bg-[#2f8ecd] hover:bg-[#001F3F] text-white text-sm font-medium transition-colors cursor-pointer flex items-center justify-center gap-2"
                     >
-                      <span>Choose Pro Plan</span>
+                      Choose Pro
                       <ArrowRight className="w-4 h-4" />
                     </button>
                   </div>
 
-                  {/* Right Column: Feature Specs Grid */}
-                  <div className="lg:w-7/12 border-t lg:border-t-0 lg:border-l border-gray-200/80 pt-6 lg:pt-0 lg:pl-10 grid grid-cols-1 sm:grid-cols-2 gap-5 text-left font-sans">
-                    <div className="flex items-start gap-3">
-                      <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
-                      <div>
-                        <h4 className="text-xs font-bold text-gray-900">25 Android testers</h4>
-                        <p className="text-[11px] text-gray-500 mt-0.5">Maximum device coverage for complex apps</p>
-                      </div>
-                    </div>
-
-                    <div className="flex items-start gap-3">
-                      <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
-                      <div>
-                        <h4 className="text-xs font-bold text-gray-900">Priority WhatsApp Line</h4>
-                        <p className="text-[11px] text-gray-500 mt-0.5">Instant 1-on-1 account manager support</p>
-                      </div>
-                    </div>
-
-                    <div className="flex items-start gap-3">
-                      <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
-                      <div>
-                        <h4 className="text-xs font-bold text-gray-900">Complete ASO Audit</h4>
-                        <p className="text-[11px] text-gray-500 mt-0.5">Store listing optimization suggestions</p>
-                      </div>
-                    </div>
-
-                    <div className="flex items-start gap-3">
-                      <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
-                      <div>
-                        <h4 className="text-xs font-bold text-gray-900">100% Approval Guarantee</h4>
-                        <p className="text-[11px] text-gray-500 mt-0.5">Production access granted or money back</p>
-                      </div>
-                    </div>
-
-                    <div className="flex items-start gap-3 sm:col-span-2">
-                      <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
-                      <div className="flex-1">
-                        <div className="flex items-center justify-between gap-2">
-                          <h4 className="text-xs font-bold text-gray-900">Comprehensive reports + ASO</h4>
-                          <button
-                            onClick={() => setShowSampleModal(true)}
-                            className="text-[#2f8ecd] hover:underline text-[11px] font-bold cursor-pointer"
-                          >
-                            View sample
-                          </button>
-                        </div>
-                        <p className="text-[11px] text-gray-500 mt-0.5">Feedback logs, questionnaire responses, & store keywords</p>
-                      </div>
-                    </div>
-
-                    <div className="flex items-start gap-3 sm:col-span-2">
-                      <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
-                      <div>
-                        <h4 className="text-xs font-bold text-gray-900">Priority Form Review</h4>
-                        <p className="text-[11px] text-gray-500 mt-0.5">1-on-1 expert review before submitting to Google</p>
-                      </div>
-                    </div>
+                  {/* RIGHT — Feature list */}
+                  <div className="lg:w-[60%] p-7 sm:p-9 bg-gray-50/40">
+                    <p className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-4">
+                      Everything in Starter, plus
+                    </p>
+                    <ul className="space-y-3.5">
+                      {[
+                        {
+                          title: "25 verified Android testers",
+                          detail: "More coverage for complex or larger apps.",
+                        },
+                        {
+                          title: "Priority WhatsApp line",
+                          detail: "Direct access to a dedicated account manager.",
+                        },
+                        {
+                          title: "Full ASO audit",
+                          detail: "Title, description, and keyword recommendations.",
+                          hasSample: true,
+                        },
+                        {
+                          title: "Expert review of your form",
+                          detail: "1-on-1 walkthrough before you submit to Google.",
+                        },
+                        {
+                          title: "100% money-back guarantee",
+                          detail: "If you're not approved, we refund the full amount.",
+                        },
+                      ].map((feature) => (
+                        <li key={feature.title} className="flex items-start gap-3">
+                          <CheckCircle2
+                            className="w-4 h-4 text-[#2f8ecd] shrink-0 mt-0.5"
+                            strokeWidth={2.5}
+                          />
+                          <div className="flex-1">
+                            <div className="flex items-center justify-between gap-2 flex-wrap">
+                              <span className="text-sm text-gray-900 font-medium">
+                                {feature.title}
+                              </span>
+                              {feature.hasSample && (
+                                <button
+                                  onClick={() => setShowSampleModal(true)}
+                                  className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#2f8ecd] hover:text-[#001F3F] cursor-pointer transition-colors"
+                                >
+                                  View sample
+                                  <ExternalLink className="w-3 h-3" />
+                                </button>
+                              )}
+                            </div>
+                            <p className="text-xs text-gray-500 mt-0.5 leading-snug">
+                              {feature.detail}
+                            </p>
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
                   </div>
                 </motion.div>
               )}
@@ -1387,14 +1403,13 @@ export const Testers: React.FC = () => {
                       Chapters
                     </span>
                   </div>
-                  <DragScrollRow className="px-4 pb-2 no-scrollbar">
-                    {/* Left spacer so first snap aligns cleanly to the start */}
-                    <div className="shrink-0 w-0" aria-hidden />
+                  <DragScrollRow className="px-4 pb-2 no-scrollbar" activeId={activeChapter}>
                     {chapters.map((ch) => {
                       const isActive = activeChapter === ch.id;
                       return (
                         <button
                           key={ch.id}
+                          data-id={ch.id}
                           onClick={() => setActiveChapter(ch.id)}
                           style={{ WebkitTapHighlightColor: "transparent" }}
                           className={`snap-start shrink-0 flex items-center gap-2 px-3 py-2 rounded-full border transition-all cursor-pointer max-w-[260px] ${
@@ -1422,29 +1437,29 @@ export const Testers: React.FC = () => {
                   </DragScrollRow>
                 </div>
 
-                {/* Desktop vertical sticky list (unchanged) */}
+                {/* Desktop vertical sticky list */}
                 <div className="hidden lg:block lg:sticky lg:top-28 bg-white border border-gray-200/80 rounded-2xl p-3 shadow-sm">
-                  <div className="flex px-2 pt-2 pb-3 mb-2 border-b border-gray-100 items-center gap-2">
+                  <div className="flex px-2 pt-1.5 pb-2.5 mb-2 border-b border-gray-100 items-center gap-2">
                     <BookOpen className="w-4 h-4 text-[#2f8ecd]" />
-                    <span className="text-xs font-bold tracking-[0.15em] text-gray-500 uppercase">
+                    <span className="text-[11px] font-bold tracking-[0.15em] text-gray-500 uppercase">
                       Chapters
                     </span>
                   </div>
-                  <div className="space-y-1 max-h-[420px] overflow-y-auto no-scrollbar pr-1">
+                  <div className="space-y-1 max-h-[460px] overflow-y-auto no-scrollbar pr-1">
                     {chapters.map((ch) => {
                       const isActive = activeChapter === ch.id;
                       return (
                         <button
                           key={ch.id}
                           onClick={() => setActiveChapter(ch.id)}
-                          className={`w-full flex items-center gap-3 p-2.5 rounded-xl text-left transition-all cursor-pointer ${
+                          className={`w-full flex items-center gap-3 p-2.5 rounded-xl text-left transition-colors cursor-pointer ${
                             isActive
                               ? "bg-blue-50 border-l-4 border-[#2f8ecd]"
                               : "hover:bg-gray-50 border-l-4 border-transparent"
                           }`}
                         >
                           <span
-                            className={`shrink-0 w-8 h-8 rounded-lg flex items-center justify-center text-xs font-black transition-colors ${
+                            className={`shrink-0 w-7 h-7 rounded-lg flex items-center justify-center text-[11px] font-bold transition-colors ${
                               isActive
                                 ? "bg-[#2f8ecd] text-white"
                                 : "bg-gray-100 text-gray-600"
@@ -1453,7 +1468,7 @@ export const Testers: React.FC = () => {
                             {String(ch.id).padStart(2, "0")}
                           </span>
                           <span
-                            className={`text-xs sm:text-sm font-bold leading-snug line-clamp-2 ${
+                            className={`text-[13px] leading-snug line-clamp-2 font-semibold ${
                               isActive ? "text-[#2f8ecd]" : "text-gray-700"
                             }`}
                           >
