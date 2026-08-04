@@ -138,6 +138,53 @@ const LaptopHeroBackground: React.FC = () => {
   );
 };
 
+/* Review Card used by the animated marquee rows */
+type Testimonial = {
+  name: string;
+  role: string;
+  country: string;
+  rating: number;
+  review: string;
+  appName: string;
+};
+
+const ReviewCard: React.FC<{ t: Testimonial }> = ({ t }) => (
+  <div className="w-[340px] sm:w-[380px] shrink-0 p-6 rounded-2xl bg-white border border-gray-200/80 shadow-xs flex flex-col justify-between hover:shadow-md transition-shadow">
+    <div>
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex gap-1">
+          {[...Array(t.rating)].map((_, i) => (
+            <Star
+              key={i}
+              className="w-4 h-4 fill-amber-400 text-amber-400"
+              strokeWidth={0}
+            />
+          ))}
+        </div>
+        <span className="text-xs text-gray-400 font-medium">{t.country}</span>
+      </div>
+
+      <p className="text-gray-600 text-sm leading-relaxed mb-6 italic">
+        "{t.review}"
+      </p>
+    </div>
+
+    <div className="pt-4 border-t border-gray-100 flex justify-between items-center">
+      <div>
+        <h4 className="text-sm font-bold text-gray-900">{t.name}</h4>
+        <p className="text-xs text-[#2f8ecd] font-medium">{t.appName}</p>
+      </div>
+
+      <button
+        onClick={openWhatsApp}
+        className="px-3 py-1.5 rounded-full bg-gray-100 hover:bg-[#2f8ecd] hover:text-white text-xs font-semibold text-gray-700 transition-all cursor-pointer"
+      >
+        View App
+      </button>
+    </div>
+  </div>
+);
+
 export const Testers: React.FC = () => {
   const [activeFaq, setActiveFaq] = useState<number | null>(0);
   const [activeChapter, setActiveChapter] = useState<number>(1);
@@ -588,7 +635,10 @@ export const Testers: React.FC = () => {
               Transparent Plans
             </span>
             <h2 className="text-3xl sm:text-5xl font-bold text-gray-900 tracking-tight">
-              Simple Closed Testing Pricing
+              Simple Closed Testing{" "}
+              <span className="font-serif italic text-[#2f8ecd] font-light">
+                Pricing
+              </span>
             </h2>
             <p className="text-gray-500 text-sm md:text-base mt-3">
               One simple price per app. Pick the plan that fits. Most developers choose Pro.
@@ -856,49 +906,59 @@ export const Testers: React.FC = () => {
               Developer Reviews
             </span>
             <h2 className="text-3xl sm:text-5xl font-bold text-gray-900 tracking-tight">
-              Loved by Developers Worldwide
+              Loved by Developers{" "}
+              <span className="font-serif italic text-[#2f8ecd] font-light">
+                Worldwide
+              </span>
             </h2>
             <p className="text-gray-500 text-base sm:text-lg mt-3">
               See how Android creators passed Google Play closed testing with Karma Dude.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {testimonials.map((t, idx) => (
-              <div
-                key={idx}
-                className="p-6 rounded-2xl bg-white border border-gray-200/80 shadow-xs flex flex-col justify-between hover:shadow-md transition-all"
-              >
-                <div>
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="flex text-[#2f8ecd] gap-1">
-                      {[...Array(t.rating)].map((_, i) => (
-                        <Star key={i} className="w-4 h-4 fill-[#2f8ecd] text-[#2f8ecd]" />
-                      ))}
-                    </div>
-                    <span className="text-xs text-gray-400 font-medium">{t.country}</span>
-                  </div>
+          {/* Animated marquee styles */}
+          <style>{`
+            @keyframes marquee-ltr {
+              0% { transform: translateX(0); }
+              100% { transform: translateX(-50%); }
+            }
+            @keyframes marquee-rtl {
+              0% { transform: translateX(-50%); }
+              100% { transform: translateX(0); }
+            }
+            .marquee-track {
+              display: flex;
+              width: max-content;
+              animation-timing-function: linear;
+              animation-iteration-count: infinite;
+            }
+            .marquee-ltr { animation-name: marquee-ltr; }
+            .marquee-rtl { animation-name: marquee-rtl; }
+            .marquee-row:hover .marquee-track { animation-play-state: paused; }
+          `}</style>
 
-                  <p className="text-gray-600 text-sm leading-relaxed mb-6 italic">
-                    "{t.review}"
-                  </p>
-                </div>
+          {/* Row 1 — scrolls left to right */}
+          <div className="marquee-row relative overflow-hidden mb-5 [mask-image:linear-gradient(to_right,transparent,black_5%,black_95%,transparent)]">
+            <div
+              className="marquee-track marquee-ltr gap-5"
+              style={{ animationDuration: "40s" }}
+            >
+              {[...testimonials.slice(0, 4), ...testimonials.slice(0, 4)].map((t, idx) => (
+                <ReviewCard key={`r1-${idx}`} t={t} />
+              ))}
+            </div>
+          </div>
 
-                <div className="pt-4 border-t border-gray-100 flex justify-between items-center">
-                  <div>
-                    <h4 className="text-sm font-bold text-gray-900">{t.name}</h4>
-                    <p className="text-xs text-[#2f8ecd] font-medium">{t.appName}</p>
-                  </div>
-
-                  <button
-                    onClick={openWhatsApp}
-                    className="px-3 py-1.5 rounded-full bg-gray-100 hover:bg-[#2f8ecd] hover:text-white text-xs font-semibold text-gray-700 transition-all cursor-pointer"
-                  >
-                    View App
-                  </button>
-                </div>
-              </div>
-            ))}
+          {/* Row 2 — scrolls right to left */}
+          <div className="marquee-row relative overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_5%,black_95%,transparent)]">
+            <div
+              className="marquee-track marquee-rtl gap-5"
+              style={{ animationDuration: "45s" }}
+            >
+              {[...testimonials.slice(4, 8), ...testimonials.slice(4, 8)].map((t, idx) => (
+                <ReviewCard key={`r2-${idx}`} t={t} />
+              ))}
+            </div>
           </div>
         </section>
 
@@ -1004,7 +1064,7 @@ export const Testers: React.FC = () => {
               <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 tracking-tight leading-tight mb-5">
                 Get Production Access in{" "}
                 <br />
-                <span className="font-serif italic text-[#2f8ecd]">4 Simple Steps</span>
+                <span className="font-serif italic text-[#2f8ecd] font-light">4 Simple Steps</span>
               </h2>
               <p className="text-gray-400 text-base leading-relaxed mb-8">
                 From payment to Production Access in just 16 days. Here's exactly what happens.
@@ -1108,7 +1168,10 @@ export const Testers: React.FC = () => {
               Got Questions?
             </span>
             <h2 className="text-3xl sm:text-5xl font-bold text-gray-900 tracking-tight">
-              Frequently Asked Questions
+              Frequently Asked{" "}
+              <span className="font-serif italic text-[#2f8ecd] font-light">
+                Questions
+              </span>
             </h2>
           </div>
 
@@ -1461,14 +1524,15 @@ export const Testers: React.FC = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 flex items-center justify-center p-4"
+              transition={{ duration: 0.25, ease: "easeOut" }}
+              className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4"
               onClick={() => setShowSampleModal(false)}
             >
               <motion.div
-                initial={{ scale: 0.9, opacity: 0, y: 20 }}
+                initial={{ scale: 0.95, opacity: 0, y: 10 }}
                 animate={{ scale: 1, opacity: 1, y: 0 }}
-                exit={{ scale: 0.9, opacity: 0, y: 20 }}
-                transition={{ type: "spring", damping: 25, stiffness: 300 }}
+                exit={{ scale: 0.96, opacity: 0, y: 8 }}
+                transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
                 className="bg-white rounded-3xl p-6 sm:p-8 max-w-lg w-full shadow-2xl relative border border-gray-100 overflow-hidden"
                 onClick={(e) => e.stopPropagation()}
               >
@@ -1555,13 +1619,15 @@ export const Testers: React.FC = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
+              transition={{ duration: 0.25, ease: "easeOut" }}
               className="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 flex items-center justify-center p-3 sm:p-6"
               onClick={() => setActivePdfPreview(null)}
             >
               <motion.div
-                initial={{ scale: 0.95, opacity: 0, y: 15 }}
+                initial={{ scale: 0.96, opacity: 0, y: 12 }}
                 animate={{ scale: 1, opacity: 1, y: 0 }}
-                exit={{ scale: 0.95, opacity: 0, y: 15 }}
+                exit={{ scale: 0.97, opacity: 0, y: 8 }}
+                transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
                 className="bg-white rounded-2xl w-full max-w-3xl max-h-[85vh] shadow-2xl flex flex-col overflow-hidden relative"
                 onClick={(e) => e.stopPropagation()}
               >
