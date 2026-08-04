@@ -149,6 +149,8 @@ type Testimonial = {
 };
 
 /* Horizontal click-and-drag scroller for the chapter pill bar.
+   - Mouse: custom drag (browsers don't auto-scroll on mouse drag).
+   - Touch: native scroll only (fastest, with momentum + soft snap).
    Pass `activeId` to auto-scroll the matching pill into the center of the viewport. */
 const DragScrollRow: React.FC<{
   children: React.ReactNode;
@@ -160,66 +162,95 @@ const DragScrollRow: React.FC<{
   const isDragging = React.useRef(false);
   const startX = React.useRef(0);
   const scrollLeftStart = React.useRef(0);
+  const rafId = React.useRef<number | null>(null);
 
-  // When activeId changes, scroll the matching pill into the center of the track
+  // When activeId changes, smoothly center the matching pill — but only if it's off-screen
   React.useEffect(() => {
     const el = trackRef.current;
     if (!el || activeId === undefined) return;
-    const item = el.querySelector<HTMLElement>(
-      `[data-id="${activeId}"]`,
-    );
+    const item = el.querySelector<HTMLElement>(`[data-id="${activeId}"]`);
     if (!item) return;
     const trackRect = el.getBoundingClientRect();
     const itemRect = item.getBoundingClientRect();
-    const offset = itemRect.left + itemRect.width / 2 - (trackRect.left + trackRect.width / 2);
-    el.scrollTo({
-      left: el.scrollLeft + offset,
-      behavior: "smooth",
+    // Skip if the item is already comfortably visible (saves a redundant scroll)
+    if (
+      itemRect.left >= trackRect.left - 8 &&
+      itemRect.right <= trackRect.right + 8
+    ) {
+      return;
+    }
+    const offset =
+      itemRect.left + itemRect.width / 2 -
+      (trackRect.left + trackRect.width / 2);
+    // Use rAF so the browser has measured the layout before we ask it to scroll
+    requestAnimationFrame(() => {
+      if (trackRef.current) {
+        trackRef.current.scrollTo({
+          left: trackRef.current.scrollLeft + offset,
+          behavior: "smooth",
+        });
+      }
     });
   }, [activeId]);
 
+  // Only intercept mouse pointers; let touch pass through to native scroll
   const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (e.pointerType !== "mouse") return;
     const el = trackRef.current;
     if (!el) return;
     isDown.current = true;
     isDragging.current = false;
     startX.current = e.pageX - el.offsetLeft;
     scrollLeftStart.current = el.scrollLeft;
-    el.setPointerCapture(e.pointerId);
+    try {
+      el.setPointerCapture(e.pointerId);
+    } catch {
+      /* no-op */
+    }
   };
 
   const onPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
-    if (!isDown.current) return;
+    if (!isDown.current || e.pointerType !== "mouse") return;
     const el = trackRef.current;
     if (!el) return;
     const x = e.pageX - el.offsetLeft;
     const walk = x - startX.current;
-    // Only start "dragging" after crossing a threshold so taps still work
-    if (!isDragging.current && Math.abs(walk) > 5) {
+    if (!isDragging.current && Math.abs(walk) > 4) {
       isDragging.current = true;
     }
     if (isDragging.current) {
       e.preventDefault();
-      el.scrollLeft = scrollLeftStart.current - walk;
+      // Throttle scroll updates to one per animation frame for buttery-smooth mouse drag
+      if (rafId.current !== null) return;
+      rafId.current = requestAnimationFrame(() => {
+        if (trackRef.current) {
+          trackRef.current.scrollLeft = scrollLeftStart.current - walk;
+        }
+        rafId.current = null;
+      });
     }
   };
 
   const onPointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (e.pointerType !== "mouse") return;
     const el = trackRef.current;
     if (!el) return;
     isDown.current = false;
+    if (rafId.current !== null) {
+      cancelAnimationFrame(rafId.current);
+      rafId.current = null;
+    }
     try {
       el.releasePointerCapture(e.pointerId);
     } catch {
       /* no-op */
     }
-    // Clear dragging flag on next tick so onClick can decide
     setTimeout(() => {
       isDragging.current = false;
     }, 0);
   };
 
-  // Suppress click that would fire after a real drag
+  // Suppress click after a real drag
   const onClickCapture = (e: React.MouseEvent<HTMLDivElement>) => {
     if (isDragging.current) {
       e.stopPropagation();
@@ -236,14 +267,18 @@ const DragScrollRow: React.FC<{
       onPointerLeave={onPointerUp}
       onPointerCancel={onPointerUp}
       onClickCapture={onClickCapture}
-      className={`flex gap-2 overflow-x-auto snap-x snap-mandatory cursor-grab select-none ${className}`}
+      className={`flex gap-2 overflow-x-auto snap-x snap-proximity select-none ${className}`}
       style={{
         WebkitOverflowScrolling: "touch",
         scrollbarWidth: "none",
         msOverflowStyle: "none",
-        touchAction: "pan-x pan-y",
+        // Native horizontal scroll on touch (no JS interference).
+        // JS handles horizontal drag on mouse; vertical pan is left to the browser.
+        touchAction: "pan-y",
         userSelect: "none",
         scrollPaddingInline: "20%",
+        overscrollBehaviorX: "contain",
+        scrollBehavior: "smooth",
       }}
     >
       {children}
