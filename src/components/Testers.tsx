@@ -24,6 +24,8 @@ import {
   Download,
   BookOpen,
   CircleDot,
+  Maximize2,
+  Minimize2,
 } from "lucide-react";
 
 const WHATSAPP_URL =
@@ -346,7 +348,9 @@ export const Testers: React.FC = () => {
 
   /* State for Sample PDF Modal Popup */
   const [showSampleModal, setShowSampleModal] = useState<boolean>(false);
-  const [activePdfPreview, setActivePdfPreview] = useState<"feedback" | "answers" | null>(null);
+  const [sampleModalPlan, setSampleModalPlan] = useState<"starter" | "pro">("starter");
+  const [activePdfPreview, setActivePdfPreview] = useState<"feedback" | "answers" | "aso" | null>(null);
+  const [isPdfMaximized, setIsPdfMaximized] = useState<boolean>(false);
 
   const testimonials = [
     {
@@ -464,8 +468,6 @@ export const Testers: React.FC = () => {
         "Failing to meet any part of this criteria—such as testers opting out early or inactive accounts—will result in Google rejecting your Production Access request, forcing you to restart the 14-day timer.",
       keyPoints:
         "In practical terms, the rule is closer to a 14-day audit than a public beta. Google looks at opt-in stability, session length, and crash-free device ratios across every tester on your track. Skipping even one of these checks reopens the requirement from scratch, so the safest mindset is to treat the 14-day window as a single, uninterrupted event—not a soft launch you can pause.",
-      proTip:
-        "Before you onboard testers, freeze your APK (or AAB) for the entire 14 days. Even minor code changes make it harder to defend a clean session graph in front of Google's review team.",
     },
     {
       id: 2,
@@ -951,7 +953,7 @@ export const Testers: React.FC = () => {
                           detail: "Approved by Google, or we re-test for free.",
                         },
                         {
-                          title: "Pre-written Production Access answers",
+                          title: "Pre-written Play Console answers",
                           detail: "Tailored responses for every Google question.",
                           hasSample: true,
                         },
@@ -972,7 +974,10 @@ export const Testers: React.FC = () => {
                               </span>
                               {feature.hasSample && (
                                 <button
-                                  onClick={() => setShowSampleModal(true)}
+                                  onClick={() => {
+                                    setSampleModalPlan("starter");
+                                    setShowSampleModal(true);
+                                  }}
                                   className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#2f8ecd] hover:text-[#001F3F] cursor-pointer transition-colors"
                                 >
                                   View sample
@@ -1042,10 +1047,6 @@ export const Testers: React.FC = () => {
                     <ul className="space-y-3.5">
                       {[
                         {
-                          title: "25 verified Android testers",
-                          detail: "More coverage for complex or larger apps.",
-                        },
-                        {
                           title: "Priority WhatsApp line",
                           detail: "Direct access to a dedicated account manager.",
                         },
@@ -1075,7 +1076,10 @@ export const Testers: React.FC = () => {
                               </span>
                               {feature.hasSample && (
                                 <button
-                                  onClick={() => setShowSampleModal(true)}
+                                  onClick={() => {
+                                    setSampleModalPlan("pro");
+                                    setShowSampleModal(true);
+                                  }}
                                   className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#2f8ecd] hover:text-[#001F3F] cursor-pointer transition-colors"
                                 >
                                   View sample
@@ -1633,7 +1637,7 @@ export const Testers: React.FC = () => {
                   )}
 
                   {/* Pro tip callout — actionable advice */}
-                  {/* {currentChapterData.proTip && (
+                  {currentChapterData.proTip && (
                     <div className="relative mb-5 flex items-start gap-3 p-4 rounded-xl bg-blue-50/70 border border-blue-100">
                       <span className="shrink-0 w-8 h-8 rounded-lg bg-[#001F3F] flex items-center justify-center">
                         <Sparkles className="w-4 h-4 text-white" strokeWidth={2.2} />
@@ -1647,14 +1651,14 @@ export const Testers: React.FC = () => {
                         </p>
                       </div>
                     </div>
-                  )} */}
+                  )}
 
                   {/* Closing recap line */}
-                  {/* <div className="relative mb-6 flex items-center gap-2 text-[11px] uppercase tracking-[0.18em] text-[#2f8ecd] font-bold">
+                  <div className="relative mb-6 flex items-center gap-2 text-[11px] uppercase tracking-[0.18em] text-[#2f8ecd] font-bold">
                     <Sparkles className="w-3.5 h-3.5" />
                     <span>End of Chapter {String(currentChapterData.id).padStart(2, "0")}</span>
                     <span className="flex-1 h-px bg-gradient-to-r from-blue-100 to-transparent" />
-                  </div> */}
+                  </div>
 
                   {/* Prev / Next Navigation */}
                   <div className="relative pt-4 border-t border-gray-100 flex flex-wrap items-center justify-between gap-3">
@@ -1782,58 +1786,61 @@ export const Testers: React.FC = () => {
                 {/* Header */}
                 <div className="mb-6">
                   <h3 className="text-xl sm:text-2xl font-bold text-gray-900 tracking-tight">
-                    Comprehensive reports
+                    {sampleModalPlan === "starter" ? "Console Form Answers" : "ASO Audit Report"}
                   </h3>
                   <p className="text-xs sm:text-sm text-gray-500 mt-1">
-                    Real reports from a live test - this is what you receive with every plan.
+                    {sampleModalPlan === "starter"
+                      ? "Real reports from a live test - this is what you receive with Starter plan."
+                      : "ASO optimization and keyword list - this is what you receive with Pro plan."}
                   </p>
                 </div>
 
-                {/* Report Options Cards */}
                 <div className="space-y-4">
-                  {/* Card 1: Testers Feedback Report */}
-                  <div className="p-4 rounded-2xl bg-gray-50 border border-gray-200/80 hover:border-blue-400 transition-all flex items-start gap-4">
-                    <div className="w-10 h-10 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center text-[#2f8ecd] shrink-0 mt-0.5">
-                      <FileText className="w-5 h-5" />
+                  {sampleModalPlan === "starter" ? (
+                    /* Card: Console Form Answers */
+                    <div className="p-4 rounded-2xl bg-gray-50 border border-gray-200/80 hover:border-blue-400 transition-all flex items-start gap-4">
+                      <div className="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center text-emerald-600 shrink-0 mt-0.5">
+                        <FileCheck className="w-5 h-5" />
+                      </div>
+                      <div className="flex-1">
+                        <h4 className="text-sm font-bold text-gray-900">
+                          Console form answers
+                        </h4>
+                        <p className="text-xs text-gray-500 mt-0.5 mb-3 leading-relaxed">
+                          Pre-filled answers for Google's console questions, ready to submit
+                        </p>
+                        <button
+                          onClick={() => setActivePdfPreview("answers")}
+                          className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#2f8ecd] hover:text-blue-700 cursor-pointer"
+                        >
+                          <span>Open sample PDF</span>
+                          <ExternalLink className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
                     </div>
-                    <div className="flex-1">
-                      <h4 className="text-sm font-bold text-gray-900">
-                        Testers feedback report
-                      </h4>
-                      <p className="text-xs text-gray-500 mt-0.5 mb-3 leading-relaxed">
-                        Real tester feedback and bug reports from a live 14-day test
-                      </p>
-                      <button
-                        onClick={() => setActivePdfPreview("feedback")}
-                        className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#2f8ecd] hover:text-blue-700 cursor-pointer"
-                      >
-                        <span>Open sample PDF</span>
-                        <ExternalLink className="w-3.5 h-3.5" />
-                      </button>
+                  ) : (
+                    /* Card: ASO Audit Report */
+                    <div className="p-4 rounded-2xl bg-gray-50 border border-gray-200/80 hover:border-blue-400 transition-all flex items-start gap-4">
+                      <div className="w-10 h-10 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center text-[#2f8ecd] shrink-0 mt-0.5">
+                        <FileText className="w-5 h-5" />
+                      </div>
+                      <div className="flex-1">
+                        <h4 className="text-sm font-bold text-gray-900">
+                          ASO Audit report
+                        </h4>
+                        <p className="text-xs text-gray-500 mt-0.5 mb-3 leading-relaxed">
+                          Detailed keyword optimization and listing recommendations to maximize organic reach
+                        </p>
+                        <button
+                          onClick={() => setActivePdfPreview("aso")}
+                          className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#2f8ecd] hover:text-blue-700 cursor-pointer"
+                        >
+                          <span>Open sample PDF</span>
+                          <ExternalLink className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
                     </div>
-                  </div>
-
-                  {/* Card 2: Production Access Form Answers */}
-                  <div className="p-4 rounded-2xl bg-gray-50 border border-gray-200/80 hover:border-blue-400 transition-all flex items-start gap-4">
-                    <div className="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center text-emerald-600 shrink-0 mt-0.5">
-                      <FileCheck className="w-5 h-5" />
-                    </div>
-                    <div className="flex-1">
-                      <h4 className="text-sm font-bold text-gray-900">
-                        Production Access form answers
-                      </h4>
-                      <p className="text-xs text-gray-500 mt-0.5 mb-3 leading-relaxed">
-                        Pre-filled answers for Google's production access questions, ready to submit
-                      </p>
-                      <button
-                        onClick={() => setActivePdfPreview("answers")}
-                        className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#2f8ecd] hover:text-blue-700 cursor-pointer"
-                      >
-                        <span>Open sample PDF</span>
-                        <ExternalLink className="w-3.5 h-3.5" />
-                      </button>
-                    </div>
-                  </div>
+                  )}
                 </div>
 
                 {/* Footer Note */}
@@ -1855,15 +1862,22 @@ export const Testers: React.FC = () => {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.25, ease: "easeOut" }}
-              className="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 flex items-center justify-center p-3 sm:p-6"
-              onClick={() => setActivePdfPreview(null)}
+              className={`fixed inset-0 bg-black/75 backdrop-blur-sm z-50 flex items-center justify-center transition-all ${isPdfMaximized ? "" : "p-3 sm:p-6"}`}
+              onClick={() => {
+                setActivePdfPreview(null);
+                setIsPdfMaximized(false);
+              }}
             >
               <motion.div
                 initial={{ scale: 0.96, opacity: 0, y: 12 }}
                 animate={{ scale: 1, opacity: 1, y: 0 }}
                 exit={{ scale: 0.97, opacity: 0, y: 8 }}
                 transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-                className="bg-white rounded-2xl w-full max-w-3xl max-h-[85vh] shadow-2xl flex flex-col overflow-hidden relative"
+                className={`bg-white shadow-2xl flex flex-col overflow-hidden relative transition-all duration-300 ${
+                  isPdfMaximized
+                    ? "w-screen h-screen rounded-none max-w-none max-h-none"
+                    : "rounded-2xl w-full max-w-6xl h-[88vh]"
+                }`}
                 onClick={(e) => e.stopPropagation()}
               >
                 {/* PDF Header Bar */}
@@ -1874,7 +1888,9 @@ export const Testers: React.FC = () => {
                       <h4 className="text-sm font-bold">
                         {activePdfPreview === "feedback"
                           ? "Sample_Testers_Feedback_Report.pdf"
-                          : "Sample_Production_Access_Answers.pdf"}
+                          : activePdfPreview === "aso"
+                          ? "Sample_ASO_Audit_Report.pdf"
+                          : "Sample_Console_Form_Answers.pdf"}
                       </h4>
                       <p className="text-[10px] text-gray-400">Karma Dude Verified Document • 2 Pages</p>
                     </div>
@@ -1882,14 +1898,51 @@ export const Testers: React.FC = () => {
 
                   <div className="flex items-center gap-2">
                     <button
-                      onClick={() => alert("Downloading sample PDF...")}
+                      onClick={() => setIsPdfMaximized(!isPdfMaximized)}
+                      className="px-3 py-1.5 rounded-lg bg-gray-800 hover:bg-gray-700 text-xs font-semibold text-gray-200 flex items-center gap-1.5 transition-all cursor-pointer animate-none"
+                      title={isPdfMaximized ? "Exit Fullscreen" : "Fullscreen"}
+                    >
+                      {isPdfMaximized ? (
+                        <>
+                          <Minimize2 className="w-3.5 h-3.5" />
+                          <span className="hidden sm:inline">Exit Fullscreen</span>
+                        </>
+                      ) : (
+                        <>
+                          <Maximize2 className="w-3.5 h-3.5" />
+                          <span className="hidden sm:inline">Fullscreen</span>
+                        </>
+                      )}
+                    </button>
+                    <button
+                      onClick={() => {
+                        const fileUrl =
+                          activePdfPreview === "feedback"
+                            ? ""
+                            : activePdfPreview === "aso"
+                            ? "/ASO Audit By KD.pdf"
+                            : "/QA By Team KD.pdf";
+                        if (fileUrl) {
+                          const link = document.createElement("a");
+                          link.href = fileUrl;
+                          link.download = fileUrl.substring(1);
+                          document.body.appendChild(link);
+                          link.click();
+                          document.body.removeChild(link);
+                        } else {
+                          alert("Downloading feedback report sample...");
+                        }
+                      }}
                       className="px-3 py-1.5 rounded-lg bg-gray-800 hover:bg-gray-700 text-xs font-semibold text-gray-200 flex items-center gap-1.5 transition-all cursor-pointer"
                     >
                       <Download className="w-3.5 h-3.5" />
                       <span>Download</span>
                     </button>
                     <button
-                      onClick={() => setActivePdfPreview(null)}
+                      onClick={() => {
+                        setActivePdfPreview(null);
+                        setIsPdfMaximized(false);
+                      }}
                       className="w-8 h-8 rounded-lg bg-gray-800 hover:bg-gray-700 text-gray-400 hover:text-white flex items-center justify-center transition-all cursor-pointer"
                     >
                       <X className="w-5 h-5" />
@@ -1898,128 +1951,98 @@ export const Testers: React.FC = () => {
                 </div>
 
                 {/* PDF Document Page View */}
-                <div className="p-6 sm:p-10 overflow-y-auto bg-gray-100 space-y-6 text-left font-sans text-gray-900 text-xs sm:text-sm leading-relaxed no-scrollbar">
+                <div className="flex-1 w-full bg-gray-100 relative min-h-[60vh] overflow-hidden">
                   {activePdfPreview === "feedback" ? (
-                    <div className="bg-white p-8 rounded-xl shadow-md space-y-6 border border-gray-200">
-                      {/* Document Header */}
-                      <div className="flex justify-between items-start border-b border-gray-200 pb-6">
+                    <div className="p-6 sm:p-10 overflow-y-auto h-full space-y-6 text-left font-sans text-gray-900 text-xs sm:text-sm leading-relaxed no-scrollbar bg-gray-100">
+                      <div className="bg-white p-8 rounded-xl shadow-md space-y-6 border border-gray-200">
+                        {/* Document Header */}
+                        <div className="flex justify-between items-start border-b border-gray-200 pb-6">
+                          <div>
+                            <h1 className="text-xl font-bold text-gray-900">CLOSED TESTING FEEDBACK REPORT</h1>
+                            <p className="text-gray-500 text-xs mt-1">App: TaskPulse Pro (com.taskpulse.app)</p>
+                            <p className="text-gray-500 text-xs">Testing Track: 14-Day Closed Alpha</p>
+                          </div>
+                          <div className="text-right">
+                            <span className="px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-bold uppercase">
+                              STATUS: PASSED (16/16 DAYS)
+                            </span>
+                            <p className="text-gray-400 text-[10px] mt-2">Date Generated: Oct 24, 2024</p>
+                          </div>
+                        </div>
+
+                        {/* Device Stats Grid */}
                         <div>
-                          <h1 className="text-xl font-bold text-gray-900">CLOSED TESTING FEEDBACK REPORT</h1>
-                          <p className="text-gray-500 text-xs mt-1">App: TaskPulse Pro (com.taskpulse.app)</p>
-                          <p className="text-gray-500 text-xs">Testing Track: 14-Day Closed Alpha</p>
+                          <h3 className="font-bold text-gray-800 text-sm mb-3">1. Tester & Device Allocation</h3>
+                          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
+                            <div className="p-3 bg-blue-50 rounded-lg">
+                              <span className="block font-bold text-blue-900 text-base">15</span>
+                              <span className="text-[10px] text-blue-600 uppercase">Active Devices</span>
+                            </div>
+                            <div className="p-3 bg-emerald-50 rounded-lg">
+                              <span className="block font-bold text-emerald-900 text-base">100%</span>
+                              <span className="text-[10px] text-emerald-600 uppercase">Opt-in Retention</span>
+                            </div>
+                            <div className="p-3 bg-amber-50 rounded-lg">
+                              <span className="block font-bold text-amber-900 text-base">0.00%</span>
+                              <span className="text-[10px] text-amber-600 uppercase">ANR / Crash Rate</span>
+                            </div>
+                            <div className="p-3 bg-purple-50 rounded-lg">
+                              <span className="block font-bold text-purple-900 text-base">14 Days</span>
+                              <span className="text-[10px] text-purple-600 uppercase">Continuous Track</span>
+                            </div>
+                          </div>
                         </div>
-                        <div className="text-right">
-                          <span className="px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-bold uppercase">
-                            STATUS: PASSED (16/16 DAYS)
-                          </span>
-                          <p className="text-gray-400 text-[10px] mt-2">Date Generated: Oct 24, 2024</p>
-                        </div>
-                      </div>
 
-                      {/* Device Stats Grid */}
-                      <div>
-                        <h3 className="font-bold text-gray-800 text-sm mb-3">1. Tester & Device Allocation</h3>
-                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
-                          <div className="p-3 bg-blue-50 rounded-lg">
-                            <span className="block font-bold text-blue-900 text-base">15</span>
-                            <span className="text-[10px] text-blue-600 uppercase">Active Devices</span>
-                          </div>
-                          <div className="p-3 bg-emerald-50 rounded-lg">
-                            <span className="block font-bold text-emerald-900 text-base">100%</span>
-                            <span className="text-[10px] text-emerald-600 uppercase">Opt-in Retention</span>
-                          </div>
-                          <div className="p-3 bg-amber-50 rounded-lg">
-                            <span className="block font-bold text-amber-900 text-base">0.00%</span>
-                            <span className="text-[10px] text-amber-600 uppercase">ANR / Crash Rate</span>
-                          </div>
-                          <div className="p-3 bg-purple-50 rounded-lg">
-                            <span className="block font-bold text-purple-900 text-base">14 Days</span>
-                            <span className="text-[10px] text-purple-600 uppercase">Continuous Track</span>
+                        {/* Device Log Table */}
+                        <div>
+                          <h3 className="font-bold text-gray-800 text-sm mb-3">2. Device Model Verification Logs</h3>
+                          <div className="border border-gray-200 rounded-lg overflow-hidden">
+                            <table className="w-full text-left text-xs">
+                              <thead className="bg-gray-50 border-b border-gray-200 text-gray-600 uppercase">
+                                <tr>
+                                  <th className="p-2.5">Device</th>
+                                  <th className="p-2.5">Android OS</th>
+                                  <th className="p-2.5">Sessions</th>
+                                  <th className="p-2.5">Status</th>
+                                </tr>
+                              </thead>
+                              <tbody className="divide-y divide-gray-100">
+                                <tr>
+                                  <td className="p-2.5 font-medium">Samsung Galaxy S23 Ultra</td>
+                                  <td className="p-2.5 text-gray-500">Android 14</td>
+                                  <td className="p-2.5 text-gray-500">28 sessions</td>
+                                  <td className="p-2.5 text-emerald-600 font-bold">Verified</td>
+                                </tr>
+                                <tr>
+                                  <td className="p-2.5 font-medium">Google Pixel 8 Pro</td>
+                                  <td className="p-2.5 text-gray-500">Android 15</td>
+                                  <td className="p-2.5 text-gray-500">32 sessions</td>
+                                  <td className="p-2.5 text-emerald-600 font-bold">Verified</td>
+                                </tr>
+                                <tr>
+                                  <td className="p-2.5 font-medium">OnePlus 11 5G</td>
+                                  <td className="p-2.5 text-gray-500">Android 13</td>
+                                  <td className="p-2.5 text-gray-500">24 sessions</td>
+                                  <td className="p-2.5 text-emerald-600 font-bold">Verified</td>
+                                </tr>
+                              </tbody>
+                            </table>
                           </div>
                         </div>
-                      </div>
 
-                      {/* Device Log Table */}
-                      <div>
-                        <h3 className="font-bold text-gray-800 text-sm mb-3">2. Device Model Verification Logs</h3>
-                        <div className="border border-gray-200 rounded-lg overflow-hidden">
-                          <table className="w-full text-left text-xs">
-                            <thead className="bg-gray-50 border-b border-gray-200 text-gray-600 uppercase">
-                              <tr>
-                                <th className="p-2.5">Device</th>
-                                <th className="p-2.5">Android OS</th>
-                                <th className="p-2.5">Sessions</th>
-                                <th className="p-2.5">Status</th>
-                              </tr>
-                            </thead>
-                            <tbody className="divide-y divide-gray-100">
-                              <tr>
-                                <td className="p-2.5 font-medium">Samsung Galaxy S23 Ultra</td>
-                                <td className="p-2.5 text-gray-500">Android 14</td>
-                                <td className="p-2.5 text-gray-500">28 sessions</td>
-                                <td className="p-2.5 text-emerald-600 font-bold">Verified</td>
-                              </tr>
-                              <tr>
-                                <td className="p-2.5 font-medium">Google Pixel 8 Pro</td>
-                                <td className="p-2.5 text-gray-500">Android 15</td>
-                                <td className="p-2.5 text-gray-500">32 sessions</td>
-                                <td className="p-2.5 text-emerald-600 font-bold">Verified</td>
-                              </tr>
-                              <tr>
-                                <td className="p-2.5 font-medium">OnePlus 11 5G</td>
-                                <td className="p-2.5 text-gray-500">Android 13</td>
-                                <td className="p-2.5 text-gray-500">24 sessions</td>
-                                <td className="p-2.5 text-emerald-600 font-bold">Verified</td>
-                              </tr>
-                            </tbody>
-                          </table>
+                        {/* Summary Note */}
+                        <div className="p-4 bg-gray-50 rounded-lg border border-gray-200 text-gray-600 text-xs">
+                          <p className="font-bold text-gray-800 mb-1">Conclusion:</p>
+                          This application exhibits zero critical crashes across all tested hardware configurations. Verified ready for Google Play Production Access submission.
                         </div>
-                      </div>
-
-                      {/* Summary Note */}
-                      <div className="p-4 bg-gray-50 rounded-lg border border-gray-200 text-gray-600 text-xs">
-                        <p className="font-bold text-gray-800 mb-1">Conclusion:</p>
-                        This application exhibits zero critical crashes across all tested hardware configurations. Verified ready for Google Play Production Access submission.
                       </div>
                     </div>
                   ) : (
-                    <div className="bg-[#121212] text-white p-8 rounded-xl shadow-md space-y-6 border border-gray-800">
-                      {/* Document Header */}
-                      <div className="border-b border-gray-800 pb-6">
-                        <h1 className="text-xl font-bold text-white">PRODUCTION ACCESS FORM ANSWERS</h1>
-                        <p className="text-gray-400 text-xs mt-1">Pre-filled Answers for Google Play Console Application</p>
-                      </div>
-
-                      {/* QA Items */}
-                      <div className="space-y-5">
-                        <div className="p-4 bg-gray-900 rounded-xl border border-gray-800">
-                          <h4 className="font-bold text-blue-400 text-xs uppercase mb-1">
-                            Question 1: Describe your testing process and how you recruited testers.
-                          </h4>
-                          <p className="text-gray-300 text-xs leading-relaxed">
-                            "We conducted a 14-day closed testing track with 15 verified Android testers using diverse physical devices (Samsung, Google Pixel, OnePlus across Android 11 to 14). Testers opted-in via Google Play opt-in link and tested core workflows daily, ensuring real-world performance validation."
-                          </p>
-                        </div>
-
-                        <div className="p-4 bg-gray-900 rounded-xl border border-gray-800">
-                          <h4 className="font-bold text-blue-400 text-xs uppercase mb-1">
-                            Question 2: Summarize the feedback you received from your closed testing track.
-                          </h4>
-                          <p className="text-gray-300 text-xs leading-relaxed">
-                            "Testers provided positive feedback regarding UI responsiveness and navigation. Minor issues identified included initial font scaling on smaller screens, which was resolved in update v1.0.4. Overall crash-free rate remained at 100% across all 14 days."
-                          </p>
-                        </div>
-
-                        <div className="p-4 bg-gray-900 rounded-xl border border-gray-800">
-                          <h4 className="font-bold text-blue-400 text-xs uppercase mb-1">
-                            Question 3: What changes did you make to your app based on tester feedback?
-                          </h4>
-                          <p className="text-gray-300 text-xs leading-relaxed">
-                            "We optimized memory usage during initial asset loading, refined layout margins for compact displays, and updated local storage sync intervals to prevent potential battery drain during idle states."
-                          </p>
-                        </div>
-                      </div>
-                    </div>
+                    <iframe
+                      src={activePdfPreview === "aso" ? "/ASO Audit By KD.pdf" : "/QA By Team KD.pdf"}
+                      className="w-full h-full border-0 absolute inset-0"
+                      title="PDF Preview"
+                    />
                   )}
                 </div>
               </motion.div>
