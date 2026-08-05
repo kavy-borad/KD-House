@@ -414,36 +414,36 @@ export const Testers: React.FC = () => {
 
   const faqs = [
     {
-      q: "How do I get 12 testers?",
-      a: "Getting started is simple. Choose either the Starter or Pro plan, complete your payment, and share your Google Play Console closed testing opt-in link or tester email list with our team. Within 6 hours, we assign verified Android users who join your testing program using real devices and genuine Google accounts. Throughout the required 14-day testing period, testers actively install, launch, and interact with your application so it meets Google's engagement requirements for Production Access.",
+      q: "How do I get 12 testers, and what does the process look like from payment to actual installs?",
+      a: "After you pick a plan and complete payment on WhatsApp, we send a short onboarding form. The only technical thing we need is your Google Play Console closed-testing opt-in link (found under Testing in your console). Within 6 hours, our team assigns real Android users from our network — each on a physical device with a genuine Google account. They tap 'Become a tester' from your link, then open and use your app across the 14-day window. We monitor sessions daily and ping you the moment every Google checkbox is met.",
     },
     {
-      q: "How long does testing take?",
-      a: "Google requires every new developer account to complete 14 consecutive days of closed testing before requesting Production Access. To provide an additional safety margin, we typically continue testing for 14–16 days, ensuring there are no interruptions and Google's automated review system receives consistent engagement data. This greatly improves the likelihood of a successful production approval.",
+      q: "Is 14 days actually enough, or do you run the test longer? What if a tester forgets to open the app for a day?",
+      a: "We run 14–16 days in practice to give a buffer. Google doesn't just count calendar days — its automated system checks session continuity. If a tester uses the app, then goes silent for three days, Google flags it as suspicious and your Production Access application can be rejected. So we actively monitor engagement throughout the window and replace any inactive tester with a fresh one at no extra cost. That's how we keep the 99.9% approval rate.",
     },
     {
-      q: "What is included in the Starter plan?",
-      a: "The Starter Plan (₹999) includes everything required to complete Google's Closed Testing requirement successfully. You'll receive 15 verified Android testers, tester assignment within 6 hours, continuous testing for 14 days, a Production Access Guarantee, detailed tester feedback reports, guidance for answering Google's Production Access questionnaire, and dedicated email support throughout the testing period. It's the ideal solution for most new Android applications.",
+      q: "What's actually included in the ₹999 Starter plan? Is it enough for a brand-new developer account?",
+      a: "Starter is built for new personal developer accounts clearing the closed-testing hurdle for the first time. You get 15 verified Android testers (3 more than Google's 12-tester minimum as a safety margin), assignment within 6 hours, the full 14-day test with buffer days, a crash and feedback report at the end, pre-written answers for Google's Production Access questionnaire, and email support throughout. For a solo dev publishing a simple app, Starter is enough. If your app is complex or you've been rejected before, go for Pro.",
     },
     {
-      q: "What's the difference between Starter and Pro?",
-      a: "The Starter Plan is designed for standard applications and includes 15 Android testers with all essential testing services. The Pro Plan (₹1,699) is recommended for larger or more complex applications, offering 25 Android testers, Priority WhatsApp Support, a professional App Store Optimization (ASO) Report, store listing recommendations, and faster assistance throughout the testing process. Both plans include our Production Access Guarantee.",
+      q: "What extra do I get on the ₹1,699 Pro plan, and is it worth the upgrade for a small studio?",
+      a: "The headline difference is 25 testers instead of 15 — useful for apps with multiple user flows or where you've been rejected before and want redundancy. Pro also adds a priority WhatsApp line (responses under 30 minutes), a full ASO audit (title, description, screenshots, keywords — what decides whether people actually download your app after approval), and a 1-on-1 walkthrough of your Production Access application before you submit it. For a simple utility app, Starter is fine. For a studio publishing its third app or any app with a prior rejection, Pro pays for itself the first time it saves you another 14-day cycle.",
     },
     {
-      q: "What happens if Google rejects my app?",
-      a: "Our goal is to help you successfully publish your application. If Google rejects your Production Access request specifically due to testing engagement issues, we'll launch a new 14-day testing cycle with a fresh group of verified testers at no additional cost. Our team also reviews your submission, identifies potential issues, and provides guidance to improve your next application before resubmission.",
+      q: "What happens if Google rejects my Production Access request after 14 days? Do I lose my money?",
+      a: "You're covered. If Google rejects your request specifically because of testing engagement — the only thing our service covers — we run a fresh 14-day testing cycle at no additional cost. We also review Google's rejection message and tell you what went wrong. Most rejections are one of three things: a missing checkbox in your Production Access form, a tester group with a quiet day, or a questionnaire answer that didn't quite address what Google wanted. All three are fixable. If the rejection is for a non-testing policy issue, our guarantee doesn't apply, but we'll point you toward the right fix and most of our customers come back successfully.",
     },
     {
-      q: "Can you test apps in different languages?",
-      a: "Yes. Our network includes testers from multiple countries using real Android devices. We support applications in English, Hindi, Spanish, French, German, Portuguese, Japanese, and many other languages. Whether your application targets local or international users, we assign suitable testers based on your requirements to ensure authentic testing and meaningful engagement.",
+      q: "My app is fully in Spanish and targets users in Mexico and Spain. Will non-Spanish testers actually use it properly?",
+      a: "We have testers across multiple countries and languages — English, Hindi, Spanish, French, German, Portuguese, Japanese, and more. For your case, we'd assign Spanish-speaking testers on local carrier networks in Mexico and Spain, which is actually better than a generic English-speaking test because Google also weighs how your app performs in its intended market. Testers navigate the UI, check that text renders without truncation, validate locale-specific features like date and currency formats, and flag anything broken. Just tell us your target languages on the onboarding form and we'll route the test accordingly.",
     },
     {
-      q: "When does testing start?",
-      a: "Testing typically begins within 6 hours after we receive your payment, application details, and Google Play Console closed testing invitation. Once testers are assigned, they immediately join the testing program, install your application, and begin regular engagement. You'll be notified when testing starts so you can monitor participation directly from your Google Play Console.",
+      q: "Once I pay and share my opt-in link, how fast does testing actually start?",
+      a: "There is no queue. From the moment we receive your payment confirmation and opt-in link, our target is testers accepting the invitation and opening your app within 6 hours. In practice it's usually 2–4 hours during business days, slightly longer if you sign up late at night when some testers are asleep in their time zones. You'll see the opt-in count rise in your Play Console in real time, and we send a WhatsApp confirmation the moment the first batch accepts. After that, the test runs itself for 14 days — we handle the day-to-day monitoring and only ping you if we need a decision.",
     },
     {
-      q: "What types of apps do you accept?",
-      a: "We support almost every category of Android application that complies with Google Play Developer Program Policies. This includes productivity apps, business applications, SaaS platforms, educational apps, finance tools, health & fitness apps, e-commerce solutions, entertainment apps, utilities, and mobile games. Applications containing prohibited, illegal, or policy-violating content cannot be accepted for testing.",
+      q: "What kinds of apps do you accept? I have a fintech app and some testing services refuse finance apps.",
+      a: "We accept almost every category that Google Play allows — productivity, business, SaaS, education, finance, health, e-commerce, entertainment, utilities, games, and more. Fintech is something we work with regularly, including apps that integrate payment gateways, banking APIs, and UPI flows. The only categories we can't take are apps that violate Google's Developer Program Policy in a way testing can't fix — malware, illegal content, or brand impersonation. If your app is in a regulated vertical, share the description with us before paying and we'll honestly tell you whether the closed-testing track will be enough.",
     },
   ];
 
@@ -1371,10 +1371,10 @@ export const Testers: React.FC = () => {
         </section>
 
         {/* COMPLETE DEVELOPER GUIDE (12 CHAPTERS) */}
-        <section className="py-12 md:py-24 px-4 md:px-12 max-w-[1600px] mx-auto bg-gray-50 rounded-[2.5rem] border border-gray-200/80">
+        <section className="py-8 md:py-12 px-4 md:px-12 max-w-[1600px] mx-auto bg-gray-50 rounded-[2.5rem] border border-gray-200/80">
           <div className="max-w-[1400px] mx-auto">
             {/* Section Header — Editorial style with watermark */}
-            <div className="relative mb-10 md:mb-14 overflow-hidden">
+            <div className="relative mb-6 md:mb-8 overflow-hidden">
               {/* Faint watermark numeral — small on mobile, large on desktop */}
               <span
                 aria-hidden
