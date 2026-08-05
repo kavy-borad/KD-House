@@ -16,7 +16,6 @@ import {
   MessageSquare,
   ArrowRight,
   FileText,
-  Check,
   AlertTriangle,
   Headphones,
   ArrowDown,
@@ -453,6 +452,7 @@ export const Testers: React.FC = () => {
       id: 1,
       title: "1. The Requirement",
       subtitle: "Understanding Google Play's Closed Testing Mandate",
+      headline: "Google's closed testing rule, in plain words",
       intro:
         "Google Play requires all personal developer accounts created after November 13, 2023, to conduct a mandatory closed test with a minimum of 12 opt-in testers continuously over 14 days before requesting production access.",
       keyFacts: [
@@ -468,6 +468,7 @@ export const Testers: React.FC = () => {
       id: 2,
       title: "2. Why Google Asks",
       subtitle: "Why Google Enforces 14-Day Testing Policy",
+      headline: "Why Google introduced the 14-day testing policy",
       intro:
         "Google introduced this policy to elevate app quality on the Play Store, reduce zero-day crashes, eliminate low-quality spam apps, and verify developer intent.",
       keyFacts: [
@@ -483,6 +484,7 @@ export const Testers: React.FC = () => {
       id: 3,
       title: "3. Who We Are",
       subtitle: "Karma Dude - India's #1 Android Testing Platform",
+      headline: "Who is behind Karma Dude",
       intro:
         "Karma Dude IT Solutions is an enterprise software development studio specializing in mobile app engineering, AI automation, and Google Play compliance services.",
       keyFacts: [
@@ -498,6 +500,7 @@ export const Testers: React.FC = () => {
       id: 4,
       title: "4. Free vs Managed",
       subtitle: "DIY Testing vs Karma Dude Managed Testing",
+      headline: "Asking friends vs hiring a managed testing team",
       intro:
         "Asking friends, family, or online groups often leads to inactive testers, missing days, and eventual Google rejection. Managed testing guarantees 100% compliance.",
       keyFacts: [
@@ -513,6 +516,7 @@ export const Testers: React.FC = () => {
       id: 5,
       title: "5. Plans",
       subtitle: "Transparent, Fixed Pricing Plans",
+      headline: "What each plan actually costs and includes",
       intro:
         "Choose between our Starter Plan for standard apps or our Pro Plan for high-priority apps requiring extra testers, ASO reports, and priority support.",
       keyFacts: [
@@ -528,6 +532,7 @@ export const Testers: React.FC = () => {
       id: 6,
       title: "6. Timeline",
       subtitle: "16-Day Closed Testing Lifecycle Roadmap",
+      headline: "What happens day by day during the 14-day test",
       intro:
         "We follow a strict, milestone-driven timeline to ensure your closed testing track satisfies all Google requirements effortlessly.",
       keyFacts: [
@@ -543,6 +548,7 @@ export const Testers: React.FC = () => {
       id: 7,
       title: "7. Real Testers",
       subtitle: "Verified Physical Android Devices & Real Users",
+      headline: "Who the testers actually are",
       intro:
         "Google detects emulators, virtual machines, and duplicated IP addresses. We strictly use physical Android smartphones with active Google accounts.",
       keyFacts: [
@@ -558,6 +564,7 @@ export const Testers: React.FC = () => {
       id: 8,
       title: "8. What You Get",
       subtitle: "Complete Package Deliverables & Reports",
+      headline: "Every deliverable you receive after the test",
       intro:
         "Beyond testers, Karma Dude equips you with all the tools, documentation, and tailored answers required to pass Google's manual review.",
       keyFacts: [
@@ -573,6 +580,7 @@ export const Testers: React.FC = () => {
       id: 9,
       title: "9. Why Choose Us",
       subtitle: "Unmatched Reliability, Speed & Guarantee",
+      headline: "What makes Karma Dude different from alternatives",
       intro:
         "We are India's most trusted closed testing provider with over 100 published apps and a 99.9% approval track record.",
       keyFacts: [
@@ -588,6 +596,7 @@ export const Testers: React.FC = () => {
       id: 10,
       title: "10. Experience",
       subtitle: "5+ Years of Google Play Compliance Mastery",
+      headline: "Five years of navigating Google Play policy",
       intro:
         "Our team has navigated every Google Play Console policy update since 2019, ensuring your app stays compliant with the latest guidelines.",
       keyFacts: [
@@ -603,6 +612,7 @@ export const Testers: React.FC = () => {
       id: 11,
       title: "11. Rejected Before?",
       subtitle: "App Rejected by Google? We Offer Full Recovery!",
+      headline: "How we recover rejected apps",
       intro:
         "If Google previously rejected your production access request due to insufficient testing engagement, don't panic. Our recovery program fixes the root cause.",
       keyFacts: [
@@ -618,6 +628,7 @@ export const Testers: React.FC = () => {
       id: 12,
       title: "12. Going Live",
       subtitle: "Step-by-Step Guidance to Final Store Release",
+      headline: "The final four steps to publishing your app",
       intro:
         "The final step after completing 14 days of testing is submitting the Production Access Application. We walk you through every click.",
       keyFacts: [
@@ -1361,7 +1372,7 @@ export const Testers: React.FC = () => {
 
         {/* COMPLETE DEVELOPER GUIDE (12 CHAPTERS) */}
         <section className="py-12 md:py-24 px-4 md:px-12 max-w-[1600px] mx-auto bg-gray-50 rounded-[2.5rem] border border-gray-200/80">
-          <div className="max-w-7xl mx-auto">
+          <div className="max-w-[1400px] mx-auto">
             {/* Section Header — Editorial style with watermark */}
             <div className="relative mb-10 md:mb-14 overflow-hidden">
               {/* Faint watermark numeral — small on mobile, large on desktop */}
@@ -1394,274 +1405,207 @@ export const Testers: React.FC = () => {
               </div>
             </div>
 
-            {/* Progress Bar — 12 clickable segments */}
-            <div className="mb-8 md:mb-10">
-              <div className="flex items-center justify-between mb-3">
-                <span className="text-xs font-bold tracking-[0.15em] text-gray-500 uppercase">
-                  Your Progress
-                </span>
-                <span className="text-xs font-bold text-[#2f8ecd]">
-                  Chapter {activeChapter} of 12 · {Math.round((activeChapter / 12) * 100)}%
-                </span>
-              </div>
-              <div className="flex gap-1.5 sm:gap-2">
-                {chapters.map((ch) => {
-                  const isActive = activeChapter === ch.id;
-                  const isCompleted = activeChapter > ch.id;
-                  return (
-                    <button
-                      key={ch.id}
-                      onClick={() => setActiveChapter(ch.id)}
-                      title={ch.subtitle}
-                      className={`group relative flex-1 h-2.5 sm:h-3 rounded-full overflow-hidden transition-all cursor-pointer ${
-                        isActive
-                          ? "bg-[#2f8ecd] shadow-[0_0_12px_rgba(47,142,205,0.4)]"
-                          : isCompleted
-                          ? "bg-[#2f8ecd]/40"
-                          : "bg-gray-200 hover:bg-gray-300"
-                      }`}
-                    >
-                      <span className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                        <span className="hidden lg:block absolute -top-9 left-1/2 -translate-x-1/2 px-2.5 py-1 rounded-lg bg-gray-900 text-white text-[10px] font-bold whitespace-nowrap z-20 pointer-events-none">
-                          Ch. {ch.id}
-                        </span>
-                      </span>
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
+            {/* Progress Bar removed — was redundant with prev/next chapter navigation */}
 
-            {/* 3-Column Layout: Sidebar | Content | Key Facts */}
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 lg:gap-6">
-              {/* LEFT SIDEBAR — Chapter Index (Sticky vertical on desktop, horizontal pills on mobile) */}
-              <aside className="lg:col-span-3">
-                {/* Mobile horizontal pill scroller (sits outside the desktop card so it gets full width) */}
-                <div className="lg:hidden -mx-4 mb-5">
-                  <div className="flex items-center gap-2 px-4 mb-2">
-                    <BookOpen className="w-4 h-4 text-[#2f8ecd]" />
-                    <span className="text-xs font-bold tracking-[0.15em] text-gray-500 uppercase">
-                      Chapters
-                    </span>
-                  </div>
-                  <DragScrollRow className="px-4 pb-2 no-scrollbar" activeId={activeChapter}>
-                    {chapters.map((ch) => {
-                      const isActive = activeChapter === ch.id;
-                      return (
-                        <button
-                          key={ch.id}
-                          data-id={ch.id}
-                          onClick={() => setActiveChapter(ch.id)}
-                          style={{ WebkitTapHighlightColor: "transparent" }}
-                          className={`snap-start shrink-0 flex items-center gap-2 px-3 py-2 rounded-full border transition-all cursor-pointer max-w-[260px] ${
-                            isActive
-                              ? "bg-blue-50 border-[#2f8ecd] text-[#2f8ecd] shadow-sm"
-                              : "bg-white border-gray-200 hover:bg-gray-50 text-gray-700"
-                          }`}
-                        >
-                          <span
-                            className={`shrink-0 w-6 h-6 rounded-md flex items-center justify-center text-[10px] font-black ${
-                              isActive
-                                ? "bg-[#2f8ecd] text-white"
-                                : "bg-gray-100 text-gray-600"
-                            }`}
-                          >
-                            {String(ch.id).padStart(2, "0")}
-                          </span>
-                          <span className="text-xs font-bold truncate">
-                            {ch.subtitle}
-                          </span>
-                        </button>
-                      );
-                    })}
-                    <div className="shrink-0 w-4" aria-hidden />
-                  </DragScrollRow>
-                </div>
-
-                {/* Desktop vertical sticky list */}
-                <div className="hidden lg:block lg:sticky lg:top-28 bg-white border border-gray-200/80 rounded-2xl p-3 shadow-sm">
-                  <div className="flex px-2 pt-1.5 pb-2.5 mb-2 border-b border-gray-100 items-center gap-2">
+            {/* Two-column layout: Left index sidebar | Chapter card */}
+            <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-6 lg:gap-10 items-start">
+              {/* LEFT — Chapter Index Sidebar (Sticky) */}
+              <aside className="lg:sticky lg:top-28 hidden lg:block">
+                <div className="bg-white border border-gray-200/80 rounded-2xl p-4 shadow-sm">
+                  {/* Sidebar header */}
+                  <div className="flex items-center gap-2 px-2 pt-1 pb-3 mb-2 border-b border-gray-100">
                     <BookOpen className="w-4 h-4 text-[#2f8ecd]" />
                     <span className="text-[11px] font-bold tracking-[0.15em] text-gray-500 uppercase">
-                      Chapters
+                      Index
+                    </span>
+                    <span className="text-[11px] font-bold tracking-[0.15em] text-gray-300 uppercase ml-auto">
+                      · 12 Chapters
                     </span>
                   </div>
-                  <div className="space-y-1 max-h-[460px] overflow-y-auto no-scrollbar pr-1">
+
+                  {/* Chapter list */}
+                  <nav className="space-y-1">
                     {chapters.map((ch) => {
                       const isActive = activeChapter === ch.id;
                       return (
                         <button
-                          key={ch.id}
+                          key={`L-${ch.id}`}
                           onClick={() => setActiveChapter(ch.id)}
-                          className={`w-full flex items-center gap-3 p-2.5 rounded-xl text-left transition-colors cursor-pointer ${
+                          className={`group w-full flex items-center gap-3 p-2.5 rounded-xl text-left transition-all cursor-pointer ${
                             isActive
-                              ? "bg-blue-50 border-l-4 border-[#2f8ecd]"
-                              : "hover:bg-gray-50 border-l-4 border-transparent"
+                              ? "bg-blue-50 ring-1 ring-[#2f8ecd] shadow-sm"
+                              : "hover:bg-gray-50"
                           }`}
                         >
                           <span
                             className={`shrink-0 w-7 h-7 rounded-lg flex items-center justify-center text-[11px] font-bold transition-colors ${
                               isActive
                                 ? "bg-[#2f8ecd] text-white"
-                                : "bg-gray-100 text-gray-600"
+                                : "bg-gray-100 text-gray-500 group-hover:bg-gray-200"
                             }`}
                           >
                             {String(ch.id).padStart(2, "0")}
                           </span>
                           <span
-                            className={`text-[13px] leading-snug line-clamp-2 font-semibold ${
-                              isActive ? "text-[#2f8ecd]" : "text-gray-700"
+                            className={`text-[13px] leading-tight font-semibold transition-colors ${
+                              isActive ? "text-gray-900" : "text-gray-600 group-hover:text-gray-900"
                             }`}
                           >
-                            {ch.subtitle}
+                            {ch.title.replace(/^\d+\.\s*/, "")}
                           </span>
                         </button>
                       );
                     })}
-                  </div>
+                  </nav>
                 </div>
               </aside>
 
-              {/* MAIN CONTENT — Active Chapter */}
-              <main className="lg:col-span-6">
+              {/* CENTER — Chapter Card */}
+              <main className="w-full min-w-0">
                 <motion.div
                   key={currentChapterData.id}
                   initial={{ opacity: 0, y: 12 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-                  className="relative p-6 sm:p-8 lg:p-10 rounded-3xl bg-white border border-gray-200/80 shadow-sm overflow-hidden"
+                  className="relative p-5 sm:p-6 lg:p-7 rounded-2xl bg-white border border-gray-200/80 shadow-sm overflow-hidden"
                 >
-                  {/* Decorative large chapter number watermark */}
-                  <span
-                    aria-hidden
-                    className="absolute -top-4 -right-2 sm:top-2 sm:right-4 text-[7rem] sm:text-[9rem] lg:text-[10rem] font-black text-[#2f8ecd]/[0.06] leading-none select-none pointer-events-none"
-                  >
-                    {String(currentChapterData.id).padStart(2, "0")}
-                  </span>
-
-                  {/* Header row */}
-                  <div className="relative flex flex-col sm:flex-row justify-between items-start gap-4 mb-6 pb-6 border-b border-gray-100">
+                  {/* Header row — pill badge + chapter counter on right */}
+                  <div className="relative flex flex-col sm:flex-row justify-between items-start gap-3 mb-4">
                     <div>
-                      <span className="text-[#2f8ecd] font-extrabold text-xs uppercase tracking-[0.2em]">
-                        Chapter {currentChapterData.id} of 12
-                      </span>
-                      <h3 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mt-1.5 leading-tight">
+                      <span className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-blue-50 border border-blue-100 text-[#2f8ecd] text-[10px] font-bold uppercase tracking-[0.15em]">
+                        <CircleDot className="w-2.5 h-2.5" />
                         {currentChapterData.subtitle}
-                      </h3>
+                      </span>
                     </div>
-                    <button
-                      onClick={openWhatsApp}
-                      className="px-4 py-2.5 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold uppercase tracking-wider transition-all flex items-center gap-2 cursor-pointer shrink-0 shadow-md shadow-emerald-600/20"
-                    >
-                      <MessageSquare className="w-4 h-4" />
-                      <span className="hidden sm:inline">Ask Expert on WhatsApp</span>
-                      <span className="sm:hidden">Ask Expert</span>
-                    </button>
+                    <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400 mt-0.5">
+                      Chapter {String(currentChapterData.id).padStart(2, "0")} / 12
+                    </span>
                   </div>
+
+                  {/* Big editorial heading */}
+                  <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 mb-3 leading-[1.15]">
+                    {currentChapterData.headline}
+                  </h3>
 
                   {/* Intro paragraph */}
-                  <div className="relative mb-6">
-                    <div className="flex items-center gap-2 mb-3">
-                      <CircleDot className="w-4 h-4 text-[#2f8ecd]" />
-                      <span className="text-xs font-bold uppercase tracking-[0.15em] text-gray-500">
-                        Overview
-                      </span>
-                    </div>
-                    <p className="text-gray-700 text-base sm:text-lg leading-relaxed">
-                      {currentChapterData.intro}
-                    </p>
-                  </div>
+                  <p className="text-gray-700 text-sm sm:text-base leading-relaxed mb-5">
+                    {currentChapterData.intro}
+                  </p>
 
-                  {/* Important Note */}
-                  <div className="relative p-5 sm:p-6 rounded-2xl bg-amber-50/60 border border-amber-200/80 mb-6">
-                    <h4 className="text-xs font-bold text-amber-800 uppercase tracking-[0.15em] mb-2 flex items-center gap-2">
-                      <AlertTriangle className="w-4 h-4 text-amber-600" />
-                      <span>Important Note for Developers</span>
-                    </h4>
-                    <p className="text-amber-900/85 text-sm leading-relaxed">
-                      {currentChapterData.details}
-                    </p>
-                  </div>
+                  {/* "The rule at a glance" style visual card — only for chapter 1 */}
+                  {currentChapterData.id === 1 && (
+                    <div className="relative mb-5 p-4 sm:p-5 rounded-xl border border-blue-100 bg-gradient-to-b from-blue-50/40 to-white">
+                      <h4 className="text-[10px] font-bold text-[#2f8ecd] uppercase tracking-[0.2em] mb-3">
+                        The Rule at a Glance
+                      </h4>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        {/* 12 testers — row of person icons */}
+                        <div className="bg-white rounded-lg border border-blue-100 p-3">
+                          <div className="flex gap-0.5 mb-2">
+                            {Array.from({ length: 14 }).map((_, i) => (
+                              <span
+                                key={i}
+                                className={`shrink-0 w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold border ${
+                                  i < 12
+                                    ? "bg-blue-50 text-[#2f8ecd] border-blue-200"
+                                    : "bg-gray-100 text-gray-400 border-gray-200"
+                                }`}
+                              >
+                                <Users className="w-2.5 h-2.5" />
+                              </span>
+                            ))}
+                          </div>
+                          <p className="text-sm font-bold text-gray-900">12 testers</p>
+                          <p className="text-[11px] text-gray-500 mt-0.5">Opted in, not just added to a list</p>
+                        </div>
+
+                        {/* 14 days — row of day pills */}
+                        <div className="bg-white rounded-lg border border-blue-100 p-3">
+                          <div className="flex gap-0.5 mb-2 flex-wrap">
+                            {Array.from({ length: 14 }).map((_, i) => {
+                              const day = i + 1;
+                              const isFinal = day === 14;
+                              return (
+                                <span
+                                  key={i}
+                                  className={`shrink-0 w-5 h-5 rounded-md flex items-center justify-center text-[9px] font-bold ${
+                                    isFinal
+                                      ? "bg-[#001F3F] text-white"
+                                      : "bg-blue-50 text-[#2f8ecd] border border-blue-100"
+                                  }`}
+                                >
+                                  {day}
+                                </span>
+                              );
+                            })}
+                          </div>
+                          <p className="text-sm font-bold text-gray-900">14 days</p>
+                          <p className="text-[11px] text-gray-500 mt-0.5">One continuous, unbroken stretch</p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Key facts rendered as a checklist */}
+                  {currentChapterData.keyFacts.length > 0 && (
+                    <div className="relative mb-5">
+                      <h4 className="text-xs font-bold text-gray-900 mb-2.5">
+                        {currentChapterData.id === 1 ? "Play Console tracks it as a three-step checklist:" : "Key takeaways:"}
+                      </h4>
+                      <ul className="space-y-2">
+                        {currentChapterData.keyFacts.map((fact, idx) => (
+                          <li key={idx} className="flex items-start gap-2.5">
+                            <span className="shrink-0 mt-0.5 w-4 h-4 rounded-full bg-blue-50 border border-blue-100 flex items-center justify-center">
+                              <CheckCircle2 className="w-2.5 h-2.5 text-[#2f8ecd]" strokeWidth={3} />
+                            </span>
+                            <span className="text-xs sm:text-sm text-gray-700 leading-relaxed">
+                              {fact}
+                            </span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+
+                  {/* Details / closing paragraph */}
+                  <p className="text-gray-700 text-sm leading-relaxed mb-6">
+                    {currentChapterData.details}
+                  </p>
 
                   {/* Prev / Next Navigation */}
-                  <div className="relative pt-6 border-t border-gray-100 flex flex-wrap items-center justify-between gap-3">
+                  <div className="relative pt-4 border-t border-gray-100 flex flex-wrap items-center justify-between gap-3">
                     <button
                       onClick={() => activeChapter > 1 && setActiveChapter(activeChapter - 1)}
                       disabled={activeChapter === 1}
-                      className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all ${
+                      className={`inline-flex items-center gap-1.5 px-3 py-2 rounded-full text-[11px] font-bold uppercase tracking-wider transition-all ${
                         activeChapter === 1
                           ? "bg-gray-50 text-gray-300 cursor-not-allowed"
                           : "bg-white border border-gray-200 text-gray-700 hover:border-[#2f8ecd] hover:text-[#2f8ecd] cursor-pointer"
                       }`}
                     >
-                      <ChevronLeft className="w-4 h-4" />
+                      <ChevronLeft className="w-3.5 h-3.5" />
                       <span>Previous</span>
                     </button>
 
-                    <span className="text-xs text-gray-400 font-medium order-first sm:order-none w-full sm:w-auto text-center">
+                    <span className="text-[11px] text-gray-400 font-medium order-first sm:order-none w-full sm:w-auto text-center">
                       {currentChapterData.id} / 12
                     </span>
 
                     <button
                       onClick={() => activeChapter < 12 && setActiveChapter(activeChapter + 1)}
                       disabled={activeChapter === 12}
-                      className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all ${
+                      className={`inline-flex items-center gap-1.5 px-3 py-2 rounded-full text-[11px] font-bold uppercase tracking-wider transition-all ${
                         activeChapter === 12
                           ? "bg-gray-50 text-gray-300 cursor-not-allowed"
                           : "bg-[#001F3F] hover:bg-[#2f8ecd] text-white cursor-pointer shadow-md"
                       }`}
                     >
                       <span>Next Chapter</span>
-                      <ChevronRight className="w-4 h-4" />
+                      <ChevronRight className="w-3.5 h-3.5" />
                     </button>
                   </div>
                 </motion.div>
               </main>
-
-              {/* RIGHT SIDEBAR — Key Facts (Sticky) */}
-              <aside className="lg:col-span-3">
-                <div className="lg:sticky lg:top-28 bg-gradient-to-b from-blue-50/60 to-white border border-blue-100 rounded-2xl p-5 shadow-sm">
-                  <div className="flex items-center gap-2 mb-4 pb-3 border-b border-blue-100">
-                    <div className="w-8 h-8 rounded-lg bg-[#2f8ecd] text-white flex items-center justify-center">
-                      <CheckCircle2 className="w-4 h-4" />
-                    </div>
-                    <div>
-                      <h4 className="text-xs font-bold text-gray-900 uppercase tracking-[0.15em]">
-                        Key Facts
-                      </h4>
-                      <p className="text-[10px] text-gray-500 font-medium">
-                        Chapter {currentChapterData.id}
-                      </p>
-                    </div>
-                  </div>
-                  <ul className="space-y-2.5">
-                    {currentChapterData.keyFacts.map((fact, idx) => (
-                      <li
-                        key={idx}
-                        className="group p-3.5 rounded-xl bg-white border border-blue-100 hover:border-[#2f8ecd]/40 hover:shadow-sm transition-all"
-                      >
-                        <div className="flex items-start gap-2.5">
-                          <span className="shrink-0 w-5 h-5 rounded-full bg-blue-50 border border-blue-100 flex items-center justify-center mt-0.5">
-                            <Check className="w-3 h-3 text-[#2f8ecd]" strokeWidth={3} />
-                          </span>
-                          <span className="text-xs sm:text-sm text-gray-700 leading-relaxed">
-                            {fact}
-                          </span>
-                        </div>
-                      </li>
-                    ))}
-                  </ul>
-
-                  {/* Sidebar CTA */}
-                  <button
-                    onClick={openWhatsApp}
-                    className="w-full mt-5 px-4 py-3 rounded-xl bg-[#2f8ecd] hover:bg-[#001F3F] text-white text-xs font-bold uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer shadow-md"
-                  >
-                    <MessageSquare className="w-3.5 h-3.5" />
-                    <span>Discuss with Expert</span>
-                  </button>
-                </div>
-              </aside>
             </div>
           </div>
         </section>
