@@ -16,7 +16,6 @@ import {
   MessageSquare,
   ArrowRight,
   FileText,
-  AlertTriangle,
   Headphones,
   ArrowDown,
   X,
@@ -463,6 +462,10 @@ export const Testers: React.FC = () => {
       ],
       details:
         "Failing to meet any part of this criteria—such as testers opting out early or inactive accounts—will result in Google rejecting your Production Access request, forcing you to restart the 14-day timer.",
+      keyPoints:
+        "In practical terms, the rule is closer to a 14-day audit than a public beta. Google looks at opt-in stability, session length, and crash-free device ratios across every tester on your track. Skipping even one of these checks reopens the requirement from scratch, so the safest mindset is to treat the 14-day window as a single, uninterrupted event—not a soft launch you can pause.",
+      proTip:
+        "Before you onboard testers, freeze your APK (or AAB) for the entire 14 days. Even minor code changes make it harder to defend a clean session graph in front of Google's review team.",
     },
     {
       id: 2,
@@ -479,6 +482,10 @@ export const Testers: React.FC = () => {
       ],
       details:
         "Google's automated review system monitors device hardware IDs, IP distribution, app session duration, and opt-in stability throughout the 14-day window.",
+      keyPoints:
+        "The policy is fundamentally a trust signal. Google's risk engine assumes that legitimate developers will engage thoughtfully with real users for at least two weeks, so anything that looks automated—emulators, identical IPs, instant opt-ins—counts against you. The 40% crash reduction figure isn't just a marketing line; it reflects how much junk the new policy filters out before a single user installs the app.",
+      proTip:
+        "When filling the Production Access questionnaire, frame each answer around real tester feedback—reviewers actively look for evidence that you listened to users, not just that you ran tests.",
     },
     {
       id: 3,
@@ -495,6 +502,10 @@ export const Testers: React.FC = () => {
       ],
       details:
         "Our dedicated testing network spans real device farms and verified human testers across India, US, Europe, and Asia Pacific.",
+      keyPoints:
+        "We started as a small Android-only studio in 2019 and grew into a compliance-focused team the hard way—by debugging dozens of rejected apps before Google formalised its current testing rules. That early pain is now our playbook: every framework we ship is built around the same edge cases that originally got our own submissions stuck in review. The result is a process that has held up across fintech, gaming, utility, and SaaS apps for five straight years.",
+      proTip:
+        "If you have an unusual app category—wearables, automotive, enterprise MDM—skip the generic guides and ask for a category-specific walkthrough before paying for any testing plan.",
     },
     {
       id: 4,
@@ -511,6 +522,10 @@ export const Testers: React.FC = () => {
       ],
       details:
         "With Karma Dude Managed Service, you don't need to chase testers daily—our automated monitoring system ensures continuous 14-day active sessions.",
+      keyPoints:
+        "DIY testing is rarely free once you factor in the hidden cost of a failed cycle. A single dropout on day 9 means you reset the timer, lose a week, and still have to chase replacements who will be naturally less engaged than a paid, accountability-tracked tester. Managed testing flips that equation: you pay once, you get a clean 14-day run, and you walk away with the documentation that Google's review team actually wants to see.",
+      proTip:
+        "Run a quick audit of your last rejection (if any) before choosing a plan—most DIY failures can be traced to tester inactivity, not to the app itself, which is exactly what managed testing fixes.",
     },
     {
       id: 5,
@@ -527,6 +542,10 @@ export const Testers: React.FC = () => {
       ],
       details:
         "All purchase buttons redirect directly to our official WhatsApp support for instant onboarding within minutes.",
+      keyPoints:
+        "Both plans share the same backend—the same tester pool, the same monitoring system, and the same questionnaire templates. The difference is the surface area: Pro gives you ten extra testers (which shortens your risk surface if anyone drops off), plus an ASO audit that often pays for the plan upgrade within the first week of launch. If your app is revenue-critical, Pro is the cheaper option once you account for the cost of a delayed release.",
+      proTip:
+        "Bundle the Pro plan with a launch date in mind—once you have ASO recommendations, schedule them into your store listing update the same day Production Access is granted.",
     },
     {
       id: 6,
@@ -543,6 +562,10 @@ export const Testers: React.FC = () => {
       ],
       details:
         "We provide extra buffer days (up to Day 16) to ensure Google's system logs 100% complete metrics before you hit 'Apply for Production'.",
+      keyPoints:
+        "Day 0 is where most developers lose the most time. Onboarding is less about uploading an APK and more about compiling the tester email list, joining the right closed track, and pushing the right build to the right testers in the right order. The 16-day window is intentionally generous: 14 days of testing plus two buffer days to absorb time-zone gaps, late-night tester drop-offs, and the occasional mid-cycle tester replacement.",
+      proTip:
+        "Don't upload a new build on day 7 unless you absolutely have to. Google's session graph is far easier to defend when the testers run the same APK from start to finish.",
     },
     {
       id: 7,
@@ -559,6 +582,10 @@ export const Testers: React.FC = () => {
       ],
       details:
         "Every tester in our network is identity-verified, preventing bot detection or flagged accounts on Google Play Console.",
+      keyPoints:
+        "The single biggest reason a closed test gets rejected is not the app itself—it is the testers. Google's heuristics can spot when ten testers share the same IP block, log in from the same device fingerprint, or opt in within minutes of each other. Our testers are deliberately split across regions, devices, and OS versions, so each session graph looks like an organic cohort rather than a coordinated batch.",
+      proTip:
+        "Ask for a tester breakdown before launching your track. A healthy mix of high-end and mid-range Android devices catches the layout regressions that emulators always miss.",
     },
     {
       id: 8,
@@ -575,6 +602,10 @@ export const Testers: React.FC = () => {
       ],
       details:
         "When filling Google's 'Apply for Production' form, our provided answers directly address what Google reviewers want to hear about your testing feedback loop.",
+      keyPoints:
+        "The reports are written for two audiences at once: your internal product team and Google's review team. Each crash log is paired with a short narrative explaining what happened and how the next build addresses it, which is exactly the kind of feedback loop Google's reviewers want to see in the questionnaire answers. You also get a copy of the wording we recommend for each Production form field, so you are not paraphrasing policies from memory at the final step.",
+      proTip:
+        "Save the questionnaire answers as a reusable template—Google's review team frequently asks follow-up questions, and a documented answer history turns round two into a five-minute task.",
     },
     {
       id: 9,
@@ -591,6 +622,10 @@ export const Testers: React.FC = () => {
       ],
       details:
         "We handle all the operational heavy lifting so you can focus on building features and scaling your app business.",
+      keyPoints:
+        "Reliability is the entire product. Most competitors win on speed during the first 24 hours, then disappear once a tester drops off or a reviewer pushes back. Our workflow is built around daily monitoring and escalation paths so that a single bad day never becomes a failed cycle. The 100% approval guarantee is not a marketing promise; it is a structural commitment backed by a re-test policy that we have never had to publicly defend.",
+      proTip:
+        "Pair your account manager with a shared spreadsheet on day one. When everyone can see the tester activity in real time, escalations happen in minutes instead of hours.",
     },
     {
       id: 10,
@@ -607,6 +642,10 @@ export const Testers: React.FC = () => {
       ],
       details:
         "You leverage half a decade of app store optimization and compliance expertise with every order.",
+      keyPoints:
+        "Policy wording changes every quarter, and the Play Console is silently rewritten alongside it. What worked in 2021—long opt-in windows, weak audit trails—now triggers an instant rejection. We have walked through each of those transitions with live apps, which is why our questionnaire templates are versioned and our tester recommendations are adjusted within days of any major Console update. The result is a body of institutional knowledge that compresses a 14-day learning curve into a single onboarding call.",
+      proTip:
+        "Treat every Console notification as a policy update, not a comment. Forwarding those emails to your account manager is the fastest way to catch a requirement shift before your next submission.",
     },
     {
       id: 11,
@@ -623,6 +662,10 @@ export const Testers: React.FC = () => {
       ],
       details:
         "Over 2,500 developers who were rejected on their first attempt successfully got approved after switching to Karma Dude.",
+      keyPoints:
+        "Re-applying with the same evidence is the fastest way to get rejected twice. Our recovery program starts with a forensic audit of your previous submission, so we can pinpoint whether the failure was tester inactivity, weak questionnaire answers, or a Console misconfiguration. From there we rebuild the entire evidence trail: a fresh tester cohort, a fresh 14-day cycle, and a freshly written questionnaire that pre-empts the same reviewer objections.",
+      proTip:
+        "Quote the original rejection reason verbatim in your recovery intake form. The exact wording tells us which Console review team handled your case and which policy clause they cited.",
     },
     {
       id: 12,
@@ -639,6 +682,10 @@ export const Testers: React.FC = () => {
       ],
       details:
         "Once approved, your app is unlocked for public release to billions of Android users worldwide on the Google Play Store!",
+      keyPoints:
+        "Going live is the easy part—preparing the submission is where most launches slip. The 14-day badge on your Console dashboard is the only objective proof that your test qualifies, and it is what a reviewer will look at first. Once that badge is visible, every other step is paperwork: drop in the questionnaire templates, hit submit, and the manual review team typically responds within 48 to 72 hours with either an approval or a single, specific follow-up question.",
+      proTip:
+        "Pre-write your store listing update the same week you hit day 14. Production Access approval is binary, and the apps that launch fastest are the ones whose listings are already queued for a same-day rollout.",
     },
   ];
 
@@ -1568,9 +1615,46 @@ export const Testers: React.FC = () => {
                   )}
 
                   {/* Details / closing paragraph */}
-                  <p className="text-gray-700 text-sm leading-relaxed mb-6">
+                  <p className="text-gray-700 text-sm leading-relaxed mb-5">
                     {currentChapterData.details}
                   </p>
+
+                  {/* Key insights paragraph — deeper explanation in plain words */}
+                  {currentChapterData.keyPoints && (
+                    <div className="relative mb-5">
+                      <h4 className="text-xs font-bold text-gray-900 mb-2 inline-flex items-center gap-1.5">
+                        <BookOpen className="w-3.5 h-3.5 text-[#2f8ecd]" />
+                        In Depth
+                      </h4>
+                      <p className="text-gray-700 text-sm leading-relaxed">
+                        {currentChapterData.keyPoints}
+                      </p>
+                    </div>
+                  )}
+
+                  {/* Pro tip callout — actionable advice */}
+                  {/* {currentChapterData.proTip && (
+                    <div className="relative mb-5 flex items-start gap-3 p-4 rounded-xl bg-blue-50/70 border border-blue-100">
+                      <span className="shrink-0 w-8 h-8 rounded-lg bg-[#001F3F] flex items-center justify-center">
+                        <Sparkles className="w-4 h-4 text-white" strokeWidth={2.2} />
+                      </span>
+                      <div className="min-w-0">
+                        <h4 className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#2f8ecd] mb-1">
+                          Pro Tip
+                        </h4>
+                        <p className="text-xs sm:text-sm text-gray-700 leading-relaxed">
+                          {currentChapterData.proTip}
+                        </p>
+                      </div>
+                    </div>
+                  )} */}
+
+                  {/* Closing recap line */}
+                  {/* <div className="relative mb-6 flex items-center gap-2 text-[11px] uppercase tracking-[0.18em] text-[#2f8ecd] font-bold">
+                    <Sparkles className="w-3.5 h-3.5" />
+                    <span>End of Chapter {String(currentChapterData.id).padStart(2, "0")}</span>
+                    <span className="flex-1 h-px bg-gradient-to-r from-blue-100 to-transparent" />
+                  </div> */}
 
                   {/* Prev / Next Navigation */}
                   <div className="relative pt-4 border-t border-gray-100 flex flex-wrap items-center justify-between gap-3">
@@ -1610,34 +1694,60 @@ export const Testers: React.FC = () => {
           </div>
         </section>
 
-        {/* MINIMAL CTA */}
-        <section className="py-16 md:py-32 px-4 md:px-12 max-w-[1600px] mx-auto text-center relative overflow-hidden">
-          <div className="relative z-10">
-            <h2 className="text-4xl sm:text-6xl md:text-8xl font-bold text-gray-900 mb-4 md:mb-8 tracking-tighter leading-[0.9]">
-              READY TO <br className="hidden md:block" />
-              <span className="text-[#2f8ecd]">PUBLISH?</span>
-            </h2>
+        {/* CTA — hand-crafted editorial style */}
+        <section className="py-14 md:py-20 px-4 md:px-12 max-w-[1400px] mx-auto">
+          <div className="relative overflow-hidden rounded-[2rem] border border-gray-200/80 bg-[#fbfaf7]">
+            {/* Subtle paper texture — small noise dots */}
+            <div
+              aria-hidden
+              className="absolute inset-0 opacity-[0.35] pointer-events-none"
+              style={{
+                backgroundImage:
+                  "radial-gradient(circle at 1px 1px, rgba(0,0,0,0.06) 1px, transparent 0)",
+                backgroundSize: "14px 14px",
+              }}
+            />
 
-            <p className="text-lg md:text-2xl text-gray-500 mb-6 md:mb-12 max-w-3xl mx-auto font-light leading-relaxed">
-              Get 15 to 25 verified Android device testers assigned within 6 hours and pass Google Play Production Access seamlessly.
-            </p>
+            {/* Hand-drawn style underline accent (top-left) */}
+            <div
+              aria-hidden
+              className="absolute top-8 left-8 md:top-12 md:left-12 w-16 h-[2px] bg-[#2f8ecd] rounded-full"
+            />
 
-            <div className="flex flex-wrap justify-center gap-4">
+            <div className="relative flex flex-col items-center text-center p-8 md:p-16">
+              {/* Eyebrow */}
+              <div className="flex items-center gap-2 mb-5">
+                <span className="w-5 h-5 rounded-full bg-[#2f8ecd]/10 flex items-center justify-center">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#2f8ecd]" />
+                </span>
+                <span className="text-[11px] font-bold tracking-[0.2em] text-[#2f8ecd] uppercase">
+                  Ready when you are
+                </span>
+              </div>
+
+              {/* Heading */}
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 leading-[1.1] tracking-tight mb-5 max-w-2xl">
+                Ready to publish your app?
+              </h2>
+
+              {/* Subtext */}
+              <p className="text-gray-600 text-base md:text-lg leading-relaxed mb-8 max-w-xl">
+                Get 15 to 25 verified Android device testers assigned within 6 hours and pass Google Play Production Access seamlessly.
+              </p>
+
+              {/* Single CTA */}
               <button
                 onClick={openWhatsApp}
-                className="group relative inline-flex items-center gap-4 px-10 py-5 bg-[#001F3F] text-white rounded-full font-bold uppercase tracking-widest hover:bg-[#2f8ecd] transition-all duration-500 shadow-xl hover:shadow-2xl hover:shadow-blue-500/20 hover:-translate-y-1 cursor-pointer text-xs sm:text-sm"
+                className="group inline-flex items-center gap-3 px-7 py-4 bg-[#001F3F] text-white rounded-full font-bold text-xs sm:text-sm uppercase tracking-widest hover:bg-[#2f8ecd] transition-all duration-300 shadow-xl hover:shadow-2xl hover:-translate-y-0.5 cursor-pointer"
               >
                 <span>Get Started</span>
-                <ArrowRight className="w-4 h-4" />
+                <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
               </button>
 
-              <button
-                onClick={openWhatsApp}
-                className="group relative inline-flex items-center gap-4 px-10 py-5 bg-emerald-600 text-white rounded-full font-bold uppercase tracking-widest hover:bg-emerald-700 transition-all duration-500 shadow-xl hover:-translate-y-1 cursor-pointer text-xs sm:text-sm"
-              >
-                <MessageSquare className="w-4 h-4" />
-                <span>Talk to Expert</span>
-              </button>
+              {/* Reassurance line */}
+              <p className="text-gray-400 text-xs mt-5">
+                100% Production Access Guarantee · No subscription · Refund if rejected
+              </p>
             </div>
           </div>
         </section>
