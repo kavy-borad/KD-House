@@ -143,6 +143,7 @@ type Testimonial = {
   name: string;
   role: string;
   country: string;
+  countryCode: string;
   rating: number;
   review: string;
   appName: string;
@@ -290,16 +291,42 @@ const ReviewCard: React.FC<{ t: Testimonial }> = ({ t }) => (
   <div className="w-[340px] sm:w-[380px] shrink-0 p-6 rounded-2xl bg-white border border-gray-200/80 shadow-xs flex flex-col justify-between hover:shadow-md transition-shadow">
     <div>
       <div className="flex items-center justify-between mb-4">
-        <div className="flex gap-1">
-          {[...Array(t.rating)].map((_, i) => (
-            <Star
-              key={i}
-              className="w-4 h-4 fill-amber-400 text-amber-400"
-              strokeWidth={0}
-            />
-          ))}
+        <div className="flex gap-0.5">
+          {[...Array(5)].map((_, i) => {
+            const isFilled = i + 1 <= Math.floor(t.rating);
+            const isHalf = !isFilled && i + 0.5 < t.rating;
+            return (
+              <span key={i} className="relative inline-block w-4 h-4">
+                <Star
+                  className="w-4 h-4 text-gray-200 fill-gray-200"
+                  strokeWidth={0}
+                />
+                {(isFilled || isHalf) && (
+                  <span
+                    className="absolute inset-0 overflow-hidden"
+                    style={{ width: isHalf ? "50%" : "100%" }}
+                  >
+                    <Star
+                      className="w-4 h-4 fill-amber-400 text-amber-400"
+                      strokeWidth={0}
+                    />
+                  </span>
+                )}
+              </span>
+            );
+          })}
         </div>
-        <span className="text-xs text-gray-400 font-medium">{t.country}</span>
+        <div className="flex items-center gap-2">
+          <img
+            src={`https://flagcdn.com/${t.countryCode}.svg`}
+            alt={`${t.country} flag`}
+            className="w-5 h-4 object-cover rounded-[2px] shadow-sm border border-gray-200/60"
+            loading="lazy"
+          />
+          <span className="text-xs text-gray-400 font-medium">
+            {t.country} <span className="text-gray-300 uppercase ml-0.5">{t.countryCode}</span>
+          </span>
+        </div>
       </div>
 
       <p className="text-gray-600 text-sm leading-relaxed mb-6 italic">
@@ -307,18 +334,9 @@ const ReviewCard: React.FC<{ t: Testimonial }> = ({ t }) => (
       </p>
     </div>
 
-    <div className="pt-4 border-t border-gray-100 flex justify-between items-center">
-      <div>
-        <h4 className="text-sm font-bold text-gray-900">{t.name}</h4>
-        <p className="text-xs text-[#2f8ecd] font-medium">{t.appName}</p>
-      </div>
-
-      <button
-        onClick={openWhatsApp}
-        className="px-3 py-1.5 rounded-full bg-gray-100 hover:bg-[#2f8ecd] hover:text-white text-xs font-semibold text-gray-700 transition-all cursor-pointer"
-      >
-        View App
-      </button>
+    <div className="pt-4 border-t border-gray-100">
+      <h4 className="text-sm font-bold text-gray-900">{t.name}</h4>
+      <p className="text-xs text-[#2f8ecd] font-medium">{t.appName}</p>
     </div>
   </div>
 );
@@ -336,74 +354,62 @@ export const Testers: React.FC = () => {
     {
       name: "Alex Rivera",
       role: "Solo Android Developer",
-      country: "United States 🇺🇸",
-      rating: 5,
+      country: "United States",
+      countryCode: "us",
+      rating: 4.5,
       review:
-        "Karma Dude saved my app release! I was struggling to find 12 active testers. Their team assigned 15 real testers within 4 hours, and we passed production review on our first try.",
+        "Got stuck trying to find enough testers on my own for almost 3 weeks. Found Karma Dude on Reddit, paid at 11pm, and by morning I had 15 testers opted in. Dashboard is straightforward — I could see sessions log daily. Only reason I'm not giving 5 stars is I had to ask twice for the production form template, but it came through eventually.",
       appName: "TaskPulse Pro",
     },
     {
-      name: "Rajesh Kumar",
+      name: "Priya Sharma",
       role: "Founder, AppCraft Studio",
-      country: "India 🇮🇳",
+      country: "India",
+      countryCode: "in",
       rating: 5,
       review:
-        "The production form answers provided in the Pro plan were invaluable. Google accepted our production access request within 24 hours of completing the 14-day test.",
+        "We've been running a small studio for 2 years and Google rejected our last 2 apps citing insufficient testing. Karma Dude ran a clean 14-day cycle and we got approved on the first try after that. Their questionnaire answers were honestly better than what I would have written myself.",
       appName: "FinTrack Daily",
     },
     {
       name: "Sophie Laurent",
       role: "Indie Game Developer",
-      country: "France 🇫🇷",
-      rating: 5,
+      country: "France",
+      countryCode: "fr",
+      rating: 4,
       review:
-        "Extremely professional service. Real devices, genuine bug reports, and continuous daily engagement. Worth every single penny!",
+        "Mon RPG indé avait déjà été rejeté une fois. Le service m'a évité de chercher 12 testeurs moi-même. Les rapports de bugs étaient utiles et les testeurs semblaient réels (pas des bots). Le seul reproche : la communication WhatsApp est un peu lente le week-end.",
       appName: "Pixel Quest RPG",
     },
     {
       name: "Marcus Vance",
       role: "Lead Dev, TechNova",
-      country: "United Kingdom 🇬🇧",
-      rating: 5,
+      country: "United Kingdom",
+      countryCode: "gb",
+      rating: 4.5,
       review:
-        "Our app had been rejected twice before using Karma Dude. Their team guided us through the fix, ran 16 days of testing, and got us live smoothly.",
+        "Our health app was stuck in closed testing limbo for a month before we found these guys. They assigned testers within 6 hours as advertised. Setup was painless — I just shared the opt-in link and they handled the rest. Crash report was actually detailed, not generic.",
       appName: "HealthSync AI",
     },
     {
       name: "Lucas Silva",
       role: "Mobile App Engineer",
-      country: "Brazil 🇧🇷",
+      country: "Brazil",
+      countryCode: "br",
       rating: 5,
       review:
-        "Fast, reliable, and guaranteed! The dashboard feedback report gave us deep insight into real device crashes we hadn't caught during dev.",
+        "Comprei o plano Pro para meu app de delivery e fui aprovado no primeiro pedido de production access. Os testadores são de verdade — vi comentários específicos no relatório sobre problemas no meu fluxo de checkout que eu não tinha percebido durante o dev.",
       appName: "DeliveryFast",
     },
     {
       name: "Hannah Weber",
       role: "Product Owner",
-      country: "Germany 🇩🇪",
-      rating: 5,
+      country: "Germany",
+      countryCode: "de",
+      rating: 4,
       review:
-        "Outstanding service! 25 testers on real Samsung & Pixel devices. The team was responsive on WhatsApp 24/7. Highly recommended!",
+        "Hat alles wie beschrieben funktioniert. 25 Tester angemeldet, 14 Tage durchgetestet, Production Access beim ersten Versuch erhalten. Ein Stern Abzug, weil das ASO-Report im Pro-Plan etwas oberflächlich war — hatte mehr Tiefe erwartet. Aber der Hauptservice (Testing) ist solide.",
       appName: "MindSpace Meditation",
-    },
-    {
-      name: "Kenji Sato",
-      role: "Utility App Creator",
-      country: "Japan 🇯🇵",
-      rating: 5,
-      review:
-        "Google's 14-day requirement is a nightmare for solo devs. Karma Dude made it effortless. 100% genuine testers and rapid onboarding.",
-      appName: "ScanEasy PDF",
-    },
-    {
-      name: "Liam O'Connor",
-      role: "Startup Founder",
-      country: "Australia 🇦🇺",
-      rating: 5,
-      review:
-        "Pro plan is the best investment. ASO report and store listing suggestions helped boost our initial launch downloads after approval!",
-      appName: "FitFlow Coaching",
     },
   ];
 
@@ -568,7 +574,7 @@ export const Testers: React.FC = () => {
       title: "9. Why Choose Us",
       subtitle: "Unmatched Reliability, Speed & Guarantee",
       intro:
-        "We are India's most trusted closed testing provider with over 10,000 published apps and a 99.9% approval track record.",
+        "We are India's most trusted closed testing provider with over 100 published apps and a 99.9% approval track record.",
       keyFacts: [
         "6-Hour Rapid Onboarding",
         "100% Production Access Guarantee",
@@ -744,7 +750,7 @@ export const Testers: React.FC = () => {
               </p>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-6 pt-6 border-t border-gray-100">
                 {[
-                  { label: "Apps Published", value: "10,000+" },
+                  { label: "Apps Published", value: "100+" },
                   { label: "Approval Rate", value: "99.9%" },
                   { label: "Assignment Time", value: "< 6 Hours" },
                   { label: "Testing Window", value: "14-16 Days" },
@@ -1077,7 +1083,7 @@ export const Testers: React.FC = () => {
               className="marquee-track marquee-ltr gap-5"
               style={{ animationDuration: "40s" }}
             >
-              {[...testimonials.slice(0, 4), ...testimonials.slice(0, 4)].map((t, idx) => (
+              {[...testimonials.slice(0, 3), ...testimonials.slice(0, 3)].map((t, idx) => (
                 <ReviewCard key={`r1-${idx}`} t={t} />
               ))}
             </div>
@@ -1089,7 +1095,7 @@ export const Testers: React.FC = () => {
               className="marquee-track marquee-rtl gap-5"
               style={{ animationDuration: "45s" }}
             >
-              {[...testimonials.slice(4, 8), ...testimonials.slice(4, 8)].map((t, idx) => (
+              {[...testimonials.slice(3, 6), ...testimonials.slice(3, 6)].map((t, idx) => (
                 <ReviewCard key={`r2-${idx}`} t={t} />
               ))}
             </div>
@@ -1118,8 +1124,8 @@ export const Testers: React.FC = () => {
                 <Award className="w-7 h-7" />
               </div>
               <div>
-                <h3 className="text-2xl md:text-3xl font-bold text-white mb-2">10,000+ Apps Published</h3>
-                <p className="text-blue-200 group-hover:text-white/90 text-sm leading-relaxed max-w-md transition-colors duration-500">Proven track record with over ten thousand Android apps approved for public release on Google Play.</p>
+                <h3 className="text-2xl md:text-3xl font-bold text-white mb-2">100+ Apps Published</h3>
+                <p className="text-blue-200 group-hover:text-white/90 text-sm leading-relaxed max-w-md transition-colors duration-500">Growing track record with 100+ Android apps approved for public release on Google Play.</p>
               </div>
             </div>
 
