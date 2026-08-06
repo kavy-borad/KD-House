@@ -150,8 +150,8 @@ type Testimonial = {
 };
 
 /* Horizontal click-and-drag scroller for the chapter pill bar.
-   - Mouse: custom drag (browsers don't auto-scroll on mouse drag).
-   - Touch: native scroll only (fastest, with momentum + soft snap).
+   - Touch / pen: native horizontal scroll with momentum + soft snap (fastest on mobile).
+   - Mouse: custom drag (browsers don't auto-scroll on mouse drag) + wheel-to-scroll.
    Pass `activeId` to auto-scroll the matching pill into the center of the viewport. */
 const DragScrollRow: React.FC<{
   children: React.ReactNode;
@@ -180,21 +180,18 @@ const DragScrollRow: React.FC<{
     ) {
       return;
     }
-    const offset =
-      itemRect.left + itemRect.width / 2 -
-      (trackRect.left + trackRect.width / 2);
-    // Use rAF so the browser has measured the layout before we ask it to scroll
+    // Use native scrollIntoView with inline:"center" for the smoothest native animation
+    // (respects the browser's momentum, scroll-snap, and works on both touch & mouse).
     requestAnimationFrame(() => {
-      if (trackRef.current) {
-        trackRef.current.scrollTo({
-          left: trackRef.current.scrollLeft + offset,
-          behavior: "smooth",
-        });
-      }
+      item.scrollIntoView({
+        behavior: "smooth",
+        block: "nearest",
+        inline: "center",
+      });
     });
   }, [activeId]);
 
-  // Only intercept mouse pointers; let touch pass through to native scroll
+  // Only intercept mouse pointers; touch/pen uses native browser horizontal scroll
   const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
     if (e.pointerType !== "mouse") return;
     const el = trackRef.current;
@@ -251,6 +248,17 @@ const DragScrollRow: React.FC<{
     }, 0);
   };
 
+  // Mouse wheel → horizontal scroll (desktop convenience; mobile already supports swipe)
+  const onWheel = (e: React.WheelEvent<HTMLDivElement>) => {
+    const el = trackRef.current;
+    if (!el) return;
+    // Only redirect when the wheel is clearly horizontal (shift+wheel or trackpad horizontal)
+    if (e.deltaX !== 0 || e.shiftKey) {
+      e.preventDefault();
+      el.scrollLeft += e.deltaX !== 0 ? e.deltaX : e.deltaY;
+    }
+  };
+
   // Suppress click after a real drag
   const onClickCapture = (e: React.MouseEvent<HTMLDivElement>) => {
     if (isDragging.current) {
@@ -267,15 +275,16 @@ const DragScrollRow: React.FC<{
       onPointerUp={onPointerUp}
       onPointerLeave={onPointerUp}
       onPointerCancel={onPointerUp}
+      onWheel={onWheel}
       onClickCapture={onClickCapture}
-      className={`flex gap-2 overflow-x-auto snap-x snap-proximity select-none ${className}`}
+      className={`drag-scroll-row flex gap-2 overflow-x-auto overflow-y-hidden snap-x snap-mandatory select-none ${className}`}
       style={{
         WebkitOverflowScrolling: "touch",
         scrollbarWidth: "none",
         msOverflowStyle: "none",
-        // Native horizontal scroll on touch (no JS interference).
-        // JS handles horizontal drag on mouse; vertical pan is left to the browser.
-        touchAction: "pan-y",
+        // "pan-x" lets the browser handle horizontal swipes natively on touch
+        // (with momentum + bounce). Vertical scrolling is left to the page.
+        touchAction: "pan-x pan-y",
         userSelect: "none",
         scrollPaddingInline: "20%",
         overscrollBehaviorX: "contain",
@@ -1466,9 +1475,59 @@ export const GooglePlayTesting: React.FC = () => {
 
             {/* Two-column layout: Left index sidebar | Chapter card */}
             <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-6 lg:gap-10 items-start">
-              {/* LEFT — Chapter Index Sidebar (Sticky) */}
-              <aside className="lg:sticky lg:top-28 hidden lg:block">
-                <div className="bg-white border border-gray-200/80 rounded-2xl p-4 shadow-sm">
+              {/* LEFT — Chapter Index Sidebar (Sticky on desktop, horizontal scroll on mobile) */}
+              <aside className="lg:sticky lg:top-28">
+                {/* MOBILE — Horizontal scrollable chapter pills (visible only on small screens) */}
+                <div className="lg:hidden relative -mx-4 mb-4">
+                  {/* Edge fade masks to hint scrollability */}
+                  <span
+                    aria-hidden
+                    className="pointer-events-none absolute left-0 top-0 bottom-0 w-5 z-10"
+                    style={{
+                      background:
+                        "linear-gradient(to right, rgb(249 250 251) 0%, rgba(249,250,251,0) 100%)",
+                    }}
+                  />
+                  <span
+                    aria-hidden
+                    className="pointer-events-none absolute right-0 top-0 bottom-0 w-5 z-10"
+                    style={{
+                      background:
+                        "linear-gradient(to left, rgb(249 250 251) 0%, rgba(249,250,251,0) 100%)",
+                    }}
+                  />
+                  <div className="px-4">
+                    <DragScrollRow activeId={activeChapter} className="pb-2">
+                      {chapters.map((ch) => {
+                        const isActive = activeChapter === ch.id;
+                        return (
+                          <button
+                            key={`M-${ch.id}`}
+                            data-id={ch.id}
+                            onClick={() => setActiveChapter(ch.id)}
+                            className={`shrink-0 snap-center inline-flex items-center gap-2 px-3.5 py-2 rounded-full text-[11px] font-bold uppercase tracking-wider transition-all duration-300 cursor-pointer active:scale-95 ${isActive
+                              ? "bg-[#2f8ecd] text-white shadow-md"
+                              : "bg-white border border-gray-200 text-gray-600 hover:border-[#2f8ecd] hover:text-[#2f8ecd]"
+                              }`}
+                          >
+                            <span
+                              className={`shrink-0 w-5 h-5 rounded-md flex items-center justify-center text-[10px] font-black transition-colors ${isActive
+                                ? "bg-white/20 text-white"
+                                : "bg-gray-100 text-gray-500"
+                                }`}
+                            >
+                              {String(ch.id).padStart(2, "0")}
+                            </span>
+                            <span className="whitespace-nowrap">{ch.title.replace(/^\d+\.\s*/, "")}</span>
+                          </button>
+                        );
+                      })}
+                    </DragScrollRow>
+                  </div>
+                </div>
+
+                {/* DESKTOP — Sticky vertical sidebar (hidden on small screens) */}
+                <div className="hidden lg:block bg-white border border-gray-200/80 rounded-2xl p-4 shadow-sm">
                   {/* Sidebar header */}
                   <div className="flex items-center gap-2 px-2 pt-1 pb-3 mb-2 border-b border-gray-100">
                     <BookOpen className="w-4 h-4 text-[#2f8ecd]" />
@@ -1525,13 +1584,13 @@ export const GooglePlayTesting: React.FC = () => {
                 >
                   {/* Header row — pill badge + chapter counter on right */}
                   <div className="relative flex flex-col sm:flex-row justify-between items-start gap-3 mb-4">
-                    <div>
-                      <span className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-blue-50 border border-blue-100 text-[#2f8ecd] text-[10px] font-bold uppercase tracking-[0.15em]">
-                        <CircleDot className="w-2.5 h-2.5" />
-                        {currentChapterData.subtitle}
+                    <div className="min-w-0 flex-1">
+                      <span className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-blue-50 border border-blue-100 text-[#2f8ecd] text-[9px] sm:text-[10px] font-bold uppercase tracking-[0.15em] max-w-full">
+                        <CircleDot className="w-2.5 h-2.5 shrink-0" />
+                        <span className="break-words">{currentChapterData.subtitle}</span>
                       </span>
                     </div>
-                    <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400 mt-0.5">
+                    <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400 mt-0.5 shrink-0">
                       Chapter {String(currentChapterData.id).padStart(2, "0")} / 12
                     </span>
                   </div>
@@ -1553,13 +1612,13 @@ export const GooglePlayTesting: React.FC = () => {
                         The Rule at a Glance
                       </h4>
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        {/* 12 testers — row of person icons */}
+                        {/* 12 testers — row of person icons (wraps on tiny screens) */}
                         <div className="bg-white rounded-lg border border-blue-100 p-3">
-                          <div className="flex gap-0.5 mb-2">
+                          <div className="flex flex-wrap gap-1 mb-2">
                             {Array.from({ length: 14 }).map((_, i) => (
                               <span
                                 key={i}
-                                className={`shrink-0 w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold border ${i < 12
+                                className={`shrink-0 w-5 h-5 sm:w-5 sm:h-5 rounded-full flex items-center justify-center text-[10px] font-bold border ${i < 12
                                   ? "bg-blue-50 text-[#2f8ecd] border-blue-200"
                                   : "bg-gray-100 text-gray-400 border-gray-200"
                                   }`}
@@ -1572,9 +1631,9 @@ export const GooglePlayTesting: React.FC = () => {
                           <p className="text-[11px] text-gray-500 mt-0.5">Opted in, not just added to a list</p>
                         </div>
 
-                        {/* 14 days — row of day pills */}
+                        {/* 14 days — row of day pills (wraps on tiny screens) */}
                         <div className="bg-white rounded-lg border border-blue-100 p-3">
-                          <div className="flex gap-0.5 mb-2 flex-wrap">
+                          <div className="flex flex-wrap gap-1 mb-2">
                             {Array.from({ length: 14 }).map((_, i) => {
                               const day = i + 1;
                               const isFinal = day === 14;
@@ -1662,11 +1721,11 @@ export const GooglePlayTesting: React.FC = () => {
                   </div>
 
                   {/* Prev / Next Navigation */}
-                  <div className="relative pt-4 border-t border-gray-100 flex flex-wrap items-center justify-between gap-3">
+                  <div className="relative pt-4 border-t border-gray-100 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2 sm:gap-3">
                     <button
                       onClick={() => activeChapter > 1 && setActiveChapter(activeChapter - 1)}
                       disabled={activeChapter === 1}
-                      className={`inline-flex items-center gap-1.5 px-3 py-2 rounded-full text-[11px] font-bold uppercase tracking-wider transition-all ${activeChapter === 1
+                      className={`inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-full text-[11px] font-bold uppercase tracking-wider transition-all ${activeChapter === 1
                         ? "bg-gray-50 text-gray-300 cursor-not-allowed"
                         : "bg-white border border-gray-200 text-gray-700 hover:border-[#2f8ecd] hover:text-[#2f8ecd] cursor-pointer"
                         }`}
@@ -1675,14 +1734,14 @@ export const GooglePlayTesting: React.FC = () => {
                       <span>Previous</span>
                     </button>
 
-                    <span className="text-[11px] text-gray-400 font-medium order-first sm:order-none w-full sm:w-auto text-center">
+                    <span className="text-[11px] text-gray-400 font-medium text-center order-first sm:order-none">
                       {currentChapterData.id} / 12
                     </span>
 
                     <button
                       onClick={() => activeChapter < 12 && setActiveChapter(activeChapter + 1)}
                       disabled={activeChapter === 12}
-                      className={`inline-flex items-center gap-1.5 px-3 py-2 rounded-full text-[11px] font-bold uppercase tracking-wider transition-all ${activeChapter === 12
+                      className={`inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-full text-[11px] font-bold uppercase tracking-wider transition-all ${activeChapter === 12
                         ? "bg-gray-50 text-gray-300 cursor-not-allowed"
                         : "bg-[#001F3F] hover:bg-[#2f8ecd] text-white cursor-pointer shadow-md"
                         }`}

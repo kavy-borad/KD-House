@@ -25,6 +25,18 @@
     }
   }
 
+  /* Hide scrollbar across all browsers (Firefox + WebKit) for drag-scroll rows */
+  .drag-scroll-row {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .drag-scroll-row::-webkit-scrollbar {
+    display: none;
+    -webkit-appearance: none;
+    width: 0;
+    height: 0;
+  }
+
   @keyframes marquee {
     0% {
       transform: translateX(0%);
