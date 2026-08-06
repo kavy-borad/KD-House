@@ -6,7 +6,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { api, ASSETS_BASE } from "../lib/apiClient";
 
 // --- Assets ---
-import Sir from "../assets/Developer_Image/kanaksirr.png";
+import Sir from "../assets/Developer_Image/kanaksirr.jpg";
 
 // --- Data & Types ---
 interface TabData {

@@ -855,8 +855,8 @@ export const GooglePlayTesting: React.FC = () => {
               <button
                 onClick={() => setSelectedPlan("starter")}
                 className={`px-6 py-2.5 rounded-full text-xs sm:text-sm font-bold transition-all cursor-pointer flex items-center gap-2 ${selectedPlan === "starter"
-                    ? "bg-white text-gray-900 shadow-md"
-                    : "text-gray-500 hover:text-gray-900"
+                  ? "bg-white text-gray-900 shadow-md"
+                  : "text-gray-500 hover:text-gray-900"
                   }`}
               >
                 <span>Starter</span>
@@ -866,8 +866,8 @@ export const GooglePlayTesting: React.FC = () => {
               <button
                 onClick={() => setSelectedPlan("pro")}
                 className={`px-6 py-2.5 rounded-full text-xs sm:text-sm font-bold transition-all cursor-pointer flex items-center gap-2 relative ${selectedPlan === "pro"
-                    ? "bg-white text-gray-900 shadow-md"
-                    : "text-gray-500 hover:text-gray-900"
+                  ? "bg-white text-gray-900 shadow-md"
+                  : "text-gray-500 hover:text-gray-900"
                   }`}
               >
                 <span>Pro</span>
@@ -1391,8 +1391,8 @@ export const GooglePlayTesting: React.FC = () => {
                 <div
                   key={idx}
                   className={`rounded-2xl bg-white border overflow-hidden transition-all duration-300 ${isOpen
-                      ? "border-[#2f8ecd]/40 shadow-md"
-                      : "border-gray-200 shadow-xs hover:border-gray-300"
+                    ? "border-[#2f8ecd]/40 shadow-md"
+                    : "border-gray-200 shadow-xs hover:border-gray-300"
                     }`}
                 >
                   <button
@@ -1489,14 +1489,14 @@ export const GooglePlayTesting: React.FC = () => {
                           key={`L-${ch.id}`}
                           onClick={() => setActiveChapter(ch.id)}
                           className={`group w-full flex items-center gap-3 p-2.5 rounded-xl text-left transition-all cursor-pointer ${isActive
-                              ? "bg-blue-50 ring-1 ring-[#2f8ecd] shadow-sm"
-                              : "hover:bg-gray-50"
+                            ? "bg-blue-50 ring-1 ring-[#2f8ecd] shadow-sm"
+                            : "hover:bg-gray-50"
                             }`}
                         >
                           <span
                             className={`shrink-0 w-7 h-7 rounded-lg flex items-center justify-center text-[11px] font-bold transition-colors ${isActive
-                                ? "bg-[#2f8ecd] text-white"
-                                : "bg-gray-100 text-gray-500 group-hover:bg-gray-200"
+                              ? "bg-[#2f8ecd] text-white"
+                              : "bg-gray-100 text-gray-500 group-hover:bg-gray-200"
                               }`}
                           >
                             {String(ch.id).padStart(2, "0")}
@@ -1560,8 +1560,8 @@ export const GooglePlayTesting: React.FC = () => {
                               <span
                                 key={i}
                                 className={`shrink-0 w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold border ${i < 12
-                                    ? "bg-blue-50 text-[#2f8ecd] border-blue-200"
-                                    : "bg-gray-100 text-gray-400 border-gray-200"
+                                  ? "bg-blue-50 text-[#2f8ecd] border-blue-200"
+                                  : "bg-gray-100 text-gray-400 border-gray-200"
                                   }`}
                               >
                                 <Users className="w-2.5 h-2.5" />
@@ -1582,8 +1582,8 @@ export const GooglePlayTesting: React.FC = () => {
                                 <span
                                   key={i}
                                   className={`shrink-0 w-5 h-5 rounded-md flex items-center justify-center text-[9px] font-bold ${isFinal
-                                      ? "bg-[#001F3F] text-white"
-                                      : "bg-blue-50 text-[#2f8ecd] border border-blue-100"
+                                    ? "bg-[#001F3F] text-white"
+                                    : "bg-blue-50 text-[#2f8ecd] border border-blue-100"
                                     }`}
                                 >
                                   {day}
@@ -1667,8 +1667,8 @@ export const GooglePlayTesting: React.FC = () => {
                       onClick={() => activeChapter > 1 && setActiveChapter(activeChapter - 1)}
                       disabled={activeChapter === 1}
                       className={`inline-flex items-center gap-1.5 px-3 py-2 rounded-full text-[11px] font-bold uppercase tracking-wider transition-all ${activeChapter === 1
-                          ? "bg-gray-50 text-gray-300 cursor-not-allowed"
-                          : "bg-white border border-gray-200 text-gray-700 hover:border-[#2f8ecd] hover:text-[#2f8ecd] cursor-pointer"
+                        ? "bg-gray-50 text-gray-300 cursor-not-allowed"
+                        : "bg-white border border-gray-200 text-gray-700 hover:border-[#2f8ecd] hover:text-[#2f8ecd] cursor-pointer"
                         }`}
                     >
                       <ChevronLeft className="w-3.5 h-3.5" />
@@ -1683,8 +1683,8 @@ export const GooglePlayTesting: React.FC = () => {
                       onClick={() => activeChapter < 12 && setActiveChapter(activeChapter + 1)}
                       disabled={activeChapter === 12}
                       className={`inline-flex items-center gap-1.5 px-3 py-2 rounded-full text-[11px] font-bold uppercase tracking-wider transition-all ${activeChapter === 12
-                          ? "bg-gray-50 text-gray-300 cursor-not-allowed"
-                          : "bg-[#001F3F] hover:bg-[#2f8ecd] text-white cursor-pointer shadow-md"
+                        ? "bg-gray-50 text-gray-300 cursor-not-allowed"
+                        : "bg-[#001F3F] hover:bg-[#2f8ecd] text-white cursor-pointer shadow-md"
                         }`}
                     >
                       <span>Next Chapter</span>
@@ -1785,18 +1785,64 @@ export const GooglePlayTesting: React.FC = () => {
                 {/* Header */}
                 <div className="mb-6">
                   <h3 className="text-xl sm:text-2xl font-bold text-gray-900 tracking-tight">
-                    {sampleModalPlan === "starter" ? "Console Form Answers" : "ASO Audit Report"}
+                    {sampleModalPlan === "starter" ? "Console Form Answers" : "ASO Audit & Console Answers"}
                   </h3>
                   <p className="text-xs sm:text-sm text-gray-500 mt-1">
                     {sampleModalPlan === "starter"
                       ? "Real reports from a live test - this is what you receive with Starter plan."
-                      : "ASO optimization and keyword list - this is what you receive with Pro plan."}
+                      : "ASO optimization and Console answers - this is what you receive with Pro plan."}
                   </p>
                 </div>
 
-                <div className="space-y-4">
-                  {sampleModalPlan === "starter" ? (
-                    /* Card: Console Form Answers */
+                <div className="space-y-4 max-h-[55vh] overflow-y-auto pr-1 no-scrollbar">
+                  {sampleModalPlan === "pro" ? (
+                    <>
+                      {/* Card 1: ASO Audit Report */}
+                      <div className="p-4 rounded-2xl bg-gray-50 border border-gray-200/80 hover:border-blue-400 transition-all flex items-start gap-4">
+                        <div className="w-10 h-10 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center text-[#2f8ecd] shrink-0 mt-0.5">
+                          <FileText className="w-5 h-5" />
+                        </div>
+                        <div className="flex-1">
+                          <h4 className="text-sm font-bold text-gray-900">
+                            ASO Audit report
+                          </h4>
+                          <p className="text-xs text-gray-500 mt-0.5 mb-3 leading-relaxed">
+                            Detailed keyword optimization and listing recommendations to maximize organic reach
+                          </p>
+                          <button
+                            onClick={() => setActivePdfPreview("aso")}
+                            className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#2f8ecd] hover:text-blue-700 cursor-pointer"
+                          >
+                            <span>Open sample PDF</span>
+                            <ExternalLink className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Card 2: Console Form Answers */}
+                      <div className="p-4 rounded-2xl bg-gray-50 border border-gray-200/80 hover:border-blue-400 transition-all flex items-start gap-4">
+                        <div className="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center text-emerald-600 shrink-0 mt-0.5">
+                          <FileCheck className="w-5 h-5" />
+                        </div>
+                        <div className="flex-1">
+                          <h4 className="text-sm font-bold text-gray-900">
+                            Console form answers
+                          </h4>
+                          <p className="text-xs text-gray-500 mt-0.5 mb-3 leading-relaxed">
+                            Pre-filled answers for Google's console questions, ready to submit
+                          </p>
+                          <button
+                            onClick={() => setActivePdfPreview("answers")}
+                            className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#2f8ecd] hover:text-blue-700 cursor-pointer"
+                          >
+                            <span>Open sample PDF</span>
+                            <ExternalLink className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      </div>
+                    </>
+                  ) : (
+                    /* Card: Console Form Answers Only (Starter) */
                     <div className="p-4 rounded-2xl bg-gray-50 border border-gray-200/80 hover:border-blue-400 transition-all flex items-start gap-4">
                       <div className="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center text-emerald-600 shrink-0 mt-0.5">
                         <FileCheck className="w-5 h-5" />
@@ -1817,35 +1863,15 @@ export const GooglePlayTesting: React.FC = () => {
                         </button>
                       </div>
                     </div>
-                  ) : (
-                    /* Card: ASO Audit Report */
-                    <div className="p-4 rounded-2xl bg-gray-50 border border-gray-200/80 hover:border-blue-400 transition-all flex items-start gap-4">
-                      <div className="w-10 h-10 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center text-[#2f8ecd] shrink-0 mt-0.5">
-                        <FileText className="w-5 h-5" />
-                      </div>
-                      <div className="flex-1">
-                        <h4 className="text-sm font-bold text-gray-900">
-                          ASO Audit report
-                        </h4>
-                        <p className="text-xs text-gray-500 mt-0.5 mb-3 leading-relaxed">
-                          Detailed keyword optimization and listing recommendations to maximize organic reach
-                        </p>
-                        <button
-                          onClick={() => setActivePdfPreview("aso")}
-                          className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#2f8ecd] hover:text-blue-700 cursor-pointer"
-                        >
-                          <span>Open sample PDF</span>
-                          <ExternalLink className="w-3.5 h-3.5" />
-                        </button>
-                      </div>
-                    </div>
                   )}
                 </div>
 
                 {/* Footer Note */}
                 <div className="mt-6 pt-4 border-t border-gray-100">
                   <p className="text-[11px] text-gray-400 leading-relaxed">
-                    Included with both Starter and Pro. Pro also adds a detailed ASO report on your store listing.
+                    {sampleModalPlan === "starter"
+                      ? "Included with both Starter and Pro."
+                      : "ASO audit and Console answers are both included in the Pro plan."}
                   </p>
                 </div>
               </motion.div>
@@ -1873,8 +1899,8 @@ export const GooglePlayTesting: React.FC = () => {
                 exit={{ scale: 0.97, opacity: 0, y: 8 }}
                 transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
                 className={`bg-white shadow-2xl flex flex-col overflow-hidden relative transition-all duration-300 ${isPdfMaximized
-                    ? "w-screen h-screen rounded-none max-w-none max-h-none"
-                    : "rounded-2xl w-full max-w-6xl h-[88vh]"
+                  ? "w-screen h-screen rounded-none max-w-none max-h-none"
+                  : "rounded-2xl w-full max-w-6xl h-[88vh]"
                   }`}
                 onClick={(e) => e.stopPropagation()}
               >
