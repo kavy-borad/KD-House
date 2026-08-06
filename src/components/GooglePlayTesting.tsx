@@ -45,97 +45,7 @@ const scrollToPricing = (e?: React.MouseEvent) => {
 
 /* Fast Opening Background Laptop for Hero Section (Smooth Scroll-Driven 3D Opening) */
 const LaptopHeroBackground: React.FC = () => {
-  const { scrollY } = useScroll();
-  // Lid opens smoothly as user scrolls down the page
-  const rotateX = useTransform(scrollY, [0, 180], [45, 0]);
-  const scale = useTransform(scrollY, [0, 220], [1.0, 1.15]);
-  const opacity = useTransform(scrollY, [0, 180], [0.25, 0.35]);
-
-  return (
-    <div
-      className="absolute top-[50%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-[1000px] pointer-events-none z-0 flex justify-center items-center overflow-visible"
-      style={{ perspective: "1500px" }}
-    >
-      <motion.div
-        initial={{ rotateX: 45, opacity: 0.25 }}
-        animate={{ rotateX: 0, opacity: 0.35 }}
-        transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
-        style={{
-          rotateX,
-          scale,
-          opacity,
-          transformOrigin: "center center",
-          transformStyle: "preserve-3d",
-        }}
-        className="w-full relative flex flex-col items-center"
-      >
-        {/* Laptop Lid Screen Frame */}
-        <div className="w-full aspect-[16/9.5] bg-[#0F172A] rounded-t-2xl sm:rounded-t-3xl p-3.5 sm:p-5 border-[3.5px] border-slate-700 shadow-2xl relative">
-          {/* Webcam Dot */}
-          <div className="absolute top-2 left-1/2 -translate-x-1/2 w-3 h-3 bg-black rounded-full flex items-center justify-center z-30">
-            <div className="w-1 h-1 bg-blue-500/60 rounded-full" />
-          </div>
-
-          {/* Inner Screen Frame */}
-          <div className="w-full h-full p-2.5 sm:p-4 rounded-xl md:rounded-2xl relative overflow-hidden">
-            {/* Play Console Inner Screen */}
-            <div className="w-full h-full bg-[#121212] text-white p-4 sm:p-7 rounded-lg md:rounded-xl flex flex-col justify-between text-left font-sans no-scrollbar">
-              <div>
-                {/* Google Play Console Logo Header */}
-                <div className="flex items-center gap-2.5 mb-3 pb-2.5 border-b border-gray-800">
-                  <div className="w-5 h-5 flex items-center justify-center">
-                    <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current text-blue-500">
-                      <path d="M3 20.5v-17c0-.83.67-1.5 1.5-1.5h.35L17.5 12 4.85 22H4.5C3.67 22 3 21.33 3 20.5z" />
-                      <path d="M17.5 12L4.85 2H4.5c.83 0 1.5.67 1.5 1.5v17c0 .83-.67 1.5-1.5 1.5h.35L17.5 12z" opacity="0.3" />
-                    </svg>
-                  </div>
-                  <span className="font-semibold text-gray-200 text-xs sm:text-base tracking-tight">
-                    Google Play <span className="text-blue-400 font-normal">Console</span>
-                  </span>
-                </div>
-
-                {/* Main Success Notification */}
-                <div className="space-y-3">
-                  <div className="flex items-start gap-2.5">
-                    <span className="text-gray-400 text-base sm:text-xl shrink-0 mt-0.5">ⓘ</span>
-                    <h3 className="text-xs sm:text-lg font-bold text-white leading-snug">
-                      Congratulations! Your app has been granted Google Play production access
-                    </h3>
-                  </div>
-
-                  <p className="text-gray-200 text-[11px] sm:text-sm leading-relaxed pl-6">
-                    You applied for Google Play production access for your app 'Testers Community' (com.testerscommunity), and this has now been granted. Production is where you make your app available to billions of users on Google Play.
-                  </p>
-
-                  <div className="pt-1 pl-6 space-y-1">
-                    <h4 className="text-[11px] sm:text-sm font-bold text-gray-100">
-                      Before you release to production
-                    </h4>
-                    <p className="text-gray-400 text-[10px] sm:text-xs leading-relaxed">
-                      We recommend testing your app extensively before publishing your app to production, and routinely testing any future updates.
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="pt-3 border-t border-gray-800 text-[10px] sm:text-xs text-gray-400 space-y-0.5">
-                <p>Thank you,</p>
-                <p className="font-semibold text-gray-200">The Google Play Console team</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Laptop Keyboard Base Body & Hinge Deck */}
-        <div className="w-[104%] h-4 sm:h-6 bg-gradient-to-b from-slate-600 via-slate-700 to-slate-800 rounded-b-xl shadow-2xl relative flex justify-center items-center border-t border-slate-500 mt-[-1px]">
-          {/* Thumb Opening Notch */}
-          <div className="w-16 sm:w-24 h-1.5 sm:h-2 bg-slate-900 rounded-b-md shadow-inner" />
-        </div>
-        {/* Base Floor Reflection Shadow */}
-        <div className="w-[92%] h-3 bg-black/30 rounded-full blur-md mt-0.5" />
-      </motion.div>
-    </div>
-  );
+  return null;
 };
 
 /* Review Card used by the animated marquee rows */
@@ -725,8 +635,8 @@ export const GooglePlayTesting: React.FC = () => {
         </div>
 
         <div className="relative z-10 max-w-[1600px] mx-auto px-6 md:px-12">
-          {/* Swiss Editorial Hero Header with Low-Opacity 3D Laptop in Background */}
-          <header className="pt-20 pb-16 md:pt-36 md:pb-24 relative overflow-visible mb-4 md:mb-8">
+          {/* Swiss Editorial Hero Header */}
+          <header className="pt-20 pb-4 md:pt-36 md:pb-24 relative overflow-visible mb-2 md:mb-8">
             {/* Background 3D Laptop Mockup */}
             <LaptopHeroBackground />
 
@@ -800,7 +710,7 @@ export const GooglePlayTesting: React.FC = () => {
         </div>
 
         {/* Philosophy & Metrics Section (Comfortable Balanced Gap) */}
-        <section className="pt-4 md:pt-8 pb-8 md:pb-16 px-4 md:px-12 max-w-[1600px] mx-auto border-b border-gray-100 relative">
+        <section className="pt-6 md:pt-8 pb-8 md:pb-16 px-4 md:px-12 max-w-[1600px] mx-auto border-b border-gray-100 relative">
           <div className="flex flex-col md:flex-row gap-6 md:gap-24">
             <div className="md:w-1/3 relative">
               <span className="text-xs font-bold tracking-[0.2em] text-[#2f8ecd] uppercase mb-4 block">

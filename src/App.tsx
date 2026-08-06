@@ -46,14 +46,9 @@ function ScrollToTop() {
 
 function Layout() {
   const { pathname } = useLocation();
-  const [debugInfo] = useState("");
 
   // Track page views on route changes
   usePageViewTracking();
-
-  useEffect(() => {
-    // setDebugInfo(`Pathname: ${pathname}, FloatingContactIcons mounted: ${Date.now()}`);
-  }, [pathname]);
 
   // Hide Navbar and Footer for specific pages
   const normalizedPathname = pathname.replace(/\/+$/, "").toLowerCase();
@@ -75,9 +70,6 @@ function Layout() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white">
       <ScrollToTop />
-      <div className="fixed top-0 bg-black/50 text-white text-xs z-50">
-        <pre>{debugInfo}</pre>
-      </div>
       {!hideNavAndFooter && (
         <Navbar isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
       )}
