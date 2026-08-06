@@ -49,7 +49,7 @@ const menuItems = [
   { isDropdown: true, label: "Services", icon: Layers },
   { to: "/our-works", label: "Our Works", icon: Briefcase },
   { to: "/quotation", label: "Quotation", icon: FileText },
-  { to: "/testers", label: "Testers", icon: Smartphone },
+  { to: "/google-play-testing", label: "Google Play Testing", icon: Smartphone },
   // { to: "/internships", label: "Internships", icon: GraduationCap },
   { to: "/about", label: "About Us", icon: Info },
   { to: "/contact", label: "Contact", icon: Send },
@@ -388,14 +388,14 @@ const Navbar = ({ isMenuOpen, setIsMenuOpen }: NavbarProps) => {
             </Link>
 
             <Link
-              to="/testers"
-              className={`flex items-center gap-2 px-4 py-2 rounded-full transition-all text-sm font-bold ${isActive("/testers")
+              to="/google-play-testing"
+              className={`flex items-center gap-2 px-4 py-2 rounded-full transition-all text-sm font-bold ${isActive("/google-play-testing")
                 ? "bg-white/20 text-white"
                 : "text-white/80 hover:bg-white/15 hover:text-white"
                 }`}
             >
               <i className="fas fa-mobile-alt text-blue-400"></i>{" "}
-              Testers
+              Google Play Testing
             </Link>
 
             {/* <Link
@@ -459,7 +459,10 @@ const Navbar = ({ isMenuOpen, setIsMenuOpen }: NavbarProps) => {
               exit={{ opacity: 0 }}
               transition={{ duration: 0.2 }}
               className="fixed inset-0 bg-black/30 lg:hidden z-[55] backdrop-blur-sm"
-              onClick={toggleMenu}
+              onClick={() => {
+                setIsMenuOpen(false);
+                setIsServicesOpen(false);
+              }}
             />
 
             {/* Mobile Drawer */}
@@ -625,7 +628,7 @@ const Navbar = ({ isMenuOpen, setIsMenuOpen }: NavbarProps) => {
                       <FaEnvelope size={20} />
                     </a>
                     <a
-                      href="https://wa.me/7435822022"
+                      href="https://wa.me/7434822022"
                       target="_blank"
                       rel="noopener noreferrer"
                       aria-label="WhatsApp"

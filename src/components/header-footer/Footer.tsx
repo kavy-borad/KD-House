@@ -44,7 +44,7 @@ export const Footer = () => {
   const company = [
     { name: "About Us", href: "/about" },
     { name: "Our Portfolio", href: "/our-works" },
-    { name: "Android Testers", href: "/testers" },
+    { name: "Google Play Testing", href: "/google-play-testing" },
     // { name: "Internships", href: "/Internships" },
     { name: "Contact Us", href: "/contact" },
   ];

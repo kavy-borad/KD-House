@@ -75,7 +75,7 @@ const Contact: React.FC = () => {
       icon: <Phone className="w-6 h-6" />,
       title: "Phone Numbers",
       details: [
-        { label: "India", value: "+91 74358 22022" },
+        { label: "India", value: "+91 74348 22022" },
         { label: "Canada", value: "+1 289 888 3877" },
         { label: "UK", value: "+44 077 7004 2843" },
       ],
@@ -426,7 +426,7 @@ const Contact: React.FC = () => {
                                   );
                                 }
                                 window.open(
-                                  "https://wa.me/917435822022",
+                                  "https://wa.me/917434822022",
                                   "_blank",
                                 );
 

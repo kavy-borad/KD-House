@@ -4,6 +4,7 @@ import {
   Routes,
   Route,
   useLocation,
+  Navigate,
 } from "react-router-dom";
 import usePageViewTracking from "./lib/usePageViewTracking";
 import { HelmetProvider } from "react-helmet-async";
@@ -31,7 +32,7 @@ import Slidesportfolio from "./components/Slidesportfolio";
 import Ourworks from "./components/Ourworks";
 import Studentform from "./components/StudentForm";
 import Onboarding from "./components/Services-Pages/Onboarding";
-import Testers from "./components/Testers";
+import GooglePlayTesting from "./components/GooglePlayTesting";
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -108,7 +109,8 @@ function Layout() {
           <Route path="/portfolio" element={<Slidesportfolio />} />
           <Route path="/studentform" element={<Studentform />} />
           <Route path="/onboarding" element={<Onboarding />} />
-          <Route path="/testers" element={<Testers />} />
+          <Route path="/google-play-testing" element={<GooglePlayTesting />} />
+          <Route path="/testers" element={<Navigate to="/google-play-testing" replace />} />
           <Route path="*" element={<div>404 - Page Not Found</div>} />
         </Routes>
       </main>

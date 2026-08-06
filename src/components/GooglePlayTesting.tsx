@@ -288,7 +288,7 @@ const DragScrollRow: React.FC<{
 };
 
 const ReviewCard: React.FC<{ t: Testimonial }> = ({ t }) => (
-  <div className="w-[340px] sm:w-[380px] shrink-0 p-6 rounded-2xl bg-white border border-gray-200/80 shadow-xs flex flex-col justify-between hover:shadow-md transition-shadow">
+  <div className="w-[340px] sm:w-[380px] shrink-0 mr-5 p-6 rounded-2xl bg-white border border-gray-200/80 shadow-xs flex flex-col justify-between hover:shadow-md transition-shadow">
     <div>
       <div className="flex items-center justify-between mb-4">
         <div className="flex gap-0.5">
@@ -341,7 +341,7 @@ const ReviewCard: React.FC<{ t: Testimonial }> = ({ t }) => (
   </div>
 );
 
-export const Testers: React.FC = () => {
+export const GooglePlayTesting: React.FC = () => {
   const [activeFaq, setActiveFaq] = useState<number | null>(null);
   const [activeChapter, setActiveChapter] = useState<number>(1);
   const [selectedPlan, setSelectedPlan] = useState<"starter" | "pro">("starter");
@@ -706,7 +706,7 @@ export const Testers: React.FC = () => {
           content="Google play closed testing, 12 testers 14 days, android testing service, publish app to play store, production access guarantee, closed testing track, Karma Dude"
         />
         <meta name="robots" content="index, follow" />
-        <link rel="canonical" href="https://karmadude.in/testers" />
+        <link rel="canonical" href="https://karmadude.in/google-play-testing" />
       </Helmet>
 
       <div className="min-h-screen bg-white font-sans text-gray-900 selection:bg-blue-100 selection:text-blue-900">
@@ -854,11 +854,10 @@ export const Testers: React.FC = () => {
             <div className="bg-gray-100 p-1.5 rounded-full border border-gray-200/80 flex items-center gap-1 relative shadow-inner">
               <button
                 onClick={() => setSelectedPlan("starter")}
-                className={`px-6 py-2.5 rounded-full text-xs sm:text-sm font-bold transition-all cursor-pointer flex items-center gap-2 ${
-                  selectedPlan === "starter"
+                className={`px-6 py-2.5 rounded-full text-xs sm:text-sm font-bold transition-all cursor-pointer flex items-center gap-2 ${selectedPlan === "starter"
                     ? "bg-white text-gray-900 shadow-md"
                     : "text-gray-500 hover:text-gray-900"
-                }`}
+                  }`}
               >
                 <span>Starter</span>
                 <span className="text-[#2f8ecd]">₹999</span>
@@ -866,11 +865,10 @@ export const Testers: React.FC = () => {
 
               <button
                 onClick={() => setSelectedPlan("pro")}
-                className={`px-6 py-2.5 rounded-full text-xs sm:text-sm font-bold transition-all cursor-pointer flex items-center gap-2 relative ${
-                  selectedPlan === "pro"
+                className={`px-6 py-2.5 rounded-full text-xs sm:text-sm font-bold transition-all cursor-pointer flex items-center gap-2 relative ${selectedPlan === "pro"
                     ? "bg-white text-gray-900 shadow-md"
                     : "text-gray-500 hover:text-gray-900"
-                }`}
+                  }`}
               >
                 <span>Pro</span>
                 <span className="text-emerald-600">₹1,699</span>
@@ -1122,10 +1120,10 @@ export const Testers: React.FC = () => {
           <style>{`
             @keyframes marquee-ltr {
               0% { transform: translateX(0); }
-              100% { transform: translateX(-50%); }
+              100% { transform: translateX(-25%); }
             }
             @keyframes marquee-rtl {
-              0% { transform: translateX(-50%); }
+              0% { transform: translateX(-25%); }
               100% { transform: translateX(0); }
             }
             .marquee-track {
@@ -1139,25 +1137,35 @@ export const Testers: React.FC = () => {
             .marquee-row:hover .marquee-track { animation-play-state: paused; }
           `}</style>
 
-          {/* Row 1 — scrolls left to right */}
+          {/* Row 1 — scrolls right to left */}
           <div className="marquee-row relative overflow-hidden mb-5 [mask-image:linear-gradient(to_right,transparent,black_5%,black_95%,transparent)]">
             <div
-              className="marquee-track marquee-ltr gap-5"
+              className="marquee-track marquee-ltr"
               style={{ animationDuration: "40s" }}
             >
-              {[...testimonials.slice(0, 3), ...testimonials.slice(0, 3)].map((t, idx) => (
+              {[
+                ...testimonials.slice(0, 3),
+                ...testimonials.slice(0, 3),
+                ...testimonials.slice(0, 3),
+                ...testimonials.slice(0, 3),
+              ].map((t, idx) => (
                 <ReviewCard key={`r1-${idx}`} t={t} />
               ))}
             </div>
           </div>
 
-          {/* Row 2 — scrolls right to left */}
+          {/* Row 2 — scrolls left to right */}
           <div className="marquee-row relative overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_5%,black_95%,transparent)]">
             <div
-              className="marquee-track marquee-rtl gap-5"
+              className="marquee-track marquee-rtl"
               style={{ animationDuration: "45s" }}
             >
-              {[...testimonials.slice(3, 6), ...testimonials.slice(3, 6)].map((t, idx) => (
+              {[
+                ...testimonials.slice(3, 6),
+                ...testimonials.slice(3, 6),
+                ...testimonials.slice(3, 6),
+                ...testimonials.slice(3, 6),
+              ].map((t, idx) => (
                 <ReviewCard key={`r2-${idx}`} t={t} />
               ))}
             </div>
@@ -1315,9 +1323,8 @@ export const Testers: React.FC = () => {
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true, margin: "-60px" }}
                   transition={{ duration: 0.55, delay: idx * 0.08, ease: [0.22, 1, 0.36, 1] }}
-                  className={`relative flex items-center mb-10 md:mb-12 last:mb-0 ${
-                    s.side === "right" ? "md:flex-row-reverse" : "md:flex-row"
-                  } flex-col gap-4 md:gap-0`}
+                  className={`relative flex items-center mb-10 md:mb-12 last:mb-0 ${s.side === "right" ? "md:flex-row-reverse" : "md:flex-row"
+                    } flex-col gap-4 md:gap-0`}
                 >
                   {/* Card — takes 44% width */}
                   <div className={`w-full md:w-[44%] ${s.side === "left" ? "md:pr-8" : "md:pl-8"}`}>
@@ -1383,11 +1390,10 @@ export const Testers: React.FC = () => {
               return (
                 <div
                   key={idx}
-                  className={`rounded-2xl bg-white border overflow-hidden transition-all duration-300 ${
-                    isOpen
+                  className={`rounded-2xl bg-white border overflow-hidden transition-all duration-300 ${isOpen
                       ? "border-[#2f8ecd]/40 shadow-md"
                       : "border-gray-200 shadow-xs hover:border-gray-300"
-                  }`}
+                    }`}
                 >
                   <button
                     onClick={() => setActiveFaq(isOpen ? null : idx)}
@@ -1482,25 +1488,22 @@ export const Testers: React.FC = () => {
                         <button
                           key={`L-${ch.id}`}
                           onClick={() => setActiveChapter(ch.id)}
-                          className={`group w-full flex items-center gap-3 p-2.5 rounded-xl text-left transition-all cursor-pointer ${
-                            isActive
+                          className={`group w-full flex items-center gap-3 p-2.5 rounded-xl text-left transition-all cursor-pointer ${isActive
                               ? "bg-blue-50 ring-1 ring-[#2f8ecd] shadow-sm"
                               : "hover:bg-gray-50"
-                          }`}
+                            }`}
                         >
                           <span
-                            className={`shrink-0 w-7 h-7 rounded-lg flex items-center justify-center text-[11px] font-bold transition-colors ${
-                              isActive
+                            className={`shrink-0 w-7 h-7 rounded-lg flex items-center justify-center text-[11px] font-bold transition-colors ${isActive
                                 ? "bg-[#2f8ecd] text-white"
                                 : "bg-gray-100 text-gray-500 group-hover:bg-gray-200"
-                            }`}
+                              }`}
                           >
                             {String(ch.id).padStart(2, "0")}
                           </span>
                           <span
-                            className={`text-[13px] leading-tight font-semibold transition-colors ${
-                              isActive ? "text-gray-900" : "text-gray-600 group-hover:text-gray-900"
-                            }`}
+                            className={`text-[13px] leading-tight font-semibold transition-colors ${isActive ? "text-gray-900" : "text-gray-600 group-hover:text-gray-900"
+                              }`}
                           >
                             {ch.title.replace(/^\d+\.\s*/, "")}
                           </span>
@@ -1556,11 +1559,10 @@ export const Testers: React.FC = () => {
                             {Array.from({ length: 14 }).map((_, i) => (
                               <span
                                 key={i}
-                                className={`shrink-0 w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold border ${
-                                  i < 12
+                                className={`shrink-0 w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold border ${i < 12
                                     ? "bg-blue-50 text-[#2f8ecd] border-blue-200"
                                     : "bg-gray-100 text-gray-400 border-gray-200"
-                                }`}
+                                  }`}
                               >
                                 <Users className="w-2.5 h-2.5" />
                               </span>
@@ -1579,11 +1581,10 @@ export const Testers: React.FC = () => {
                               return (
                                 <span
                                   key={i}
-                                  className={`shrink-0 w-5 h-5 rounded-md flex items-center justify-center text-[9px] font-bold ${
-                                    isFinal
+                                  className={`shrink-0 w-5 h-5 rounded-md flex items-center justify-center text-[9px] font-bold ${isFinal
                                       ? "bg-[#001F3F] text-white"
                                       : "bg-blue-50 text-[#2f8ecd] border border-blue-100"
-                                  }`}
+                                    }`}
                                 >
                                   {day}
                                 </span>
@@ -1665,11 +1666,10 @@ export const Testers: React.FC = () => {
                     <button
                       onClick={() => activeChapter > 1 && setActiveChapter(activeChapter - 1)}
                       disabled={activeChapter === 1}
-                      className={`inline-flex items-center gap-1.5 px-3 py-2 rounded-full text-[11px] font-bold uppercase tracking-wider transition-all ${
-                        activeChapter === 1
+                      className={`inline-flex items-center gap-1.5 px-3 py-2 rounded-full text-[11px] font-bold uppercase tracking-wider transition-all ${activeChapter === 1
                           ? "bg-gray-50 text-gray-300 cursor-not-allowed"
                           : "bg-white border border-gray-200 text-gray-700 hover:border-[#2f8ecd] hover:text-[#2f8ecd] cursor-pointer"
-                      }`}
+                        }`}
                     >
                       <ChevronLeft className="w-3.5 h-3.5" />
                       <span>Previous</span>
@@ -1682,11 +1682,10 @@ export const Testers: React.FC = () => {
                     <button
                       onClick={() => activeChapter < 12 && setActiveChapter(activeChapter + 1)}
                       disabled={activeChapter === 12}
-                      className={`inline-flex items-center gap-1.5 px-3 py-2 rounded-full text-[11px] font-bold uppercase tracking-wider transition-all ${
-                        activeChapter === 12
+                      className={`inline-flex items-center gap-1.5 px-3 py-2 rounded-full text-[11px] font-bold uppercase tracking-wider transition-all ${activeChapter === 12
                           ? "bg-gray-50 text-gray-300 cursor-not-allowed"
                           : "bg-[#001F3F] hover:bg-[#2f8ecd] text-white cursor-pointer shadow-md"
-                      }`}
+                        }`}
                     >
                       <span>Next Chapter</span>
                       <ChevronRight className="w-3.5 h-3.5" />
@@ -1873,11 +1872,10 @@ export const Testers: React.FC = () => {
                 animate={{ scale: 1, opacity: 1, y: 0 }}
                 exit={{ scale: 0.97, opacity: 0, y: 8 }}
                 transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-                className={`bg-white shadow-2xl flex flex-col overflow-hidden relative transition-all duration-300 ${
-                  isPdfMaximized
+                className={`bg-white shadow-2xl flex flex-col overflow-hidden relative transition-all duration-300 ${isPdfMaximized
                     ? "w-screen h-screen rounded-none max-w-none max-h-none"
                     : "rounded-2xl w-full max-w-6xl h-[88vh]"
-                }`}
+                  }`}
                 onClick={(e) => e.stopPropagation()}
               >
                 {/* PDF Header Bar */}
@@ -1889,8 +1887,8 @@ export const Testers: React.FC = () => {
                         {activePdfPreview === "feedback"
                           ? "Sample_Testers_Feedback_Report.pdf"
                           : activePdfPreview === "aso"
-                          ? "Sample_ASO_Audit_Report.pdf"
-                          : "Sample_Console_Form_Answers.pdf"}
+                            ? "Sample_ASO_Audit_Report.pdf"
+                            : "Sample_Console_Form_Answers.pdf"}
                       </h4>
                       <p className="text-[10px] text-gray-400">Karma Dude Verified Document • 2 Pages</p>
                     </div>
@@ -1920,8 +1918,8 @@ export const Testers: React.FC = () => {
                           activePdfPreview === "feedback"
                             ? ""
                             : activePdfPreview === "aso"
-                            ? "/ASO Audit By KD.pdf"
-                            : "/QA By Team KD.pdf";
+                              ? "/ASO Audit By KD.pdf"
+                              : "/QA By Team KD.pdf";
                         if (fileUrl) {
                           const link = document.createElement("a");
                           link.href = fileUrl;
@@ -2054,4 +2052,4 @@ export const Testers: React.FC = () => {
   );
 };
 
-export default Testers;
+export default GooglePlayTesting;

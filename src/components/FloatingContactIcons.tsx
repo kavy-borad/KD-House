@@ -68,7 +68,7 @@ export default function FloatingContactIcons({
           >
             {/* WhatsApp */}
             <ContactItem
-              href="https://wa.me/7435822022"
+              href="https://wa.me/7434822022"
               icon={<FaWhatsapp className="w-6 h-6" />}
               color="bg-[#25D366]"
               label="WhatsApp"
