@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
 import { ArrowUpRight } from "lucide-react";
 import { api, ASSETS_BASE } from "../lib/apiClient";
+import karmaLogo from "../assets/logo/KARMDUDE NEW.webp";
 
 const WorkShowcase = () => {
   const [activeCategory, setActiveCategory] = useState("All");
@@ -181,12 +182,26 @@ const WorkShowcase = () => {
                 <div className="flex flex-col h-full">
                   {/* Image Section */}
                   <div className="relative overflow-hidden aspect-[16/10] bg-gray-50 border-b border-gray-100 flex items-center justify-center">
-                    <img
-                      src={getFullImageUrl(displaySection.image_url)}
-                      alt={product.title}
-                      loading="lazy"
-                      className="w-full h-full object-contain transition-transform duration-700 ease-out group-hover:scale-105"
-                    />
+                    {displaySection.image_url ? (
+                      <img
+                        src={getFullImageUrl(displaySection.image_url)}
+                        alt={product.title}
+                        loading="lazy"
+                        onError={(e) => {
+                          const target = e.currentTarget;
+                          target.onerror = null;
+                          target.src = karmaLogo;
+                          target.classList.add("opacity-50");
+                        }}
+                        className="w-full h-full object-contain transition-transform duration-700 ease-out group-hover:scale-105"
+                      />
+                    ) : (
+                      <img
+                        src={karmaLogo}
+                        alt="KarmaDude Logo"
+                        className="w-1/2 h-1/2 object-contain opacity-50"
+                      />
+                    )}
                     {/* Hover Overlay */}
                     <div className="absolute inset-0 bg-[#2f8ecd]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none mix-blend-multiply"></div>
                   </div>
