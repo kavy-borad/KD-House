@@ -29,7 +29,7 @@ import {
 } from "lucide-react";
 
 const WHATSAPP_URL =
-  "https://wa.me/919874561520?text=Hi%20Karma%20Dude%20Team,%20I%20want%20to%20start%20Google%20Play%20Closed%20Testing.";
+  "https://wa.me/917435822022?text=Hi%20Karma%20Dude%20Team,%20I%20want%20to%20start%20Google%20Play%20Closed%20Testing.";
 
 const openWhatsApp = () => {
   window.open(WHATSAPP_URL, "_blank", "noopener,noreferrer");

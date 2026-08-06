@@ -426,7 +426,7 @@ const Contact: React.FC = () => {
                                   );
                                 }
                                 window.open(
-                                  "https://wa.me/917434822022",
+                                  "https://wa.me/917435822022",
                                   "_blank",
                                 );
 

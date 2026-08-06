@@ -628,7 +628,7 @@ const Navbar = ({ isMenuOpen, setIsMenuOpen }: NavbarProps) => {
                       <FaEnvelope size={20} />
                     </a>
                     <a
-                      href="https://wa.me/7434822022"
+                      href="https://wa.me/7435822022"
                       target="_blank"
                       rel="noopener noreferrer"
                       aria-label="WhatsApp"
