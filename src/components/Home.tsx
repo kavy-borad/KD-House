@@ -10,11 +10,13 @@ import {
   useMotionValueEvent,
   useInView,
   useMotionValue,
+  useTransform,
+  useReducedMotion,
   animate,
 } from "framer-motion";
-import heroBgVideo from "../assets/hero_bg.mp4";
-import noiseBg from "../assets/noise.svg";
 import MessageTicker from "./home/MessageTicker";
+import HeroArchitectureBg from "./home/HeroArchitectureBg";
+import HeroTechNodes from "./home/HeroTechNodes";
 
 const CounterNumber = ({ value }: { value: string }) => {
   const ref = useRef<HTMLSpanElement>(null);
@@ -84,6 +86,15 @@ const ScrollHideTicker = () => {
 };
 
 const Home = () => {
+  const heroRef = useRef<HTMLDivElement>(null);
+  const shouldReduceMotion = useReducedMotion();
+  const { scrollYProgress } = useScroll({
+    target: heroRef,
+    offset: ["start start", "end start"],
+  });
+  const bgY = useTransform(scrollYProgress, [0, 1], [0, 32]);
+  const bgOpacity = useTransform(scrollYProgress, [0, 0.9, 1], [1, 0.85, 0.65]);
+
   const scrollToServices = (
     e: React.MouseEvent<HTMLAnchorElement | HTMLDivElement>,
   ) => {
@@ -186,138 +197,72 @@ const Home = () => {
         `}
       </style>
 
-      {/* Hero Section - Bento Grid Layout */}
-      <div className="relative min-h-[100dvh] w-full bg-gray-900 flex flex-col pt-28 sm:pt-32 md:pt-24 md:overflow-hidden">
-        {/* Global Cinematic Video Background */}
-        <div className="absolute inset-0 z-0 bg-gray-900">
-          <video
-            autoPlay
-            loop
-            muted
-            playsInline
-            preload="none"
-            className="hidden md:block w-full h-full object-cover opacity-60 pointer-events-none"
-            style={{ willChange: "auto" }}
-          >
-            <source src={heroBgVideo} type="video/mp4" />
-            Your browser does not support the video tag.
-          </video>
-          {/* Mobile Fallback Background */}
-          <div className="md:hidden absolute inset-0 bg-gradient-to-b from-gray-900 via-indigo-950/40 to-black"></div>
+      {/* Hero Section - Light Architectural Bento Grid Layout */}
+      <div
+        ref={heroRef}
+        className="relative min-h-[100dvh] w-full bg-[#f8fafc] flex flex-col pt-28 sm:pt-32 md:pt-24 md:overflow-hidden"
+      >
+        {/* Light Blueprint Grid & Animated Crosshair Background */}
+        <motion.div
+          style={shouldReduceMotion ? undefined : { y: bgY, opacity: bgOpacity }}
+          className="absolute inset-0 z-0 will-change-transform"
+        >
+          <HeroArchitectureBg />
+        </motion.div>
 
-          {/* Detailed Overlay for depth */}
-          <div className="absolute inset-0 bg-gradient-to-tr from-gray-900/90 via-indigo-950/50 to-black/80"></div>
-          <div
-            className="absolute inset-0 opacity-20 brightness-100 contrast-150"
-            style={{ backgroundImage: `url(${noiseBg})` }}
-          ></div>
-        </div>
         {/* Main Content Area (Bento Grid) - Fills Available Space */}
         <div className="flex-1 w-full max-w-7xl mx-auto px-4 py-4 md:p-6 flex items-start md:items-center justify-center relative z-10 pb-24 md:pb-0">
           <div className="grid grid-cols-1 md:grid-cols-12 grid-rows-auto md:grid-rows-2 gap-4 md:gap-6 w-full h-auto md:h-full md:max-h-[75vh]">
-            {/* Box 1: Main Hero Content (Spans 8 cols, 2 rows) - Slides in from LEFT */}
+            {/* Box 1: Main Hero Content (Spans 8 cols, 2 rows) */}
             <motion.div
-              initial={{ opacity: 1, x: 0 }}
+              initial={shouldReduceMotion ? false : { opacity: 1, x: 0 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6, ease: "easeOut" }}
-              className="md:col-span-8 md:row-span-2 relative group overflow-hidden rounded-[2rem] md:rounded-[2.5rem] border border-white/10 bg-white/5 backdrop-blur-sm md:backdrop-blur-2xl shadow-2xl flex flex-col justify-center p-6 md:p-14 hover:border-blue-400/50 transition-colors"
+              className="md:col-span-8 md:row-span-2 relative group overflow-hidden rounded-[2rem] md:rounded-[2.5rem] border border-white/85 ring-1 ring-slate-300/45 bg-gradient-to-br from-white/15 via-white/5 to-blue-50/10 backdrop-blur-[1px] shadow-[0_14px_40px_rgba(15,23,42,0.06),inset_0_1px_0_rgba(255,255,255,0.85)] flex flex-col justify-center p-6 md:p-14 hover:from-white/25 hover:via-white/12 hover:border-blue-300/70 transition-all"
             >
-              {/* Shimmer Effect */}
-              <div className="absolute inset-0 -translate-x-full group-hover:animate-[shimmer_2s_infinite] bg-gradient-to-r from-transparent via-white/5 to-transparent z-10 pointer-events-none"></div>
-
-              {/* Background Floating Elements - Hidden on Mobile for Performance */}
-              <div className="absolute inset-0 pointer-events-none hidden md:block">
-                {[
-                  {
-                    icon: "fab fa-python",
-                    color: "#3776AB",
-                    top: "10%",
-                    right: "10%",
-                    delay: 0,
-                  },
-                  {
-                    icon: "fab fa-react",
-                    color: "#61DAFB",
-                    bottom: "15%",
-                    right: "12%",
-                    delay: 2,
-                  },
-                  {
-                    icon: "fab fa-js",
-                    color: "#F7DF1E",
-                    top: "40%",
-                    right: "20%",
-                    delay: 4,
-                  },
-                  {
-                    icon: "fab fa-docker",
-                    color: "#2496ED",
-                    top: "15%",
-                    left: "8%",
-                    delay: 1,
-                  },
-                  {
-                    icon: "fab fa-aws",
-                    color: "#FF9900",
-                    bottom: "10%",
-                    left: "15%",
-                    delay: 3,
-                  },
-                ].map((item, idx) => (
-                  <motion.i
-                    key={idx}
-                    className={`absolute text-5xl md:text-7xl opacity-20 ${item.icon}`}
-                    style={{
-                      color: item.color,
-                      top: item.top,
-                      left: item.left,
-                      right: item.right,
-                      bottom: item.bottom,
-                      filter: "blur(2px)",
-                    }}
-                  ></motion.i>
-                ))}
-              </div>
-
+              <HeroTechNodes />
               <div className="relative z-20 max-w-3xl">
                 <motion.div
-                  initial={{ opacity: 0, y: 20 }}
+                  initial={shouldReduceMotion ? false : { opacity: 0, y: 16 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.3 }}
-                  className="inline-flex items-center gap-2 px-3 py-1.5 md:px-4 md:py-2 rounded-full bg-blue-500/10 border border-blue-400/20 text-blue-300 font-semibold text-xs md:text-sm mb-4 md:mb-6 backdrop-blur-md"
+                  transition={{ delay: 0.15 }}
+                  className="inline-flex items-center gap-2 px-3 py-1.5 md:px-4 md:py-2 rounded-full bg-blue-50/75 border border-blue-200/70 text-slate-700 font-semibold text-xs md:text-sm mb-4 md:mb-6 backdrop-blur-[2px]"
                 >
                   <span className="relative flex h-2.5 w-2.5 md:h-3 md:w-3">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-2.5 w-2.5 md:h-3 md:w-3 bg-blue-500"></span>
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-500 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2.5 w-2.5 md:h-3 md:w-3 bg-blue-600"></span>
                   </span>
                   Ready to Scale Your Business?
                 </motion.div>
 
-                <h1 className="text-4xl md:text-7xl font-bold text-white mb-4 md:mb-6 leading-[1.1] md:leading-[0.9] tracking-tight">
+                <h1 className="text-4xl md:text-7xl font-bold text-slate-900 mb-4 md:mb-6 leading-[1.1] md:leading-[0.9] tracking-tight">
                   <span className="block mb-2 md:mb-3">Building The</span>
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-indigo-300 to-purple-400 drop-shadow-[0_0_30px_rgba(59,130,246,0.5)]">
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-blue-500 to-purple-600">
                     Digital Future.
                   </span>
                 </h1>
 
-                <p className="text-base md:text-xl text-gray-300 mb-8 md:mb-10 font-normal leading-relaxed max-w-2xl">
+                <p className="text-base md:text-xl text-slate-700 mb-8 md:mb-10 font-normal leading-relaxed max-w-2xl">
                   We are{" "}
-                  <span className="text-white font-semibold">Karma Dude</span>.
-                  We engineer high-performance websites, AI-driven applications,
-                  and scalable software solutions that drive real growth.
+                  <span className="text-slate-900 font-semibold">
+                    Karma Dude
+                  </span>
+                  . We engineer high-performance websites, AI-driven
+                  applications, and scalable software solutions that drive real
+                  growth.
                 </p>
 
                 <div className="flex flex-wrap gap-3 md:gap-4">
                   <Link
                     to="/our-works"
                     onClick={scrollToServices}
-                    className="relative px-6 py-3 md:px-8 md:py-4 rounded-full bg-[#001F3F] text-white font-bold text-base md:text-lg hover:scale-105 active:scale-95 transition-all shadow-[0_0_40px_rgba(0,31,63,0.3)]"
+                    className="relative px-6 py-3 md:px-8 md:py-4 rounded-full bg-[#001F3F] text-white font-bold text-base md:text-lg hover:scale-105 active:scale-95 transition-all shadow-[0_10px_28px_rgba(0,31,63,0.2)]"
                   >
                     Start Your Project
                   </Link>
                   <Link
                     to="/contact"
-                    className="px-6 py-3 md:px-8 md:py-4 rounded-full border border-white/20 bg-white/5 hover:bg-white/10 font-normal text-base md:text-lg text-white backdrop-blur-sm transition-all hover:border-white/40 hover:scale-105 active:scale-95"
+                    className="px-6 py-3 md:px-8 md:py-4 rounded-full border border-slate-300/90 bg-white/65 hover:bg-white/90 font-normal text-base md:text-lg text-slate-800 backdrop-blur-[2px] transition-all hover:border-slate-400 hover:scale-105 active:scale-95"
                   >
                     Get a Quote
                   </Link>
@@ -325,88 +270,87 @@ const Home = () => {
               </div>
             </motion.div>
 
-            {/* Box 2: AI Focus - Slides in from TOP */}
+            {/* Box 2: AI Focus */}
             <motion.div
-              initial={{ opacity: 0, y: -30 }}
+              initial={shouldReduceMotion ? false : { opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
-              className="md:col-span-4 relative group overflow-hidden rounded-[2rem] md:rounded-[2.5rem] border border-white/10 bg-gradient-to-br from-indigo-900/40 to-purple-900/40 backdrop-blur-sm md:backdrop-blur-2xl p-6 md:p-8 flex flex-col justify-between hover:border-indigo-400/50 transition-colors shadow-xl min-h-[200px] md:min-h-0"
+              className="md:col-span-4 relative group overflow-hidden rounded-[2rem] md:rounded-[2.5rem] border border-white/85 ring-1 ring-slate-300/45 bg-gradient-to-br from-white/15 via-white/5 to-indigo-50/15 backdrop-blur-[1px] p-6 md:p-8 flex flex-col justify-between hover:from-white/25 hover:via-white/12 hover:border-indigo-300/70 transition-all shadow-[0_14px_40px_rgba(15,23,42,0.06),inset_0_1px_0_rgba(255,255,255,0.85)] min-h-[200px] md:min-h-0"
             >
-              <div className="absolute top-0 right-0 p-32 bg-indigo-500/20 blur-[100px] rounded-full group-hover:bg-indigo-500/30 transition-all"></div>
+              <div className="absolute -bottom-10 -right-10 w-44 h-44 bg-indigo-200/20 blur-2xl rounded-full pointer-events-none"></div>
 
               <div className="flex justify-between items-start z-10">
-                <div className="p-3 md:p-4 bg-white/10 rounded-2xl border border-white/10 backdrop-blur-md">
-                  <i className="fas fa-brain text-3xl md:text-4xl text-indigo-300"></i>
+                <div className="p-3 md:p-4 bg-indigo-50/80 rounded-2xl border border-indigo-100/80">
+                  <i className="fas fa-brain text-3xl md:text-4xl text-[#1e3a8a]"></i>
                 </div>
-                <span className="px-2 py-1 md:px-3 rounded-full bg-indigo-500/20 text-indigo-200 text-[10px] md:text-xs font-bold border border-indigo-500/30 uppercase tracking-wider">
+                <span className="px-2 py-1 md:px-3 rounded-full bg-white/75 text-blue-700 text-[10px] md:text-xs font-bold border border-blue-300/80 uppercase tracking-wider">
                   AI Powered
                 </span>
               </div>
 
               <div className="z-10 mt-4 md:mt-0">
-                <h3 className="text-2xl md:text-3xl font-bold text-white mb-2">
+                <h3 className="text-2xl md:text-3xl font-bold text-slate-900 mb-2">
                   AI & ML
                 </h3>
-                <p className="text-indigo-200/80 text-sm leading-relaxed">
+                <p className="text-slate-700 text-sm leading-relaxed">
                   Next-gen automation, predictive models, and intelligent
                   workflows.
                 </p>
               </div>
-
-              <i className="fas fa-robot absolute -bottom-4 -right-4 text-8xl md:text-9xl text-indigo-500/10 group-hover:text-indigo-500/20 transition-all transform"></i>
             </motion.div>
 
-            {/* Box 3: Services Tease - Slides in from BOTTOM */}
+            {/* Box 3: Services Tease */}
             <motion.div
-              initial={{ opacity: 0, y: 30 }}
+              initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.3, ease: "easeOut" }}
               onClick={scrollToServices}
               onKeyDown={(e) => {
                 if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
                   scrollToServices(e as any);
                 }
               }}
               role="button"
               tabIndex={0}
-              className="md:col-span-4 relative group overflow-hidden rounded-[2rem] md:rounded-[2.5rem] border border-white/10 bg-gray-800/40 backdrop-blur-sm md:backdrop-blur-2xl p-6 md:p-8 flex flex-col justify-between hover:border-blue-400/50 transition-colors cursor-pointer shadow-xl min-h-[200px] md:min-h-0"
+              className="md:col-span-4 relative group overflow-hidden rounded-[2rem] md:rounded-[2.5rem] border border-white/85 ring-1 ring-slate-300/45 bg-gradient-to-br from-white/15 via-white/5 to-blue-50/15 backdrop-blur-[1px] p-6 md:p-8 flex flex-col justify-between hover:from-white/25 hover:via-white/12 hover:border-blue-300/70 transition-all cursor-pointer shadow-[0_14px_40px_rgba(15,23,42,0.06),inset_0_1px_0_rgba(255,255,255,0.85)] min-h-[200px] md:min-h-0"
             >
-              <div className="absolute bottom-0 left-0 p-32 bg-blue-500/10 blur-[100px] rounded-full group-hover:bg-blue-500/20 transition-all"></div>
+              <div className="absolute -bottom-10 -right-10 w-44 h-44 bg-blue-200/20 blur-2xl rounded-full pointer-events-none"></div>
 
               <div className="flex justify-between items-start z-10">
-                <div className="p-3 md:p-4 bg-white/10 rounded-2xl border border-white/10 backdrop-blur-md">
-                  <i className="fas fa-layer-group text-3xl md:text-4xl text-blue-300"></i>
+                <div className="p-3 md:p-4 bg-blue-50/80 rounded-2xl border border-blue-100/80">
+                  <i className="fas fa-layer-group text-3xl md:text-4xl text-blue-600"></i>
                 </div>
                 <div className="flex -space-x-3 hover:space-x-1 transition-all pl-2">
                   <div
-                    className="w-8 h-8 md:w-10 md:h-10 rounded-full border-2 border-gray-800 bg-gray-900 flex items-center justify-center text-blue-400 text-sm md:text-lg relative z-30"
+                    className="w-8 h-8 md:w-10 md:h-10 rounded-full border-2 border-white bg-white/85 shadow-xs flex items-center justify-center text-blue-500 text-sm md:text-lg relative z-30"
                     title="React"
                   >
                     <i className="fab fa-react"></i>
                   </div>
                   <div
-                    className="w-8 h-8 md:w-10 md:h-10 rounded-full border-2 border-gray-800 bg-gray-900 flex items-center justify-center text-green-500 text-sm md:text-lg relative z-20"
+                    className="w-8 h-8 md:w-10 md:h-10 rounded-full border-2 border-white bg-white/85 shadow-xs flex items-center justify-center text-green-600 text-sm md:text-lg relative z-20"
                     title="Node.js"
                   >
                     <i className="fab fa-node"></i>
                   </div>
                   <div
-                    className="w-8 h-8 md:w-10 md:h-10 rounded-full border-2 border-gray-800 bg-gray-900 flex items-center justify-center text-yellow-500 text-sm md:text-lg relative z-10"
+                    className="w-8 h-8 md:w-10 md:h-10 rounded-full border-2 border-white bg-white/85 shadow-xs flex items-center justify-center text-yellow-500 text-sm md:text-lg relative z-10"
                     title="Python"
                   >
                     <i className="fab fa-python"></i>
                   </div>
-                  <div className="w-8 h-8 md:w-10 md:h-10 rounded-full border-2 border-gray-800 bg-white text-gray-900 flex items-center justify-center font-bold text-[10px] md:text-xs relative z-0">
+                  <div className="w-8 h-8 md:w-10 md:h-10 rounded-full border-2 border-white bg-slate-100/90 text-slate-900 shadow-xs flex items-center justify-center font-bold text-[10px] md:text-xs relative z-0">
                     +12
                   </div>
                 </div>
               </div>
 
               <div className="z-10 mt-4 md:mt-0">
-                <h3 className="text-2xl md:text-3xl font-bold text-white mb-2">
+                <h3 className="text-2xl md:text-3xl font-bold text-slate-900 mb-2">
                   Modern Tech Stack
                 </h3>
-                <p className="text-blue-200/80 text-sm leading-relaxed">
+                <p className="text-slate-700 text-sm leading-relaxed">
                   Full-stack mastery: React, Node, Python, AWS, and Cloud
                   Architecture.
                 </p>
@@ -414,7 +358,7 @@ const Home = () => {
             </motion.div>
           </div>
         </div>
-        {/* Animated Text Strip Section - Fixed at Bottom on Mobile, Regular on Desktop */}
+
         {/* Animated Text Strip Section - Fixed at Bottom, Hides on Scroll Down */}
         <ScrollHideTicker />
       </div>

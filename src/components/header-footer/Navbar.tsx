@@ -16,7 +16,6 @@ import {
 } from "lucide-react";
 import { FaEnvelope, FaWhatsapp, FaLinkedin } from "react-icons/fa";
 import logo from "../../assets/logo/logo.png";
-import logoWhite from "../../assets/logo/logo-white.png";
 
 // Framer Motion animation variants
 const listVariants = {
@@ -257,7 +256,7 @@ const Navbar = ({ isMenuOpen, setIsMenuOpen }: NavbarProps) => {
     <>
       <nav
         className={`fixed w-full z-50 top-0 left-0 transition-all duration-500 ease-in-out ${isTransparentNav && !isScrolled
-            ? "py-2.5 md:py-4 bg-gradient-to-b from-gray-950/90 via-gray-900/50 to-transparent backdrop-blur-[4px]"
+            ? "py-2.5 md:py-4 bg-transparent"
             : "py-2 bg-white/95 backdrop-blur-md shadow-none border-none"
           }`}
         style={{
@@ -268,7 +267,7 @@ const Navbar = ({ isMenuOpen, setIsMenuOpen }: NavbarProps) => {
           <div className="flex-shrink-0 z-50">
             <Link to="/" className="block">
               <img
-                src={isTransparentNav && !isScrolled ? logoWhite : logo}
+                src={logo}
                 alt="Karma Dude Logo"
                 className="w-auto object-contain transition-all duration-300 h-10 sm:h-12 md:h-14"
               />
@@ -434,10 +433,7 @@ const Navbar = ({ isMenuOpen, setIsMenuOpen }: NavbarProps) => {
             <button
               onClick={toggleMenu}
               aria-label={isMenuOpen ? "Close menu" : "Open menu"}
-              className={`w-10 h-10 rounded-xl flex items-center justify-center focus:outline-none transition-all duration-300 ${isScrolled || !isTransparentNav
-                ? "bg-slate-100/80 border border-slate-200/80 text-slate-900 hover:bg-slate-200/80 active:scale-95 shadow-xs"
-                : "text-white bg-black/30 backdrop-blur-md border border-white/20 hover:bg-black/40 active:scale-95"
-                }`}
+              className="w-10 h-10 rounded-xl flex items-center justify-center focus:outline-none transition-all duration-300 bg-slate-100/80 border border-slate-200/80 text-slate-900 hover:bg-slate-200/80 active:scale-95 shadow-xs"
             >
               {isMenuOpen ? (
                 <i className="fas fa-times text-lg"></i>
