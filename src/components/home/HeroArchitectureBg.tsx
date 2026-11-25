@@ -39,30 +39,7 @@ const HeroArchitectureBg = () => {
       const offsetX = 0;
       const offsetY = isMobile ? (height % rowHeight) * 0.5 : 0;
 
-      // 1. Clean white left side; subtle low-opacity gradient on the right half only
-      const rightHalfWash = ctx.createLinearGradient(width * 0.48, 0, width, height * 0.85);
-      rightHalfWash.addColorStop(0, "rgba(255, 255, 255, 0)");
-      rightHalfWash.addColorStop(0.45, "rgba(219, 234, 254, 0.20)");
-      rightHalfWash.addColorStop(0.8, "rgba(199, 210, 254, 0.24)");
-      rightHalfWash.addColorStop(1, "rgba(221, 214, 254, 0.26)");
-      ctx.fillStyle = rightHalfWash;
-      ctx.fillRect(0, 0, width, height);
-
-      const rightFocusGlow = ctx.createRadialGradient(
-        width * 0.86,
-        height * 0.46,
-        0,
-        width * 0.86,
-        height * 0.46,
-        Math.max(width, height) * 0.42,
-      );
-      rightFocusGlow.addColorStop(0, "rgba(99, 102, 241, 0.08)");
-      rightFocusGlow.addColorStop(0.45, "rgba(56, 189, 248, 0.05)");
-      rightFocusGlow.addColorStop(1, "rgba(255, 255, 255, 0)");
-      ctx.fillStyle = rightFocusGlow;
-      ctx.fillRect(width * 0.45, 0, width * 0.55, height);
-
-      // 2. Crisp 1px static architectural grid lines
+      // Crisp 1px static architectural grid lines (background color handled smoothly by CSS layer)
       ctx.save();
       ctx.strokeStyle = "rgba(148, 163, 184, 0.14)";
       ctx.lineWidth = 1;
@@ -123,12 +100,21 @@ const HeroArchitectureBg = () => {
       aria-hidden="true"
       className="absolute inset-0 z-0 overflow-hidden pointer-events-none bg-white"
     >
-      {/* Static fallback: clean white left side, soft gradient on right half */}
+      {/* Pure white left half transitioning smoothly into a clean blue/indigo tint on the right half only */}
       <div
         className="absolute inset-0"
         style={{
           background:
-            "linear-gradient(105deg, #ffffff 50%, rgba(219, 234, 254, 0.20) 78%, rgba(224, 231, 255, 0.26) 100%)",
+            "linear-gradient(95deg, #ffffff 0%, #ffffff 48%, rgba(239, 246, 255, 0.65) 62%, rgba(219, 234, 254, 0.78) 82%, rgba(224, 231, 255, 0.88) 100%)",
+        }}
+      />
+
+      {/* Soft ambient accent restricted cleanly to the right side */}
+      <div
+        className="hidden md:block absolute top-[12%] -right-[6%] w-[44vw] h-[72%] rounded-full blur-[95px] opacity-60 pointer-events-none"
+        style={{
+          background:
+            "radial-gradient(circle, rgba(147, 197, 253, 0.42) 0%, rgba(199, 210, 254, 0.28) 55%, rgba(255, 255, 255, 0) 100%)",
         }}
       />
 

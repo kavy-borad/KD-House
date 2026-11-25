@@ -131,6 +131,7 @@ const HERO_SLIDES = [
 const Home = () => {
   const shouldReduceMotion = useReducedMotion();
   const [heroSlideIndex, setHeroSlideIndex] = useState(0);
+  const heroSectionRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (shouldReduceMotion) return;
@@ -246,15 +247,16 @@ const Home = () => {
 
       {/* Hero Section - Light Architectural Bento Grid Layout */}
       <div
+        ref={heroSectionRef}
         data-hero-section="true"
-        className="relative min-h-[100dvh] w-full bg-white flex flex-col pt-28 sm:pt-32 md:pt-24 md:overflow-hidden"
+        className="relative min-h-[100dvh] w-full bg-white flex flex-col pt-28 sm:pt-32 md:pt-24 md:overflow-x-clip"
       >
         {/* Static Light Blueprint Grid & Crosshair Background */}
         <HeroArchitectureBg />
 
         {/* Main Content Area - Shifted Left on Desktop with Right Architectural Loop */}
-        <div className="flex-1 w-full max-w-7xl mx-auto px-4 py-4 md:p-6 flex items-start md:items-center justify-center relative z-10 pb-24 md:pb-0">
-          <div className="w-full max-w-6xl mx-auto flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 xl:gap-10">
+        <div className="flex-1 w-full max-w-7xl mx-auto px-4 py-4 md:px-8 md:py-6 flex items-start md:items-center justify-center relative z-10 pb-24 md:pb-0">
+          <div className="w-full max-w-7xl mx-auto flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8 xl:gap-14">
             {/* Main Hero Content */}
             <motion.div
               initial={shouldReduceMotion ? false : { opacity: 1, x: 0 }}
@@ -328,13 +330,13 @@ const Home = () => {
             </motion.div>
 
             {/* Right-Side Architectural Flow Loop */}
-            <HeroRightLoop />
+            <HeroRightLoop heroRef={heroSectionRef} />
           </div>
         </div>
-
-        {/* Animated Text Strip Section - Fixed at Bottom, Hides on Scroll Down */}
-        <ScrollHideTicker />
       </div>
+
+      {/* Animated Text Strip Section - Fixed at Bottom, Hides on Scroll Down */}
+      <ScrollHideTicker />
 
       {/* Why Karma Dude? Section - 3D Modern Design */}
       {/* Why Karma Dude? Section - 3D Modern Design */}

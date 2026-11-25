@@ -78,8 +78,8 @@ const ALL_TECH_TOKENS: TechTokenMeta[] = [
     borderTint: "rgba(125, 211, 252, 0.9)",
     mass: 1.18,
     restitution: 0.46,
-    initialNx: 0.24,
-    initialNy: 0.28,
+    initialNx: 0.26,
+    initialNy: 0.42,
     initialVx: 65,
   },
   {
@@ -91,8 +91,8 @@ const ALL_TECH_TOKENS: TechTokenMeta[] = [
     borderTint: "rgba(253, 186, 116, 0.9)",
     mass: 1.22,
     restitution: 0.45,
-    initialNx: 0.76,
-    initialNy: 0.26,
+    initialNx: 0.74,
+    initialNy: 0.42,
     initialVx: -65,
   },
 ];
@@ -144,10 +144,10 @@ const HeroTechNodes = () => {
 
   const radius =
     viewportMode === "mobile"
-      ? 16
+      ? 20
       : viewportMode === "tablet" || viewportMode === "lg"
-        ? 17
-        : 21;
+        ? 22
+        : 27;
 
   const physicsConfigs = useMemo<PhysicsBodyConfig[]>(
     () =>
@@ -233,7 +233,11 @@ const HeroTechNodes = () => {
             >
               <i
                 className={`${token.icon} ${
-                  radius <= 17 ? "text-[16px]" : "text-[19px]"
+                  radius <= 20
+                    ? "text-[19px]"
+                    : radius <= 22
+                      ? "text-[21px]"
+                      : "text-[25px]"
                 }`}
                 style={{ color: token.color }}
               />
