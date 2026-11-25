@@ -3,7 +3,7 @@ import { Helmet } from "react-helmet-async";
 // import "@fortawesome/fontawesome-free/css/all.min.css"; // Removed as it is imported globally
 // import * as echarts from "echarts"; // Removed for performance
 
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   motion,
   useScroll,
@@ -84,6 +84,8 @@ const ScrollHideTicker = () => {
 };
 
 const Home = () => {
+  const navigate = useNavigate();
+
   const scrollToServices = (
     e: React.MouseEvent<HTMLAnchorElement | HTMLDivElement>,
   ) => {
@@ -356,15 +358,16 @@ const Home = () => {
               <i className="fas fa-robot absolute -bottom-4 -right-4 text-8xl md:text-9xl text-indigo-500/10 group-hover:text-indigo-500/20 transition-all transform"></i>
             </motion.div>
 
-            {/* Box 3: Services Tease - Slides in from BOTTOM */}
+            {/* Box 3: Learn With Us - Slides in from BOTTOM */}
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.3, ease: "easeOut" }}
-              onClick={scrollToServices}
+              onClick={() => navigate("/about/careers")}
               onKeyDown={(e) => {
                 if (e.key === "Enter" || e.key === " ") {
-                  scrollToServices(e as any);
+                  e.preventDefault();
+                  navigate("/about/careers");
                 }
               }}
               role="button"
@@ -375,7 +378,92 @@ const Home = () => {
 
               <div className="flex justify-between items-start z-10">
                 <div className="p-3 md:p-4 bg-white/10 rounded-2xl border border-white/10 backdrop-blur-md">
-                  <i className="fas fa-layer-group text-3xl md:text-4xl text-blue-300"></i>
+                  <svg
+                    className="w-9 h-9 md:w-11 md:h-11 text-blue-300"
+                    viewBox="0 0 64 64"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    aria-hidden="true"
+                  >
+                    <defs>
+                      <mask id="learnWithUsStudentMask">
+                        <rect width="64" height="64" fill="white" />
+                        {/* Carve clean gap around laptop & books so shoulders never clash */}
+                        <path
+                          d="M25.2 38.5H47.8C49.6 38.5 51.0 40.1 50.7 41.9L48.7 54.3C48.4 55.9 47.0 57.0 45.4 57.0H27.6C26.0 57.0 24.6 55.9 24.3 54.3L22.3 41.9C22.0 40.1 23.4 38.5 25.2 38.5Z"
+                          fill="black"
+                          stroke="black"
+                          strokeWidth="4"
+                          strokeLinejoin="round"
+                        />
+                        <path
+                          d="M6.2 46.2C8.4 45.2 11.1 45.5 13.0 46.8C14.9 45.5 17.6 45.2 19.8 46.2C20.5 46.5 20.9 47.0 20.9 47.6V55.2C20.9 56.1 20.1 56.8 19.2 56.8H6.8C5.9 56.8 5.2 56.1 5.2 55.2V47.6C5.2 47.0 5.6 46.5 6.2 46.2Z"
+                          fill="black"
+                          stroke="black"
+                          strokeWidth="3.5"
+                          strokeLinejoin="round"
+                        />
+                      </mask>
+                    </defs>
+
+                    {/* Tilted Graduation Cap (top right) */}
+                    <path
+                      d="M48.5 6.8L59.5 13.2L47.0 17.6L36.0 11.2L48.5 6.8Z"
+                      fill="currentColor"
+                    />
+                    <path
+                      d="M40.8 15.8L47.0 19.4L53.2 17.1L52.0 20.8C48.8 22.0 44.2 21.5 39.8 19.2L40.8 15.8Z"
+                      fill="currentColor"
+                    />
+                    <path
+                      d="M57.5 14.2V21.0"
+                      stroke="currentColor"
+                      strokeWidth="2.1"
+                      strokeLinecap="round"
+                    />
+                    <circle cx="57.5" cy="22.1" r="1.4" fill="currentColor" />
+
+                    {/* Student Hair */}
+                    <path
+                      d="M18.0 22.5C18.0 17.2 21.2 14.0 25.5 14.0C29.6 14.0 32.6 17.0 32.6 21.6C31.0 20.0 28.8 19.4 26.5 19.8C23.6 20.3 21.0 21.4 18.0 22.5Z"
+                      fill="currentColor"
+                    />
+
+                    {/* Student Face & Ears */}
+                    <path
+                      d="M18.6 23.8C21.2 22.4 23.8 21.3 26.5 21.0C28.8 20.7 30.8 21.3 32.2 22.7C33.1 22.9 33.7 23.7 33.7 24.7C33.7 25.6 33.1 26.3 32.3 26.5C31.6 29.8 28.9 32.2 25.4 32.2C21.9 32.2 19.2 29.8 18.5 26.5C17.7 26.3 17.1 25.6 17.1 24.7C17.1 23.9 17.8 23.7 18.6 23.8Z"
+                      fill="currentColor"
+                    />
+
+                    {/* Student Shoulders (cleanly masked behind laptop & books) */}
+                    <path
+                      mask="url(#learnWithUsStudentMask)"
+                      d="M11.5 46.5C11.5 38.4 17.2 33.8 25.4 33.8C33.6 33.8 39.4 38.4 39.4 46.5H11.5Z"
+                      fill="currentColor"
+                    />
+
+                    {/* Three Spark Rays (top right of laptop) */}
+                    <path
+                      d="M44.5 29.8L46.2 25.2M48.5 32.0L52.4 29.0M50.6 36.2L55.0 35.6"
+                      stroke="currentColor"
+                      strokeWidth="2.3"
+                      strokeLinecap="round"
+                    />
+
+                    {/* Laptop Lid with Center Dot Cutout */}
+                    <path
+                      fillRule="evenodd"
+                      clipRule="evenodd"
+                      d="M25.2 38.5H47.8C49.6 38.5 51.0 40.1 50.7 41.9L48.7 54.3C48.4 55.9 47.0 57.0 45.4 57.0H27.6C26.0 57.0 24.6 55.9 24.3 54.3L22.3 41.9C22.0 40.1 23.4 38.5 25.2 38.5ZM36.5 50.5C38.1 50.5 39.4 49.2 39.4 47.6C39.4 46.0 38.1 44.7 36.5 44.7C34.9 44.7 33.6 46.0 33.6 47.6C33.6 49.2 34.9 50.5 36.5 50.5Z"
+                      fill="currentColor"
+                    />
+
+                    {/* Open Book + Bottom Book (bottom left) */}
+                    <path
+                      d="M6.2 46.2C8.3 45.2 10.6 45.5 12.3 46.7V50.9C10.5 50.0 8.3 49.9 6.1 50.7C5.6 50.9 5.2 50.5 5.2 50.0V47.2C5.2 46.7 5.6 46.4 6.2 46.2ZM13.8 46.7C15.5 45.5 17.8 45.2 19.9 46.2C20.5 46.4 20.9 46.7 20.9 47.2V50.0C20.9 50.5 20.5 50.9 20.0 50.7C17.8 49.9 15.6 50.0 13.8 50.9V46.7ZM6.8 52.8H19.4C20.3 52.8 21.0 53.5 21.0 54.4V55.2C21.0 56.1 20.3 56.8 19.4 56.8H6.8C5.9 56.8 5.2 56.1 5.2 55.2V54.4C5.2 53.5 5.9 52.8 6.8 52.8Z"
+                      fill="currentColor"
+                    />
+                  </svg>
                 </div>
                 <div className="flex -space-x-3 hover:space-x-1 transition-all pl-2">
                   <div
@@ -404,11 +492,11 @@ const Home = () => {
 
               <div className="z-10 mt-4 md:mt-0">
                 <h3 className="text-2xl md:text-3xl font-bold text-white mb-2">
-                  Modern Tech Stack
+                  Learn With Us
                 </h3>
                 <p className="text-blue-200/80 text-sm leading-relaxed">
-                  Full-stack mastery: React, Node, Python, AWS, and Cloud
-                  Architecture.
+                  Build real-world skills in React, Node.js, Python, AWS, and
+                  modern cloud technologies.
                 </p>
               </div>
             </motion.div>

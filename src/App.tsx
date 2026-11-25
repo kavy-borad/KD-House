@@ -35,11 +35,13 @@ import Onboarding from "./components/Services-Pages/Onboarding";
 import GooglePlayTesting from "./components/GooglePlayTesting";
 
 function ScrollToTop() {
-  const { pathname } = useLocation();
+  const { pathname, hash } = useLocation();
 
   useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [pathname]);
+    if (!hash) {
+      window.scrollTo(0, 0);
+    }
+  }, [pathname, hash]);
 
   return null;
 }

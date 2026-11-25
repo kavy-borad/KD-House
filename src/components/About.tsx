@@ -32,7 +32,19 @@ interface Job {
   type: string;
   description: string;
   department: string;
+  redirectTo?: string;
 }
+
+const INTERNSHIP_OPPORTUNITY: Job = {
+  id: "internship-program",
+  title: "IT & Software Development Internship",
+  location: "Office",
+  type: "Internship",
+  department: "Training & Engineering",
+  description:
+    "Karmadude IT Solutions offers hands-on, mentor-led internship programs for aspiring developers and students! Gain real-world project experience with flexible 1, 3, or 6-month durations and Morning, Noon, or Evening batch timings. Apply directly through our student internship inquiry form to get started.",
+  redirectTo: "/studentform",
+};
 
 // Team members are now fetched from the API dynamically
 
@@ -877,12 +889,17 @@ const LifeAtKarmadudeTab = () => {
 };
 
 const CareersTab = () => {
+  const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedJob, setSelectedJob] = useState<Job | null>(null);
-  const [activeJobs, setActiveJobs] = useState<Job[]>([]);
+  const [activeJobs, setActiveJobs] = useState<Job[]>([INTERNSHIP_OPPORTUNITY]);
   const [loading, setLoading] = useState(true);
 
   const handleApply = (job: Job) => {
+    if (job.redirectTo) {
+      navigate(job.redirectTo);
+      return;
+    }
     setSelectedJob(job);
     setIsModalOpen(true);
   };
@@ -905,22 +922,39 @@ const CareersTab = () => {
         setLoading(true);
         const response = await api.jobs.getAll();
         if (response.success && Array.isArray(response.data)) {
-          const filtered = response.data
+          const filtered: Job[] = response.data
             .filter(
               (j: any) => String(j.is_active) === "1" || j.is_active === true,
             )
-            .map((j: any) => ({
-              id: j.id,
-              title: j.title,
-              location: j.location,
-              type: j.type,
-              description: j.description,
-              department: j.department,
-            }));
-          setActiveJobs(filtered);
+            .map((j: any) => {
+              const isInternship =
+                j.type?.toLowerCase().includes("internship") ||
+                j.title?.toLowerCase().includes("internship");
+              return {
+                id: j.id,
+                title: j.title,
+                location: j.location,
+                type: j.type,
+                description: j.description,
+                department: j.department,
+                ...(isInternship ? { redirectTo: "/studentform" } : {}),
+              };
+            });
+
+          const hasInternship = filtered.some(
+            (j) =>
+              j.type?.toLowerCase().includes("internship") ||
+              j.title?.toLowerCase().includes("internship"),
+          );
+          setActiveJobs(
+            hasInternship ? filtered : [...filtered, INTERNSHIP_OPPORTUNITY],
+          );
+        } else {
+          setActiveJobs([INTERNSHIP_OPPORTUNITY]);
         }
       } catch (err) {
         console.error("Failed to load jobs:", err);
+        setActiveJobs([INTERNSHIP_OPPORTUNITY]);
       } finally {
         setLoading(false);
       }
@@ -1059,7 +1093,7 @@ const CareersTab = () => {
           <div className="grid grid-cols-1 gap-8">
             {activeJobs.map((job, idx) => (
               <motion.div
-                key={idx}
+                key={job.id || idx}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ delay: idx * 0.05, duration: 0.5 }}
