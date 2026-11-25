@@ -1,10 +1,20 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, MouseEvent } from "react";
 import { FaWhatsapp, FaInstagram, FaEnvelope, FaTimes, FaCommentDots } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
 
 const HangoutIcon = ({ size = 24, className = "w-6 h-6 text-white" }: { size?: number; className?: string }) => (
   <FaCommentDots size={size} className={className} />
 );
+
+// Opens WhatsApp chat with NO pre-filled message.
+// URL has no `?text=` query param, so WhatsApp opens with a blank input.
+const openWhatsAppClean = (event?: MouseEvent) => {
+  if (event) {
+    event.preventDefault();
+    event.stopPropagation();
+  }
+  window.open("https://wa.me/917435822022", "_blank", "noopener,noreferrer");
+};
 
 interface FloatingContactIconsProps {
   hide?: boolean;
@@ -52,13 +62,14 @@ export default function FloatingContactIcons({
             }}
             className="flex flex-col gap-3.5 mb-3.5 items-center"
           >
-            {/* WhatsApp */}
+            {/* WhatsApp - opens chat with no pre-filled message */}
             <ContactItem
-              href="https://wa.me/7435822022"
+              href="https://wa.me/917435822022"
               icon={<FaWhatsapp className="w-6 h-6" />}
               color="bg-[#25D366]"
               label="WhatsApp"
               index={0}
+              onClick={openWhatsAppClean}
             />
 
             {/* Email */}
@@ -119,17 +130,20 @@ const ContactItem = ({
   color,
   label,
   index,
+  onClick,
 }: {
   href: string;
   icon: React.ReactNode;
   color: string;
   label: string;
   index: number;
+  onClick?: (event: MouseEvent) => void;
 }) => (
   <motion.a
     href={href}
     target="_blank"
     rel="noopener noreferrer"
+    onClick={onClick}
     initial={{ opacity: 0, y: 10 }}
     animate={{ opacity: 1, y: 0 }}
     exit={{ opacity: 0, y: 10 }}

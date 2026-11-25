@@ -1,12 +1,47 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useLayoutEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { ArrowUpRight } from "lucide-react";
 import { api, ASSETS_BASE } from "../lib/apiClient";
 import karmaLogo from "../assets/logo/KARMDUDE NEW.webp";
 
+const categoryToSlug = (cat: string) => {
+  return cat.toLowerCase().trim().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "");
+};
+
+const findCategoryFromHash = (hash: string, categoriesList: string[]): string | null => {
+  if (!hash) return null;
+  const cleanHash = hash.replace(/^#/, "").toLowerCase().trim();
+  if (!cleanHash) return null;
+
+  // 1. Direct match with categoryToSlug
+  const matched = categoriesList.find(
+    (cat) => categoryToSlug(cat) === cleanHash
+  );
+  if (matched) return matched;
+
+  // 2. Fuzzy match ignoring hyphens & special characters
+  const strippedHash = cleanHash.replace(/[^a-z0-9]/g, "");
+  const fuzzyMatched = categoriesList.find(
+    (cat) => cat.toLowerCase().replace(/[^a-z0-9]/g, "") === strippedHash
+  );
+  return fuzzyMatched || null;
+};
+
 const WorkShowcase = () => {
-  const [activeCategory, setActiveCategory] = useState("All");
+  const location = useLocation();
+  const showcaseRef = useRef<HTMLDivElement>(null);
+
+  const [activeCategory, setActiveCategory] = useState<string>(() => {
+    if (typeof window !== "undefined" && window.location.hash) {
+      const clean = window.location.hash.replace(/^#/, "").trim();
+      if (clean) {
+        return clean.charAt(0).toUpperCase() + clean.slice(1);
+      }
+    }
+    return "All";
+  });
+
   const [products, setProducts] = useState<any[]>([]);
   const [apiCategories, setApiCategories] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
@@ -79,6 +114,48 @@ const WorkShowcase = () => {
 
   const categories = ["All", ...apiCategories];
 
+  const performInstantScroll = () => {
+    if (showcaseRef.current) {
+      const yOffset = -100;
+      const y = showcaseRef.current.getBoundingClientRect().top + window.pageYOffset + yOffset;
+      window.scrollTo(0, Math.max(0, y));
+    }
+  };
+
+  const scrollToShowcase = () => {
+    if (showcaseRef.current) {
+      const yOffset = -100;
+      const y = showcaseRef.current.getBoundingClientRect().top + window.pageYOffset + yOffset;
+      window.scrollTo({ top: Math.max(0, y), behavior: "smooth" });
+    }
+  };
+
+  // Synchronous positioning BEFORE browser paint when hash URL is opened directly
+  useLayoutEffect(() => {
+    if (location.hash) {
+      performInstantScroll();
+    }
+  }, [location.hash]);
+
+  // Sync category state when API categories arrive or hash changes
+  useEffect(() => {
+    if (!location.hash) return;
+    if (categories.length > 0) {
+      const matchedCategory = findCategoryFromHash(location.hash, categories);
+      if (matchedCategory) {
+        setActiveCategory(matchedCategory);
+      }
+    }
+    performInstantScroll();
+  }, [location.hash, loading, apiCategories]);
+
+  const handleCategorySelect = (category: string) => {
+    setActiveCategory(category);
+    const slug = categoryToSlug(category);
+    window.history.replaceState(null, "", `#${slug}`);
+    scrollToShowcase();
+  };
+
   const activeProducts = products.filter((p: any) => {
     if (p.sections && Array.isArray(p.sections) && p.sections.length > 0) {
       return p.sections.some((s: any) => s.active === 1);
@@ -104,8 +181,36 @@ const WorkShowcase = () => {
 
   if (loading) {
     return (
-      <div className="py-20 text-center text-gray-500 font-bold">
-        Loading works...
+      <div ref={showcaseRef} className="min-h-[1000px] pb-20 md:pb-40">
+        {/* Skeleton Filter Bar */}
+        <div className="mb-12 md:mb-20">
+          <div className="w-full lg:w-fit bg-white/80 border border-gray-200 rounded-full p-2 flex gap-2 overflow-hidden">
+            {[1, 2, 3, 4, 5, 6].map((i) => (
+              <div key={i} className="h-9 w-24 bg-gray-200/70 rounded-full animate-pulse shrink-0" />
+            ))}
+          </div>
+        </div>
+
+        {/* Skeleton Grid (3x3 Layout matching real cards) */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {[1, 2, 3, 4, 5, 6].map((i) => (
+            <div
+              key={i}
+              className="bg-white border border-gray-100 rounded-3xl overflow-hidden shadow-sm flex flex-col h-[480px] animate-pulse"
+            >
+              <div className="w-full aspect-[16/10] bg-gray-200/70" />
+              <div className="p-6 flex flex-col gap-3 bg-[#f4f8fd] flex-grow">
+                <div className="w-20 h-4 bg-blue-200/60 rounded-full" />
+                <div className="w-3/4 h-7 bg-gray-300/60 rounded-lg mt-1" />
+                <div className="w-full h-10 bg-gray-200/60 rounded-lg" />
+                <div className="flex gap-2 pt-2">
+                  <div className="w-14 h-5 bg-gray-200/60 rounded-full" />
+                  <div className="w-16 h-5 bg-gray-200/60 rounded-full" />
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     );
   }
@@ -113,7 +218,7 @@ const WorkShowcase = () => {
   return (
     <>
       {/* Minimal Float Filter */}
-      <div className="top-24 z-40 mb-12 md:mb-20 pointer-events-none">
+      <div ref={showcaseRef} className="top-24 z-40 mb-12 md:mb-20 pointer-events-none">
         <div className="pointer-events-auto flex justify-start">
           <motion.div
             layout
@@ -136,7 +241,7 @@ const WorkShowcase = () => {
                       e.preventDefault();
                       return;
                     }
-                    setActiveCategory(category);
+                    handleCategorySelect(category);
                   }}
                   className={`relative px-4 py-2 md:px-5 md:py-2.5 rounded-full text-xs md:text-sm font-bold transition-colors duration-300 whitespace-nowrap shrink-0 ${activeCategory === category
                     ? "text-white"
