@@ -6,17 +6,17 @@ import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
 import {
   motion,
+  AnimatePresence,
   useScroll,
   useMotionValueEvent,
   useInView,
   useMotionValue,
-  useTransform,
   useReducedMotion,
   animate,
 } from "framer-motion";
 import MessageTicker from "./home/MessageTicker";
 import HeroArchitectureBg from "./home/HeroArchitectureBg";
-import HeroTechNodes from "./home/HeroTechNodes";
+import HeroRightLoop from "./home/HeroRightLoop";
 
 const CounterNumber = ({ value }: { value: string }) => {
   const ref = useRef<HTMLSpanElement>(null);
@@ -85,15 +85,62 @@ const ScrollHideTicker = () => {
   );
 };
 
+const HERO_SLIDES = [
+  {
+    id: "digital-future",
+    line1: "Building The",
+    line2: "Digital Future.",
+    description: (
+      <>
+        We are <span className="text-slate-900 font-semibold">Karma Dude</span>.
+        We engineer high-performance websites, AI-driven applications, and
+        scalable software solutions that drive real growth.
+      </>
+    ),
+  },
+  {
+    id: "ai-ml",
+    line1: "Building With",
+    line2: "AI & ML.",
+    description: (
+      <>
+        Next-gen automation, predictive models, and{" "}
+        <span className="text-slate-900 font-semibold">
+          intelligent workflows
+        </span>{" "}
+        engineered to transform operations and accelerate your business growth.
+      </>
+    ),
+  },
+  {
+    id: "tech-stack",
+    line1: "Modern",
+    line2: "Tech Stack.",
+    description: (
+      <>
+        Full-stack mastery across{" "}
+        <span className="text-slate-900 font-semibold">
+          React, Node, Python, AWS
+        </span>
+        , and resilient Cloud Architecture built to scale effortlessly.
+      </>
+    ),
+  },
+];
+
 const Home = () => {
-  const heroRef = useRef<HTMLDivElement>(null);
   const shouldReduceMotion = useReducedMotion();
-  const { scrollYProgress } = useScroll({
-    target: heroRef,
-    offset: ["start start", "end start"],
-  });
-  const bgY = useTransform(scrollYProgress, [0, 1], [0, 32]);
-  const bgOpacity = useTransform(scrollYProgress, [0, 0.9, 1], [1, 0.85, 0.65]);
+  const [heroSlideIndex, setHeroSlideIndex] = useState(0);
+
+  useEffect(() => {
+    if (shouldReduceMotion) return;
+    const interval = window.setInterval(() => {
+      setHeroSlideIndex((prev) => (prev + 1) % HERO_SLIDES.length);
+    }, 4500);
+    return () => window.clearInterval(interval);
+  }, [shouldReduceMotion]);
+
+  const currentHeroSlide = HERO_SLIDES[heroSlideIndex];
 
   const scrollToServices = (
     e: React.MouseEvent<HTMLAnchorElement | HTMLDivElement>,
@@ -199,30 +246,25 @@ const Home = () => {
 
       {/* Hero Section - Light Architectural Bento Grid Layout */}
       <div
-        ref={heroRef}
-        className="relative min-h-[100dvh] w-full bg-[#f8fafc] flex flex-col pt-28 sm:pt-32 md:pt-24 md:overflow-hidden"
+        data-hero-section="true"
+        className="relative min-h-[100dvh] w-full bg-white flex flex-col pt-28 sm:pt-32 md:pt-24 md:overflow-hidden"
       >
-        {/* Light Blueprint Grid & Animated Crosshair Background */}
-        <motion.div
-          style={shouldReduceMotion ? undefined : { y: bgY, opacity: bgOpacity }}
-          className="absolute inset-0 z-0 will-change-transform"
-        >
-          <HeroArchitectureBg />
-        </motion.div>
+        {/* Static Light Blueprint Grid & Crosshair Background */}
+        <HeroArchitectureBg />
 
-        {/* Main Content Area (Bento Grid) - Fills Available Space */}
+        {/* Main Content Area - Shifted Left on Desktop with Right Architectural Loop */}
         <div className="flex-1 w-full max-w-7xl mx-auto px-4 py-4 md:p-6 flex items-start md:items-center justify-center relative z-10 pb-24 md:pb-0">
-          <div className="grid grid-cols-1 md:grid-cols-12 grid-rows-auto md:grid-rows-2 gap-4 md:gap-6 w-full h-auto md:h-full md:max-h-[75vh]">
-            {/* Box 1: Main Hero Content (Spans 8 cols, 2 rows) */}
+          <div className="w-full max-w-6xl mx-auto flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 xl:gap-10">
+            {/* Main Hero Content */}
             <motion.div
               initial={shouldReduceMotion ? false : { opacity: 1, x: 0 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6, ease: "easeOut" }}
-              className="md:col-span-8 md:row-span-2 relative group overflow-hidden rounded-[2rem] md:rounded-[2.5rem] border border-white/85 ring-1 ring-slate-300/45 bg-gradient-to-br from-white/15 via-white/5 to-blue-50/10 backdrop-blur-[1px] shadow-[0_14px_40px_rgba(15,23,42,0.06),inset_0_1px_0_rgba(255,255,255,0.85)] flex flex-col justify-center p-6 md:p-14 hover:from-white/25 hover:via-white/12 hover:border-blue-300/70 transition-all"
+              className="relative flex-1 min-w-0 flex flex-col justify-center py-6 md:py-10 px-2 md:px-2"
             >
-              <HeroTechNodes />
               <div className="relative z-20 max-w-3xl">
                 <motion.div
+                  data-physics-obstacle="true"
                   initial={shouldReduceMotion ? false : { opacity: 0, y: 16 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.15 }}
@@ -235,24 +277,39 @@ const Home = () => {
                   Ready to Scale Your Business?
                 </motion.div>
 
-                <h1 className="text-4xl md:text-7xl font-bold text-slate-900 mb-4 md:mb-6 leading-[1.1] md:leading-[0.9] tracking-tight">
-                  <span className="block mb-2 md:mb-3">Building The</span>
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-blue-500 to-purple-600">
-                    Digital Future.
-                  </span>
-                </h1>
+                <div data-physics-obstacle="true">
+                  <AnimatePresence mode="wait">
+                    <motion.div
+                      key={currentHeroSlide.id}
+                      initial={
+                        shouldReduceMotion ? false : { opacity: 0, y: 12 }
+                      }
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={
+                        shouldReduceMotion ? undefined : { opacity: 0, y: -12 }
+                      }
+                      transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+                    >
+                      <h1 className="text-4xl md:text-7xl font-bold text-slate-900 mb-4 md:mb-6 leading-[1.1] md:leading-[0.9] tracking-tight">
+                        <span className="block mb-2 md:mb-3">
+                          {currentHeroSlide.line1}
+                        </span>
+                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-blue-500 to-purple-600">
+                          {currentHeroSlide.line2}
+                        </span>
+                      </h1>
 
-                <p className="text-base md:text-xl text-slate-700 mb-8 md:mb-10 font-normal leading-relaxed max-w-2xl">
-                  We are{" "}
-                  <span className="text-slate-900 font-semibold">
-                    Karma Dude
-                  </span>
-                  . We engineer high-performance websites, AI-driven
-                  applications, and scalable software solutions that drive real
-                  growth.
-                </p>
+                      <p className="text-base md:text-xl text-slate-700 mb-8 md:mb-10 font-normal leading-relaxed max-w-2xl">
+                        {currentHeroSlide.description}
+                      </p>
+                    </motion.div>
+                  </AnimatePresence>
+                </div>
 
-                <div className="flex flex-wrap gap-3 md:gap-4">
+                <div
+                  data-physics-obstacle="true"
+                  className="inline-flex flex-wrap gap-3 md:gap-4"
+                >
                   <Link
                     to="/our-works"
                     onClick={scrollToServices}
@@ -270,92 +327,8 @@ const Home = () => {
               </div>
             </motion.div>
 
-            {/* Box 2: AI Focus */}
-            <motion.div
-              initial={shouldReduceMotion ? false : { opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
-              className="md:col-span-4 relative group overflow-hidden rounded-[2rem] md:rounded-[2.5rem] border border-white/85 ring-1 ring-slate-300/45 bg-gradient-to-br from-white/15 via-white/5 to-indigo-50/15 backdrop-blur-[1px] p-6 md:p-8 flex flex-col justify-between hover:from-white/25 hover:via-white/12 hover:border-indigo-300/70 transition-all shadow-[0_14px_40px_rgba(15,23,42,0.06),inset_0_1px_0_rgba(255,255,255,0.85)] min-h-[200px] md:min-h-0"
-            >
-              <div className="absolute -bottom-10 -right-10 w-44 h-44 bg-indigo-200/20 blur-2xl rounded-full pointer-events-none"></div>
-
-              <div className="flex justify-between items-start z-10">
-                <div className="p-3 md:p-4 bg-indigo-50/80 rounded-2xl border border-indigo-100/80">
-                  <i className="fas fa-brain text-3xl md:text-4xl text-[#1e3a8a]"></i>
-                </div>
-                <span className="px-2 py-1 md:px-3 rounded-full bg-white/75 text-blue-700 text-[10px] md:text-xs font-bold border border-blue-300/80 uppercase tracking-wider">
-                  AI Powered
-                </span>
-              </div>
-
-              <div className="z-10 mt-4 md:mt-0">
-                <h3 className="text-2xl md:text-3xl font-bold text-slate-900 mb-2">
-                  AI & ML
-                </h3>
-                <p className="text-slate-700 text-sm leading-relaxed">
-                  Next-gen automation, predictive models, and intelligent
-                  workflows.
-                </p>
-              </div>
-            </motion.div>
-
-            {/* Box 3: Services Tease */}
-            <motion.div
-              initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.3, ease: "easeOut" }}
-              onClick={scrollToServices}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" || e.key === " ") {
-                  e.preventDefault();
-                  scrollToServices(e as any);
-                }
-              }}
-              role="button"
-              tabIndex={0}
-              className="md:col-span-4 relative group overflow-hidden rounded-[2rem] md:rounded-[2.5rem] border border-white/85 ring-1 ring-slate-300/45 bg-gradient-to-br from-white/15 via-white/5 to-blue-50/15 backdrop-blur-[1px] p-6 md:p-8 flex flex-col justify-between hover:from-white/25 hover:via-white/12 hover:border-blue-300/70 transition-all cursor-pointer shadow-[0_14px_40px_rgba(15,23,42,0.06),inset_0_1px_0_rgba(255,255,255,0.85)] min-h-[200px] md:min-h-0"
-            >
-              <div className="absolute -bottom-10 -right-10 w-44 h-44 bg-blue-200/20 blur-2xl rounded-full pointer-events-none"></div>
-
-              <div className="flex justify-between items-start z-10">
-                <div className="p-3 md:p-4 bg-blue-50/80 rounded-2xl border border-blue-100/80">
-                  <i className="fas fa-layer-group text-3xl md:text-4xl text-blue-600"></i>
-                </div>
-                <div className="flex -space-x-3 hover:space-x-1 transition-all pl-2">
-                  <div
-                    className="w-8 h-8 md:w-10 md:h-10 rounded-full border-2 border-white bg-white/85 shadow-xs flex items-center justify-center text-blue-500 text-sm md:text-lg relative z-30"
-                    title="React"
-                  >
-                    <i className="fab fa-react"></i>
-                  </div>
-                  <div
-                    className="w-8 h-8 md:w-10 md:h-10 rounded-full border-2 border-white bg-white/85 shadow-xs flex items-center justify-center text-green-600 text-sm md:text-lg relative z-20"
-                    title="Node.js"
-                  >
-                    <i className="fab fa-node"></i>
-                  </div>
-                  <div
-                    className="w-8 h-8 md:w-10 md:h-10 rounded-full border-2 border-white bg-white/85 shadow-xs flex items-center justify-center text-yellow-500 text-sm md:text-lg relative z-10"
-                    title="Python"
-                  >
-                    <i className="fab fa-python"></i>
-                  </div>
-                  <div className="w-8 h-8 md:w-10 md:h-10 rounded-full border-2 border-white bg-slate-100/90 text-slate-900 shadow-xs flex items-center justify-center font-bold text-[10px] md:text-xs relative z-0">
-                    +12
-                  </div>
-                </div>
-              </div>
-
-              <div className="z-10 mt-4 md:mt-0">
-                <h3 className="text-2xl md:text-3xl font-bold text-slate-900 mb-2">
-                  Modern Tech Stack
-                </h3>
-                <p className="text-slate-700 text-sm leading-relaxed">
-                  Full-stack mastery: React, Node, Python, AWS, and Cloud
-                  Architecture.
-                </p>
-              </div>
-            </motion.div>
+            {/* Right-Side Architectural Flow Loop */}
+            <HeroRightLoop />
           </div>
         </div>
 
