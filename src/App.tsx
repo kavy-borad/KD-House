@@ -20,6 +20,8 @@ import { HelmetProvider } from "react-helmet-async";
 import Navbar from "./components/header-footer/Navbar";
 import { Footer } from "./components/header-footer/Footer";
 import FloatingContactIcons from "./components/FloatingContactIcons";
+import ScrollMascot from "./components/mascot/ScrollMascot";
+import { SmoothScrollProvider, useLenis } from "./components/SmoothScrollProvider";
 import PageLoader from "./components/PageLoader";
 import "./styles.css";
 
@@ -117,6 +119,9 @@ interface ScrollManagerProps {
 function ScrollManager({ onInitialReady }: ScrollManagerProps) {
   const { pathname, key } = useLocation();
   const navigationType = useNavigationType();
+  const lenis = useLenis();
+  const lenisRef = useRef(lenis);
+  lenisRef.current = lenis;
   const activeEntryRef = useRef({ pathname, key });
   const initialHandledRef = useRef(false);
   const isRestoringScrollRef = useRef(false);
@@ -142,6 +147,7 @@ function ScrollManager({ onInitialReady }: ScrollManagerProps) {
     const applyTargetScroll = () => {
       if (cancelled) return;
       ScrollTrigger.refresh();
+      lenisRef.current?.scrollTo(targetY, { immediate: true, force: true });
       window.scrollTo({
         top: targetY,
         left: 0,
@@ -198,6 +204,7 @@ function ScrollManager({ onInitialReady }: ScrollManagerProps) {
         isRestoringScrollRef.current = true;
         // Refresh GSAP ScrollTrigger layout first, then jump instantaneously (bypassing CSS smooth scroll)
         ScrollTrigger.refresh();
+        lenisRef.current?.scrollTo(target, { immediate: true, force: true });
         window.scrollTo({
           top: target,
           left: 0,
@@ -208,6 +215,7 @@ function ScrollManager({ onInitialReady }: ScrollManagerProps) {
         rafId = window.requestAnimationFrame(() => {
           if (cancelled) return;
           ScrollTrigger.refresh();
+          lenisRef.current?.scrollTo(target, { immediate: true, force: true });
           window.scrollTo({
             top: target,
             left: 0,
@@ -305,48 +313,51 @@ function Layout() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white">
-      <PageLoader visible={showLoader} />
-      <ScrollManager onInitialReady={handleInitialReady} />
-      {!hideNavAndFooter && (
-        <Navbar isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
-      )}
+    <SmoothScrollProvider locked={isMenuOpen}>
+      <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white">
+        <PageLoader visible={showLoader} />
+        <ScrollManager onInitialReady={handleInitialReady} />
+        {!hideNavAndFooter && (
+          <Navbar isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
+        )}
 
-      <main>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/about/:tabId" element={<About />} />
-          <Route path="/our-works" element={<Ourworks />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/web-applications" element={<WebApplications />} />
-          <Route path="/product-engineering" element={<ProductEngineering />} />
-          <Route
-            path="/custom-software"
-            element={<CustomSoftwareDevelopment />}
-          />
-          <Route path="/mobile-application" element={<MobileApplication />} />
-          <Route path="/ui-ux" element={<UIUX />} />
-          <Route path="/digital-marketing" element={<DigitalMarketing />} />
-          <Route path="/privacy" element={<PrivacyPolicy />} />
-          <Route path="/bmi-privacy-policy" element={<BMIPrivacyPolicy />} />
-          <Route
-            path="/buddybank-privacy-policy"
-            element={<BuddyBankPrivacyPolicy />}
-          />
-          <Route path="/quotation" element={<Quotation />} />
-          {/* <Route path="/internships" element={<Internship />} /> */}
-          <Route path="/portfolio" element={<Slidesportfolio />} />
-          <Route path="/studentform" element={<Studentform />} />
-          <Route path="/onboarding" element={<Onboarding />} />
-          <Route path="/google-play-testing" element={<GooglePlayTesting />} />
-          <Route path="/testers" element={<Navigate to="/google-play-testing" replace />} />
-          <Route path="*" element={<div>404 - Page Not Found</div>} />
-        </Routes>
-      </main>
-      <FloatingContactIcons hide={isMenuOpen || normalizedPathname === "/contact" || normalizedPathname === "contact"} />
-      {!hideNavAndFooter && <Footer />}
-    </div>
+        <main>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/about/:tabId" element={<About />} />
+            <Route path="/our-works" element={<Ourworks />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/web-applications" element={<WebApplications />} />
+            <Route path="/product-engineering" element={<ProductEngineering />} />
+            <Route
+              path="/custom-software"
+              element={<CustomSoftwareDevelopment />}
+            />
+            <Route path="/mobile-application" element={<MobileApplication />} />
+            <Route path="/ui-ux" element={<UIUX />} />
+            <Route path="/digital-marketing" element={<DigitalMarketing />} />
+            <Route path="/privacy" element={<PrivacyPolicy />} />
+            <Route path="/bmi-privacy-policy" element={<BMIPrivacyPolicy />} />
+            <Route
+              path="/buddybank-privacy-policy"
+              element={<BuddyBankPrivacyPolicy />}
+            />
+            <Route path="/quotation" element={<Quotation />} />
+            {/* <Route path="/internships" element={<Internship />} /> */}
+            <Route path="/portfolio" element={<Slidesportfolio />} />
+            <Route path="/studentform" element={<Studentform />} />
+            <Route path="/onboarding" element={<Onboarding />} />
+            <Route path="/google-play-testing" element={<GooglePlayTesting />} />
+            <Route path="/testers" element={<Navigate to="/google-play-testing" replace />} />
+            <Route path="*" element={<div>404 - Page Not Found</div>} />
+          </Routes>
+        </main>
+        <FloatingContactIcons hide={isMenuOpen || normalizedPathname === "/contact" || normalizedPathname === "contact"} />
+        <ScrollMascot hide={isMenuOpen || hideNavAndFooter} />
+        {!hideNavAndFooter && <Footer />}
+      </div>
+    </SmoothScrollProvider>
   );
 }
 

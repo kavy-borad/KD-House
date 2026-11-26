@@ -23,6 +23,7 @@ import ServicesCircuitBg from "./home/ServicesCircuitBg";
 import GlitchSectionTitle, { GlitchWord } from "./home/GlitchSectionTitle";
 import RewriteParagraph from "./home/RewriteParagraph";
 import IndustriesShowcase from "./home/IndustriesShowcase";
+import heroCircuitRight from "../assets/hero_image/hero-circuit-right.png";
 
 const CounterNumber = ({ value }: { value: string }) => {
   const ref = useRef<HTMLSpanElement>(null);
@@ -67,9 +68,9 @@ const ScrollHideTicker = () => {
 
   useMotionValueEvent(scrollY, "change", (latest) => {
     const previous = scrollY.getPrevious() || 0;
-    if (latest > previous && latest > 150) {
+    if (latest > previous && latest > 100) {
       setHidden(true);
-    } else {
+    } else if (latest < previous || latest <= 100) {
       setHidden(false);
     }
   });
@@ -77,14 +78,16 @@ const ScrollHideTicker = () => {
   return (
     <motion.div
       variants={{
-        visible: { y: 0 },
-        hidden: { y: "100%" },
+        visible: { y: 0, opacity: 1 },
+        hidden: { y: 88, opacity: 0 },
       }}
       animate={hidden ? "hidden" : "visible"}
       transition={{ duration: 0.35, ease: "easeInOut" }}
-      className="fixed bottom-0 left-0 z-40 w-full bg-gradient-to-r from-blue-950/95 via-indigo-900/95 to-blue-950/95 backdrop-blur-xl border-t border-blue-500/30 h-16 md:h-20 flex items-center shadow-[0_-5px_30px_rgba(59,130,246,0.2)]"
+      data-offer-banner-hidden={hidden ? "true" : "false"}
+      className={`fixed bottom-2.5 md:bottom-4 inset-x-0 mx-auto z-40 w-[calc(100%-1.5rem)] max-w-[740px] bg-gradient-to-r from-blue-950/95 via-indigo-900/95 to-blue-950/95 backdrop-blur-xl border border-blue-400/30 rounded-2xl md:rounded-full min-h-11 md:h-[52px] py-2 md:py-0 flex items-center justify-center shadow-[0_10px_30px_rgba(15,23,42,0.35),0_0_20px_rgba(59,130,246,0.2)] ${hidden ? "pointer-events-none" : ""
+        }`}
     >
-      <div className="max-w-7xl mx-auto px-4 w-full relative h-full flex items-center justify-center overflow-hidden">
+      <div className="w-full px-4 md:px-6 relative h-full flex items-center justify-center overflow-hidden">
         <MessageTicker />
       </div>
     </motion.div>
@@ -269,88 +272,97 @@ const Home = () => {
           data-hero-section="true"
           className="relative sticky top-0 min-h-[100dvh] w-full bg-white flex flex-col pt-20 sm:pt-24 lg:pt-24 overflow-x-clip"
         >
-        {/* Static Light Blueprint Grid & Crosshair Background */}
-        <HeroArchitectureBg />
+          {/* Static Light Blueprint Grid & Crosshair Background */}
+          <HeroArchitectureBg />
 
-        {/* Main Content Area - Shifted Left on Desktop with Right Architectural Loop */}
-        <div className="flex-1 w-full max-w-7xl mx-auto px-4 py-2 sm:py-4 md:px-8 md:py-6 flex items-center justify-center relative z-10 pb-20 sm:pb-24 lg:pb-0">
-          <div className="w-full max-w-7xl mx-auto flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3 sm:gap-5 lg:gap-8 xl:gap-14">
-            {/* Main Hero Content */}
-            <motion.div
-              initial={shouldReduceMotion ? false : { opacity: 1, x: 0 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6, ease: "easeOut" }}
-              className="relative flex-1 min-w-0 flex flex-col justify-center py-2 sm:py-4 lg:py-10 px-1 sm:px-2 md:px-2"
-            >
-              <div className="relative z-20 max-w-3xl">
-                <motion.div
-                  data-physics-obstacle="true"
-                  initial={shouldReduceMotion ? false : { opacity: 0, y: 16 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.15 }}
-                  className="inline-flex items-center gap-2 px-3 py-1 md:px-4 md:py-2 rounded-full bg-blue-50/75 border border-blue-200/70 text-slate-700 font-semibold text-xs md:text-sm mb-2.5 sm:mb-4 md:mb-6 backdrop-blur-[2px]"
-                >
-                  <span className="relative flex h-2.5 w-2.5 md:h-3 md:w-3">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-500 opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-2.5 w-2.5 md:h-3 md:w-3 bg-blue-600"></span>
-                  </span>
-                  Ready to Scale Your Business?
-                </motion.div>
+          {/* Right-side only low-opacity PCB circuit graphic */}
+          <img
+            src={heroCircuitRight}
+            alt=""
+            aria-hidden="true"
+            decoding="async"
+            className="pointer-events-none select-none absolute top-10 sm:top-6 lg:-top-2 xl:-top-3 right-0 w-[210px] sm:w-[290px] lg:w-[360px] xl:w-[400px] opacity-[0.12] mix-blend-multiply z-[2]"
+          />
 
-                <div data-physics-obstacle="true">
-                  <AnimatePresence mode="wait">
-                    <motion.div
-                      key={currentHeroSlide.id}
-                      initial={
-                        shouldReduceMotion ? false : { opacity: 0, y: 12 }
-                      }
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={
-                        shouldReduceMotion ? undefined : { opacity: 0, y: -12 }
-                      }
-                      transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+          {/* Main Content Area - Shifted Left on Desktop with Right Architectural Loop */}
+          <div className="flex-1 w-full max-w-7xl mx-auto px-4 py-2 sm:py-4 md:px-8 md:py-6 flex items-center justify-center relative z-10 pb-20 sm:pb-24 lg:pb-0">
+            <div className="w-full max-w-7xl mx-auto flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3 sm:gap-5 lg:gap-8 xl:gap-14">
+              {/* Main Hero Content */}
+              <motion.div
+                initial={shouldReduceMotion ? false : { opacity: 1, x: 0 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.6, ease: "easeOut" }}
+                className="relative flex-1 min-w-0 flex flex-col justify-center py-2 sm:py-4 lg:py-10 px-1 sm:px-2 md:px-2"
+              >
+                <div className="relative z-20 max-w-3xl">
+                  <motion.div
+                    data-physics-obstacle="true"
+                    initial={shouldReduceMotion ? false : { opacity: 0, y: 16 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.15 }}
+                    className="inline-flex items-center gap-2 px-3 py-1 md:px-4 md:py-2 rounded-full bg-blue-50/75 border border-blue-200/70 text-slate-700 font-semibold text-xs md:text-sm mb-2.5 sm:mb-4 md:mb-6 backdrop-blur-[2px]"
+                  >
+                    <span className="relative flex h-2.5 w-2.5 md:h-3 md:w-3">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-500 opacity-75"></span>
+                      <span className="relative inline-flex rounded-full h-2.5 w-2.5 md:h-3 md:w-3 bg-blue-600"></span>
+                    </span>
+                    Ready to Scale Your Business?
+                  </motion.div>
+
+                  <div data-physics-obstacle="true">
+                    <AnimatePresence mode="wait">
+                      <motion.div
+                        key={currentHeroSlide.id}
+                        initial={
+                          shouldReduceMotion ? false : { opacity: 0, y: 12 }
+                        }
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={
+                          shouldReduceMotion ? undefined : { opacity: 0, y: -12 }
+                        }
+                        transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+                      >
+                        <h1 className="text-[32px] sm:text-5xl md:text-7xl font-bold text-slate-900 mb-2.5 sm:mb-4 md:mb-6 leading-[1.08] md:leading-[0.9] tracking-tight">
+                          <span className="block mb-1 sm:mb-2 md:mb-3">
+                            {currentHeroSlide.line1}
+                          </span>
+                          <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-blue-500 to-purple-600">
+                            {currentHeroSlide.line2}
+                          </span>
+                        </h1>
+
+                        <p className="text-sm sm:text-base md:text-xl text-slate-700 mb-4 sm:mb-6 md:mb-10 font-normal leading-relaxed max-w-2xl">
+                          {currentHeroSlide.description}
+                        </p>
+                      </motion.div>
+                    </AnimatePresence>
+                  </div>
+
+                  <div
+                    data-physics-obstacle="true"
+                    className="inline-flex flex-wrap gap-2.5 sm:gap-3 md:gap-4"
+                  >
+                    <Link
+                      to="/our-works"
+                      onClick={scrollToServices}
+                      className="relative px-5 py-2.5 sm:px-6 sm:py-3 md:px-8 md:py-4 rounded-full bg-[#001F3F] text-white font-bold text-sm sm:text-base md:text-lg hover:scale-105 active:scale-95 transition-all shadow-[0_10px_28px_rgba(0,31,63,0.2)]"
                     >
-                      <h1 className="text-[32px] sm:text-5xl md:text-7xl font-bold text-slate-900 mb-2.5 sm:mb-4 md:mb-6 leading-[1.08] md:leading-[0.9] tracking-tight">
-                        <span className="block mb-1 sm:mb-2 md:mb-3">
-                          {currentHeroSlide.line1}
-                        </span>
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-blue-500 to-purple-600">
-                          {currentHeroSlide.line2}
-                        </span>
-                      </h1>
-
-                      <p className="text-sm sm:text-base md:text-xl text-slate-700 mb-4 sm:mb-6 md:mb-10 font-normal leading-relaxed max-w-2xl">
-                        {currentHeroSlide.description}
-                      </p>
-                    </motion.div>
-                  </AnimatePresence>
+                      Start Your Project
+                    </Link>
+                    <Link
+                      to="/contact"
+                      className="px-5 py-2.5 sm:px-6 sm:py-3 md:px-8 md:py-4 rounded-full border border-slate-300/90 bg-white/65 hover:bg-white/90 font-normal text-sm sm:text-base md:text-lg text-slate-800 backdrop-blur-[2px] transition-all hover:border-slate-400 hover:scale-105 active:scale-95"
+                    >
+                      Get a Quote
+                    </Link>
+                  </div>
                 </div>
+              </motion.div>
 
-                <div
-                  data-physics-obstacle="true"
-                  className="inline-flex flex-wrap gap-2.5 sm:gap-3 md:gap-4"
-                >
-                  <Link
-                    to="/our-works"
-                    onClick={scrollToServices}
-                    className="relative px-5 py-2.5 sm:px-6 sm:py-3 md:px-8 md:py-4 rounded-full bg-[#001F3F] text-white font-bold text-sm sm:text-base md:text-lg hover:scale-105 active:scale-95 transition-all shadow-[0_10px_28px_rgba(0,31,63,0.2)]"
-                  >
-                    Start Your Project
-                  </Link>
-                  <Link
-                    to="/contact"
-                    className="px-5 py-2.5 sm:px-6 sm:py-3 md:px-8 md:py-4 rounded-full border border-slate-300/90 bg-white/65 hover:bg-white/90 font-normal text-sm sm:text-base md:text-lg text-slate-800 backdrop-blur-[2px] transition-all hover:border-slate-400 hover:scale-105 active:scale-95"
-                  >
-                    Get a Quote
-                  </Link>
-                </div>
-              </div>
-            </motion.div>
-
-            {/* Right-Side Architectural Flow Loop */}
-            <HeroRightLoop heroRef={heroTrackRef} />
+              {/* Right-Side Architectural Flow Loop */}
+              <HeroRightLoop heroRef={heroTrackRef} />
+            </div>
           </div>
-        </div>
         </div>
       </div>
 

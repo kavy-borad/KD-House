@@ -1,0 +1,65 @@
+/* Scroll-Reactive Blue Mascot responsive left-side positioning & CSS variables */
+.kd-scroll-mascot-layer {
+  --mascot-size: 74px;
+  --mascot-left: 14px;
+  --mascot-bottom: 72px;
+  --mascot-intensity: 0.8;
+
+  position: fixed;
+  left: var(--mascot-left);
+  bottom: var(--mascot-bottom);
+  width: var(--mascot-size);
+  height: var(--mascot-size);
+  z-index: 95;
+  pointer-events: none;
+  user-select: none;
+  transform: translate3d(0, 0, 0);
+  will-change: transform;
+}
+
+@media (min-width: 768px) {
+  .kd-scroll-mascot-layer {
+    --mascot-size: 96px;
+    --mascot-left: 20px;
+    --mascot-bottom: 22px;
+    --mascot-intensity: 0.92;
+  }
+}
+
+@media (min-width: 1024px) {
+  .kd-scroll-mascot-layer {
+    --mascot-size: 120px;
+    --mascot-left: 24px;
+    --mascot-bottom: 22px;
+    --mascot-intensity: 1;
+  }
+}
+
+.kd-scroll-mascot-hitbox {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: auto;
+  cursor: pointer;
+  background: transparent;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.kd-scroll-mascot-svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  filter: drop-shadow(0 8px 18px rgba(15, 23, 42, 0.16));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kd-scroll-mascot-layer {
+    --mascot-intensity: 0.2;
+  }
+}
