@@ -1,4 +1,6 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
   BrowserRouter as Router,
   Routes,
@@ -11,6 +13,7 @@ import { HelmetProvider } from "react-helmet-async";
 import Navbar from "./components/header-footer/Navbar";
 import { Footer } from "./components/header-footer/Footer";
 import FloatingContactIcons from "./components/FloatingContactIcons";
+import PageLoader from "./components/PageLoader";
 import "./styles.css";
 
 import Home from "./components/Home";
@@ -34,11 +37,141 @@ import Studentform from "./components/StudentForm";
 import Onboarding from "./components/Services-Pages/Onboarding";
 import GooglePlayTesting from "./components/GooglePlayTesting";
 
-function ScrollToTop() {
+gsap.registerPlugin(ScrollTrigger);
+
+const SCROLL_STORAGE_KEY = "kd_reload_scroll";
+
+let pendingReloadRestore: { path: string; y: number } | null = null;
+if (typeof window !== "undefined") {
+  try {
+    const nav = performance.getEntriesByType?.("navigation")?.[0] as
+      | PerformanceNavigationTiming
+      | undefined;
+    const isReloadOrHistory =
+      nav?.type === "reload" || nav?.type === "back_forward";
+    if (isReloadOrHistory) {
+      if ("scrollRestoration" in window.history) {
+        window.history.scrollRestoration = "manual";
+      }
+      const raw = sessionStorage.getItem(SCROLL_STORAGE_KEY);
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (
+          parsed &&
+          typeof parsed.path === "string" &&
+          typeof parsed.y === "number" &&
+          parsed.y > 0
+        ) {
+          pendingReloadRestore = parsed;
+        }
+      }
+    }
+  } catch {
+    pendingReloadRestore = null;
+  }
+}
+
+interface ScrollManagerProps {
+  onInitialReady: () => void;
+}
+
+function ScrollManager({ onInitialReady }: ScrollManagerProps) {
   const { pathname } = useLocation();
+  const prevPathnameRef = useRef(pathname);
+  const initialHandledRef = useRef(false);
 
   useEffect(() => {
-    window.scrollTo(0, 0);
+    // Route change inside SPA: scroll cleanly to top
+    if (prevPathnameRef.current !== pathname) {
+      pendingReloadRestore = null;
+      prevPathnameRef.current = pathname;
+      window.scrollTo({ top: 0, left: 0, behavior: "instant" as ScrollBehavior });
+      return;
+    }
+
+    if (initialHandledRef.current) return;
+
+    let cancelled = false;
+    let rafId = 0;
+    let safetyTimer = 0;
+    let loadHandler: (() => void) | null = null;
+    const target =
+      pendingReloadRestore && pendingReloadRestore.path === pathname
+        ? pendingReloadRestore.y
+        : null;
+
+    const finishRestore = () => {
+      if (cancelled) return;
+      initialHandledRef.current = true;
+
+      if (target !== null && target > 0) {
+        // Refresh GSAP ScrollTrigger pin-spacers first, then jump instantaneously (bypassing CSS smooth scroll)
+        ScrollTrigger.refresh();
+        window.scrollTo({
+          top: target,
+          left: 0,
+          behavior: "instant" as ScrollBehavior,
+        });
+
+        // Second-frame verification after pin/layout settle
+        rafId = window.requestAnimationFrame(() => {
+          if (cancelled) return;
+          ScrollTrigger.refresh();
+          window.scrollTo({
+            top: target,
+            left: 0,
+            behavior: "instant" as ScrollBehavior,
+          });
+          pendingReloadRestore = null;
+          onInitialReady();
+        });
+      } else {
+        pendingReloadRestore = null;
+        onInitialReady();
+      }
+    };
+
+    const minDelay = target !== null ? 380 : 340;
+    const timer = window.setTimeout(() => {
+      if (document.readyState === "complete") {
+        finishRestore();
+      } else {
+        loadHandler = () => finishRestore();
+        window.addEventListener("load", loadHandler, { once: true });
+        safetyTimer = window.setTimeout(finishRestore, 450);
+      }
+    }, minDelay);
+
+    return () => {
+      cancelled = true;
+      window.clearTimeout(timer);
+      if (safetyTimer) window.clearTimeout(safetyTimer);
+      if (rafId) window.cancelAnimationFrame(rafId);
+      if (loadHandler) window.removeEventListener("load", loadHandler);
+    };
+  }, [pathname, onInitialReady]);
+
+  useEffect(() => {
+    const saveScroll = () => {
+      if (pendingReloadRestore) return;
+      try {
+        sessionStorage.setItem(
+          SCROLL_STORAGE_KEY,
+          JSON.stringify({ path: pathname, y: window.scrollY }),
+        );
+      } catch {
+        // ignore storage quota errors
+      }
+    };
+
+    window.addEventListener("scroll", saveScroll, { passive: true });
+    window.addEventListener("pagehide", saveScroll);
+    window.addEventListener("beforeunload", saveScroll);
+    return () => {
+      window.removeEventListener("scroll", saveScroll);
+      window.removeEventListener("pagehide", saveScroll);
+      window.removeEventListener("beforeunload", saveScroll);
+    };
   }, [pathname]);
 
   return null;
@@ -66,10 +199,16 @@ function Layout() {
 
   // Lifted state for Menu (Sidebar)
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [showLoader, setShowLoader] = useState(true);
+
+  const handleInitialReady = useCallback(() => {
+    setShowLoader(false);
+  }, []);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white">
-      <ScrollToTop />
+      <PageLoader visible={showLoader} />
+      <ScrollManager onInitialReady={handleInitialReady} />
       {!hideNavAndFooter && (
         <Navbar isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
       )}

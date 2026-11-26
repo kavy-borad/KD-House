@@ -17,6 +17,7 @@ import {
 import MessageTicker from "./home/MessageTicker";
 import HeroArchitectureBg from "./home/HeroArchitectureBg";
 import HeroRightLoop from "./home/HeroRightLoop";
+import WhyChooseUsSection from "./home/WhyChooseUsSection";
 
 const CounterNumber = ({ value }: { value: string }) => {
   const ref = useRef<HTMLSpanElement>(null);
@@ -338,131 +339,8 @@ const Home = () => {
       {/* Animated Text Strip Section - Fixed at Bottom, Hides on Scroll Down */}
       <ScrollHideTicker />
 
-      {/* Why Karma Dude? Section - 3D Modern Design */}
-      {/* Why Karma Dude? Section - 3D Modern Design */}
-      <section className="py-12 md:py-16 relative bg-white overflow-hidden perspective-1000">
-        {/* Background Decorative Elements - Reduced on Mobile */}
-        <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
-          <div className="hidden md:block absolute -top-[20%] -right-[10%] w-[70vw] h-[70vw] rounded-full bg-white blur-[80px]"></div>
-          <div className="hidden md:block absolute -bottom-[20%] -left-[10%] w-[70vw] h-[70vw] rounded-full bg-white blur-[80px]"></div>
-        </div>
-
-        <div className="max-w-7xl mx-auto px-4 md:px-6 relative z-10">
-          <div className="text-center mb-8 md:mb-12">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="inline-block mb-4"
-            >
-              <span className="py-1.5 px-4 md:py-2 md:px-6 rounded-full bg-white shadow-sm border border-slate-100 text-slate-600 font-bold text-xs md:text-sm tracking-widest uppercase mb-4 inline-block">
-                Why Choose Us
-              </span>
-            </motion.div>
-
-            <motion.h2
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.1 }}
-              className="text-3xl md:text-6xl font-bold text-gray-900 mb-4 md:mb-6 tracking-tight leading-tight"
-            >
-              Elevate Your{" "}
-              <span className="text-[#2f8ecd]">Digital Presence</span>
-            </motion.h2>
-
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.2 }}
-              className="text-base md:text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed"
-            >
-              We bring together deep technical expertise and creative innovation
-              to build software that defines the future of your business.
-            </motion.p>
-          </div>
-
-          <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3.5 sm:gap-6 md:gap-8">
-            {[
-              {
-                icon: "fas fa-rocket",
-                title: "Accelerated Growth",
-                desc: "Propel your business with cutting-edge tech stacks designed for speed and scalability.",
-                iconColor: "text-orange-500",
-                longDesc:
-                  "We don't just build websites; we build growth engines. By utilizing the latest frameworks like Next.js, React, and serverless architectures, we ensure your digital assets load instantly and scale effortlessly as your user base grows. Our focus on performance optimization directly translates to better SEO rankings, higher conversion rates, and a superior user experience.",
-              },
-              {
-                icon: "fas fa-code-branch",
-                title: "Elite Engineering",
-                desc: "Our rigorous coding standards ensure robust, maintainable, and efficient software.",
-                iconColor: "text-[#2f8ecd]",
-                longDesc:
-                  "Quality code is the backbone of any successful software product. Our team follows strict coding guidelines, comprehensive code reviews, and automated testing pipelines. This ensures that your application is not only bug-free but also easy to maintain and extend in the future, saving you significant technical debt costs down the line.",
-              },
-              {
-                icon: "fas fa-brain",
-                title: "AI-Driven Strategy",
-                desc: "We integrate intelligent algorithms to automate processes and provide deep insights.",
-                iconColor: "text-purple-500",
-                longDesc:
-                  "Stay ahead of the competition by leveraging the power of Artificial Intelligence. From predictive analytics to personalized user experiences and automated chatbots, we integrate smart solutions that streamline operations and provide valuable insights into your business performance.",
-              },
-              {
-                icon: "fas fa-shield-alt",
-                title: "Fortified Security",
-                desc: "Enterprise-grade security protocols to protect your data and your users' trust.",
-                iconColor: "text-emerald-500",
-                longDesc:
-                  "Security is non-negotiable. We implement industry-leading security practices including end-to-end encryption, secure authentication (OAuth, JWT), and regular vulnerability assessments. Your data and your customers' trust are our top priority.",
-              },
-              {
-                icon: "fas fa-bolt",
-                title: "High Performance",
-                desc: "Optimized for lightning-fast load times and seamless user interactions.",
-                iconColor: "text-amber-500",
-                longDesc:
-                  "Speed kills... the competition. We obsess over performance metrics like Core Web Vitals. By optimizing assets, code-splitting, and leveraging CDNs, we ensure your application feels instantaneous, keeping users engaged and reducing bounce rates.",
-              },
-              {
-                icon: "fas fa-infinity",
-                title: "Seamless Scaling",
-                desc: "Infrastructure designed to grow effortlessly with your user base without friction.",
-                iconColor: "text-cyan-500",
-                longDesc:
-                  "Whether you have 100 users or 1 million, your application needs to perform flawlessly. We design cloud-native architectures (AWS, Google Cloud, Azure) that auto-scale based on demand, ensuring reliability and cost-efficiency at every stage of your growth.",
-              },
-            ].map((item, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 35 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-50px" }}
-                transition={{ duration: 0.5, ease: "easeOut" }}
-                whileHover={{
-                  y: -6,
-                  boxShadow: "0 20px 40px -12px rgba(47, 142, 205, 0.12)",
-                }}
-                className="group relative bg-white rounded-2xl p-4 sm:p-6 md:p-8 border border-slate-200/80 shadow-xs overflow-hidden transition-all duration-300"
-              >
-                {/* Clean Icon Without Color Container Box */}
-                <div className={`text-xl sm:text-2xl md:text-3xl ${item.iconColor} mb-2.5 md:mb-4 inline-block transition-transform duration-300 group-hover:scale-110`}>
-                  <i className={item.icon}></i>
-                </div>
-
-                <h3 className="text-sm sm:text-lg md:text-xl font-bold text-slate-800 mb-1.5 md:mb-3 group-hover:text-[#2f8ecd] transition-colors leading-snug">
-                  {item.title}
-                </h3>
-
-                <p className="text-slate-500 leading-snug font-normal text-[11px] sm:text-xs md:text-sm">
-                  {item.desc}
-                </p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* Why Karma Dude? Section - Concentric Half-Circle Arch with GSAP ScrollTrigger */}
+      <WhyChooseUsSection />
 
       {/* Our Services Section - Professional Modern Design */}
       <section

@@ -187,6 +187,7 @@ const HeroRightLoop = ({ heroRef }: HeroRightLoopProps) => {
             scrub: 0.65,
             anticipatePin: 1,
             invalidateOnRefresh: true,
+            refreshPriority: 1,
             onUpdate: (self) => {
               const p = self.progress;
               if (p < 0.025) {
