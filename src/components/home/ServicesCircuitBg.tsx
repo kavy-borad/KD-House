@@ -265,7 +265,7 @@ const ServicesCircuitBg = ({ sectionRef }: ServicesCircuitBgProps) => {
       <svg
         ref={svgRef}
         viewBox="0 0 800 800"
-        className="w-[320px] sm:w-[440px] md:w-[560px] lg:w-[680px] xl:w-[760px] max-w-[92vw] h-auto opacity-[0.18] select-none will-change-transform"
+        className="w-[360px] sm:w-[500px] md:w-[640px] lg:w-[780px] xl:w-[880px] max-w-[96vw] h-auto opacity-[0.11] select-none will-change-transform"
       >
         <g>
           {allCompiled.map((t, idx) => {

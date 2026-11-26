@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import logo from "../../assets/logo/logo.png";
+import FooterPixelWordmark from "./FooterPixelWordmark";
 import {
   Instagram,
   Linkedin,
@@ -179,6 +180,9 @@ export const Footer = () => {
           </div>
         </div>
       </div>
+
+      {/* Pixel-Tile Wordmark Banner */}
+      <FooterPixelWordmark />
 
       {/* Bottom Bar */}
       <div className="relative z-10 border-t border-slate-100 bg-white">

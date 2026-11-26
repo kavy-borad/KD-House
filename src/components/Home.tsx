@@ -768,11 +768,13 @@ const Home = () => {
       </section>
 
       {/* Industries Section - Clean Modern Design */}
-      <section className="py-12 md:py-16 px-4 relative overflow-hidden bg-gradient-to-br from-gray-50 via-white to-blue-50">
-        {/* Subtle Decorative Elements */}
-        <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-blue-100 to-purple-100 rounded-full blur-3xl opacity-30"></div>
-        <div className="absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-br from-purple-100 to-pink-100 rounded-full blur-3xl opacity-30"></div>
-
+      <section
+        className="py-12 md:py-16 px-4 relative overflow-hidden bg-white"
+        style={{
+          backgroundImage:
+            "linear-gradient(135deg, rgba(47, 142, 205, 0.16) 0%, rgba(47, 142, 205, 0.08) 50%, rgba(47, 142, 205, 0.22) 100%)",
+        }}
+      >
         <div className="max-w-7xl mx-auto relative z-10">
           {/* Section Header */}
           <motion.div
@@ -782,14 +784,14 @@ const Home = () => {
             transition={{ duration: 0.6 }}
             className="text-center mb-16"
           >
-            <div className="inline-block px-4 py-2 bg-blue-100 text-blue-600 rounded-full font-semibold text-sm mb-4">
+            <div className="inline-block px-4 py-2 bg-white/95 text-[#2f8ecd] rounded-full font-bold text-sm mb-4">
               INDUSTRIES WE SERVE
             </div>
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+            <h2 className="text-4xl md:text-5xl font-bold text-slate-900 mb-4">
               Tailored Solutions for Every{" "}
               <span className="text-[#2f8ecd]">Industry</span>
             </h2>
-            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+            <p className="text-lg text-slate-700 max-w-3xl mx-auto">
               From real estate to AI development, we deliver cutting-edge
               technology solutions
             </p>
