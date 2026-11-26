@@ -21,6 +21,7 @@ import WhyChooseUsSection from "./home/WhyChooseUsSection";
 import CustomProjectBanner from "./home/CustomProjectBanner";
 import ServicesCircuitBg from "./home/ServicesCircuitBg";
 import GlitchSectionTitle, { GlitchWord } from "./home/GlitchSectionTitle";
+import RewriteParagraph from "./home/RewriteParagraph";
 
 const CounterNumber = ({ value }: { value: string }) => {
   const ref = useRef<HTMLSpanElement>(null);
@@ -138,6 +139,15 @@ const Home = () => {
   const heroTrackRef = useRef<HTMLDivElement>(null);
   const heroSectionRef = useRef<HTMLDivElement>(null);
   const servicesSectionRef = useRef<HTMLElement>(null);
+  const benefitsGridRef = useRef<HTMLDivElement>(null);
+  const isBenefitsInView = useInView(benefitsGridRef, { once: true, amount: 0.2 });
+  const [benefitRewriteStep, setBenefitRewriteStep] = useState<number>(-1);
+
+  useEffect(() => {
+    if (isBenefitsInView && benefitRewriteStep < 0) {
+      setBenefitRewriteStep(0);
+    }
+  }, [isBenefitsInView, benefitRewriteStep]);
 
   useEffect(() => {
     if (shouldReduceMotion) return;
@@ -692,11 +702,12 @@ const Home = () => {
       {/* Additional Benefits Section - Aesthetic Color Blocks */}
       <section className="pb-24 pt-10 bg-white relative">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="grid grid-cols-2 gap-3.5 sm:gap-8">
+          <div ref={benefitsGridRef} className="grid grid-cols-2 gap-3.5 sm:gap-8">
             {[
               {
                 icon: "fas fa-robot",
                 color: "text-blue-600",
+                caretBg: "bg-blue-600",
                 iconBg: "bg-blue-100",
                 borderColor: "border-blue-100",
                 // splash: "bg-blue-400",
@@ -707,6 +718,7 @@ const Home = () => {
               {
                 icon: "fas fa-trophy",
                 color: "text-emerald-600",
+                caretBg: "bg-emerald-600",
                 iconBg: "bg-emerald-100",
                 borderColor: "border-emerald-100",
                 // splash: "bg-emerald-400",
@@ -717,6 +729,7 @@ const Home = () => {
               {
                 icon: "fas fa-sync-alt",
                 color: "text-orange-500",
+                caretBg: "bg-orange-500",
                 iconBg: "bg-orange-100",
                 borderColor: "border-orange-100",
                 // splash: "bg-orange-400",
@@ -727,6 +740,7 @@ const Home = () => {
               {
                 icon: "fas fa-users",
                 color: "text-purple-600",
+                caretBg: "bg-purple-600",
                 iconBg: "bg-purple-100",
                 borderColor: "border-purple-100",
                 // splash: "bg-purple-400",
@@ -759,9 +773,18 @@ const Home = () => {
                     <h4 className="text-sm sm:text-xl font-bold text-gray-900 mb-1.5 sm:mb-3 group-hover:text-gray-800">
                       {benefit.title}
                     </h4>
-                    <p className="text-xs sm:text-base text-gray-500 leading-snug sm:leading-relaxed">
-                      {benefit.desc}
-                    </p>
+                    <RewriteParagraph
+                      text={benefit.desc}
+                      active={benefitRewriteStep === index}
+                      completed={benefitRewriteStep > index}
+                      onComplete={() =>
+                        setBenefitRewriteStep((prev) =>
+                          prev === index ? index + 1 : prev,
+                        )
+                      }
+                      caretClassName={benefit.caretBg}
+                      className="text-xs sm:text-base text-gray-500 leading-snug sm:leading-relaxed"
+                    />
                   </div>
                 </div>
               </motion.div>
