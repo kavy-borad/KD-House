@@ -1,6 +1,4 @@
 import {
-  Suspense,
-  lazy,
   useCallback,
   useEffect,
   useLayoutEffect,
@@ -28,27 +26,24 @@ import PageLoader from "./components/PageLoader";
 import "./styles.css";
 
 import Home from "./components/Home";
-const About = lazy(() => import("./components/About"));
-const Contact = lazy(() => import("./components/Contact"));
-const WebApplications = lazy(() => import("./components/Services-Pages/Web-Applications"));
-const ProductEngineering = lazy(() => import("./components/Services-Pages/Product-Engineering"));
-const CustomSoftwareDevelopment = lazy(
-  () => import("./components/Services-Pages/Custom Software-Development"),
-);
-const MobileApplication = lazy(() => import("./components/Services-Pages/Mobile-Application"));
-const UIUX = lazy(() => import("./components/Services-Pages/UI-UX-Research&Design"));
-const DigitalMarketing = lazy(() => import("./components/Services-Pages/DigitalMarketing"));
-const PrivacyPolicy = lazy(() => import("./components/Services-Pages/Privacy"));
-const BMIPrivacyPolicy = lazy(() => import("./components/Services-Pages/BMI-Privacy-Policy"));
-const BuddyBankPrivacyPolicy = lazy(
-  () => import("./components/Services-Pages/BuddyBank-Privacy-Policy"),
-);
-const Quotation = lazy(() => import("./components/Quotation"));
-const Slidesportfolio = lazy(() => import("./components/Slidesportfolio"));
-const Ourworks = lazy(() => import("./components/Ourworks"));
-const Studentform = lazy(() => import("./components/StudentForm"));
-const Onboarding = lazy(() => import("./components/Services-Pages/Onboarding"));
-const GooglePlayTesting = lazy(() => import("./components/GooglePlayTesting"));
+import About from "./components/About";
+import Contact from "./components/Contact";
+import WebApplications from "./components/Services-Pages/Web-Applications";
+import ProductEngineering from "./components/Services-Pages/Product-Engineering";
+import CustomSoftwareDevelopment from "./components/Services-Pages/Custom Software-Development";
+import MobileApplication from "./components/Services-Pages/Mobile-Application";
+import UIUX from "./components/Services-Pages/UI-UX-Research&Design";
+import DigitalMarketing from "./components/Services-Pages/DigitalMarketing";
+import PrivacyPolicy from "./components/Services-Pages/Privacy";
+import BMIPrivacyPolicy from "./components/Services-Pages/BMI-Privacy-Policy";
+import BuddyBankPrivacyPolicy from "./components/Services-Pages/BuddyBank-Privacy-Policy";
+import Quotation from "./components/Quotation";
+// import Internship from "./components/Internship";
+import Slidesportfolio from "./components/Slidesportfolio";
+import Ourworks from "./components/Ourworks";
+import Studentform from "./components/StudentForm";
+import Onboarding from "./components/Services-Pages/Onboarding";
+import GooglePlayTesting from "./components/GooglePlayTesting";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -148,9 +143,11 @@ function ScrollManager({ onInitialReady }: ScrollManagerProps) {
     let raf2 = 0;
     let settleTimer = 0;
 
-    const applyTargetScroll = () => {
+    const applyTargetScroll = (shouldRefresh = false) => {
       if (cancelled) return;
-      ScrollTrigger.refresh();
+      if (shouldRefresh) {
+        ScrollTrigger.refresh();
+      }
       lenisRef.current?.scrollTo(targetY, { immediate: true, force: true });
       window.scrollTo({
         top: targetY,
@@ -159,12 +156,12 @@ function ScrollManager({ onInitialReady }: ScrollManagerProps) {
       });
     };
 
-    applyTargetScroll();
+    applyTargetScroll(false);
 
     raf1 = window.requestAnimationFrame(() => {
-      applyTargetScroll();
+      applyTargetScroll(true);
       raf2 = window.requestAnimationFrame(() => {
-        applyTargetScroll();
+        applyTargetScroll(false);
         if (targetY === 0) {
           isRestoringScrollRef.current = false;
         }
@@ -174,7 +171,7 @@ function ScrollManager({ onInitialReady }: ScrollManagerProps) {
     // Re-apply once more for POP restores after lazy sections (e.g. TechStack Suspense) finish rendering
     if (targetY > 0) {
       settleTimer = window.setTimeout(() => {
-        applyTargetScroll();
+        applyTargetScroll(true);
         isRestoringScrollRef.current = false;
       }, 160);
     }
@@ -322,38 +319,36 @@ function Layout() {
         )}
 
         <main>
-          <Suspense fallback={<div className="min-h-screen bg-white" />}>
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/about" element={<About />} />
-              <Route path="/about/:tabId" element={<About />} />
-              <Route path="/our-works" element={<Ourworks />} />
-              <Route path="/contact" element={<Contact />} />
-              <Route path="/web-applications" element={<WebApplications />} />
-              <Route path="/product-engineering" element={<ProductEngineering />} />
-              <Route
-                path="/custom-software"
-                element={<CustomSoftwareDevelopment />}
-              />
-              <Route path="/mobile-application" element={<MobileApplication />} />
-              <Route path="/ui-ux" element={<UIUX />} />
-              <Route path="/digital-marketing" element={<DigitalMarketing />} />
-              <Route path="/privacy" element={<PrivacyPolicy />} />
-              <Route path="/bmi-privacy-policy" element={<BMIPrivacyPolicy />} />
-              <Route
-                path="/buddybank-privacy-policy"
-                element={<BuddyBankPrivacyPolicy />}
-              />
-              <Route path="/quotation" element={<Quotation />} />
-              {/* <Route path="/internships" element={<Internship />} /> */}
-              <Route path="/portfolio" element={<Slidesportfolio />} />
-              <Route path="/studentform" element={<Studentform />} />
-              <Route path="/onboarding" element={<Onboarding />} />
-              <Route path="/google-play-testing" element={<GooglePlayTesting />} />
-              <Route path="/testers" element={<Navigate to="/google-play-testing" replace />} />
-              <Route path="*" element={<div>404 - Page Not Found</div>} />
-            </Routes>
-          </Suspense>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/about/:tabId" element={<About />} />
+            <Route path="/our-works" element={<Ourworks />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/web-applications" element={<WebApplications />} />
+            <Route path="/product-engineering" element={<ProductEngineering />} />
+            <Route
+              path="/custom-software"
+              element={<CustomSoftwareDevelopment />}
+            />
+            <Route path="/mobile-application" element={<MobileApplication />} />
+            <Route path="/ui-ux" element={<UIUX />} />
+            <Route path="/digital-marketing" element={<DigitalMarketing />} />
+            <Route path="/privacy" element={<PrivacyPolicy />} />
+            <Route path="/bmi-privacy-policy" element={<BMIPrivacyPolicy />} />
+            <Route
+              path="/buddybank-privacy-policy"
+              element={<BuddyBankPrivacyPolicy />}
+            />
+            <Route path="/quotation" element={<Quotation />} />
+            {/* <Route path="/internships" element={<Internship />} /> */}
+            <Route path="/portfolio" element={<Slidesportfolio />} />
+            <Route path="/studentform" element={<Studentform />} />
+            <Route path="/onboarding" element={<Onboarding />} />
+            <Route path="/google-play-testing" element={<GooglePlayTesting />} />
+            <Route path="/testers" element={<Navigate to="/google-play-testing" replace />} />
+            <Route path="*" element={<div>404 - Page Not Found</div>} />
+          </Routes>
         </main>
         <FloatingContactIcons hide={isMenuOpen || normalizedPathname === "/contact" || normalizedPathname === "contact"} />
         <ScrollMascot hide={isMenuOpen || hideNavAndFooter} />
