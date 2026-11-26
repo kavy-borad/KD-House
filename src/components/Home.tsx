@@ -22,6 +22,7 @@ import CustomProjectBanner from "./home/CustomProjectBanner";
 import ServicesCircuitBg from "./home/ServicesCircuitBg";
 import GlitchSectionTitle, { GlitchWord } from "./home/GlitchSectionTitle";
 import RewriteParagraph from "./home/RewriteParagraph";
+import IndustriesShowcase from "./home/IndustriesShowcase";
 
 const CounterNumber = ({ value }: { value: string }) => {
   const ref = useRef<HTMLSpanElement>(null);
@@ -824,133 +825,8 @@ const Home = () => {
             </p>
           </motion.div>
 
-          {/* Industries Grid - 8 Ultra-Premium Enterprise Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-            {[
-              {
-                img: "https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
-                title: "Food & Beverage",
-                category: "Hospitality & Food",
-                desc: "Digital products, platforms, POS systems, and solutions built for restaurants, cafés, food brands, cloud kitchens, and the wider food & beverage industry.",
-                accentGradient: "from-orange-500 to-amber-400",
-                badgeBg: "bg-orange-50 text-orange-600 border-orange-200/80",
-                btnColor: "text-orange-600 hover:text-orange-700",
-              },
-              {
-                img: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
-                title: "Health & Wellness",
-                category: "Healthcare & Fitness",
-                desc: "Digital solutions for dietitians, nutritionists, wellness businesses, fitness platforms, and products focused on improving health and lifestyle management.",
-                accentGradient: "from-emerald-500 to-teal-400",
-                badgeBg: "bg-emerald-50 text-emerald-600 border-emerald-200/80",
-                btnColor: "text-emerald-600 hover:text-emerald-700",
-              },
-              {
-                img: "https://images.unsplash.com/photo-1556740738-b6a63e27c4df?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
-                title: "Rental & Marketplace",
-                category: "E-Commerce & Booking",
-                desc: "Rental platforms and marketplace solutions that help businesses list, discover, book, rent, buy, sell, and manage products or services online.",
-                accentGradient: "from-[#2f8ecd] to-sky-400",
-                badgeBg: "bg-blue-50 text-[#2f8ecd] border-blue-200/80",
-                btnColor: "text-[#2f8ecd] hover:text-blue-700",
-              },
-              {
-                img: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
-                title: "CRM & ERP",
-                category: "Enterprise Systems",
-                desc: "Custom CRM and ERP solutions designed to streamline customer management, sales, operations, inventory, employee workflows, and overall business processes.",
-                accentGradient: "from-purple-500 to-indigo-400",
-                badgeBg: "bg-purple-50 text-purple-600 border-purple-200/80",
-                btnColor: "text-purple-600 hover:text-purple-700",
-              },
-              {
-                img: "https://images.unsplash.com/photo-1556740758-90de374c12ad?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
-                title: "POS & Inventory",
-                category: "Retail & Commerce",
-                desc: "Smart point-of-sale and inventory management solutions that help businesses manage billing, stock, products, orders, purchases, and real-time inventory efficiently.",
-                accentGradient: "from-teal-500 to-cyan-400",
-                badgeBg: "bg-teal-50 text-teal-600 border-teal-200/80",
-                btnColor: "text-teal-600 hover:text-teal-700",
-              },
-              {
-                img: "https://images.unsplash.com/photo-1677442136019-21780ecad995?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
-                title: "AI & Automation",
-                category: "Next-Gen Tech",
-                desc: "AI-powered products and intelligent automation solutions that reduce manual work, automate repetitive processes, improve productivity, and enable smarter business operations.",
-                accentGradient: "from-rose-500 to-pink-400",
-                badgeBg: "bg-rose-50 text-rose-600 border-rose-200/80",
-                btnColor: "text-rose-600 hover:text-rose-700",
-              },
-              {
-                img: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
-                title: "SaaS Products",
-                category: "Cloud Software",
-                desc: "Scalable subscription-based software products built for businesses and professionals, including multi-tenant platforms, dashboards, and specialised industry solutions.",
-                accentGradient: "from-indigo-500 to-blue-400",
-                badgeBg: "bg-indigo-50 text-indigo-600 border-indigo-200/80",
-                btnColor: "text-indigo-600 hover:text-indigo-700",
-              },
-              {
-                img: "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
-                title: "Finance & Professional Solutions",
-                category: "Fintech & Services",
-                desc: "Digital platforms and SaaS solutions for CA firms, accountants, financial professionals, and other service-based businesses to simplify workflows, compliance, reporting, and client management.",
-                accentGradient: "from-sky-500 to-blue-400",
-                badgeBg: "bg-sky-50 text-sky-600 border-sky-200/80",
-                btnColor: "text-sky-600 hover:text-sky-700",
-              },
-            ].map((item, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 35 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.07 }}
-                className="group flex"
-              >
-                <div className="flex flex-col w-full bg-white rounded-2xl shadow-none hover:-translate-y-2 transition-all duration-500 overflow-hidden border border-slate-200/80 hover:border-[#2f8ecd]/50 relative">
-                  {/* Top Accent Color Bar */}
-                  <div
-                    className={`h-[3px] w-full bg-gradient-to-r ${item.accentGradient}`}
-                  ></div>
-
-                  {/* Image Showcase */}
-                  <div className="relative h-48 overflow-hidden bg-slate-50">
-                    <img
-                      src={item.img}
-                      alt={item.title}
-                      loading="lazy"
-                      className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-                    />
-                    {/* Subtle Overlay Glow */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-slate-900/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
-                  </div>
-
-                  {/* Content Section */}
-                  <div className="flex flex-col flex-grow p-6 gap-3">
-                    {/* Category Tag */}
-                    <div className="flex items-center gap-2">
-                      <span
-                        className={`text-[10px] font-extrabold tracking-wider uppercase px-3 py-1 rounded-full border ${item.badgeBg}`}
-                      >
-                        {item.category}
-                      </span>
-                    </div>
-
-                    {/* Title */}
-                    <h3 className="text-xl font-bold text-slate-900 tracking-tight leading-tight group-hover:text-[#2f8ecd] transition-colors duration-300">
-                      {item.title}
-                    </h3>
-
-                    {/* Description */}
-                    <p className="text-slate-600 leading-relaxed text-sm font-normal">
-                      {item.desc}
-                    </p>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
+          {/* Executive Asymmetric Spotlight + Industry Directory */}
+          <IndustriesShowcase />
 
           {/* Bottom CTA */}
           <motion.div

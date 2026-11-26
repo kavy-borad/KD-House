@@ -255,13 +255,10 @@ const Navbar = ({ isMenuOpen, setIsMenuOpen }: NavbarProps) => {
   return (
     <>
       <nav
-        className={`fixed w-full z-50 top-0 left-0 transition-all duration-500 ease-in-out ${isTransparentNav && !isScrolled
-            ? "py-2.5 md:py-4 bg-transparent"
-            : "py-2 bg-white/95 backdrop-blur-md shadow-none border-none"
+        className={`fixed w-full z-50 top-0 left-0 py-2.5 md:py-3.5 transition-colors duration-300 ease-in-out ${isTransparentNav && !isScrolled
+            ? "bg-transparent"
+            : "bg-white/95 backdrop-blur-md shadow-none border-none"
           }`}
-        style={{
-          willChange: isScrolled ? "auto" : "padding",
-        }}
       >
         <div className="max-w-7xl mx-auto px-4 md:px-6 flex items-center justify-between">
           <div className="flex-shrink-0 z-50">
@@ -275,9 +272,9 @@ const Navbar = ({ isMenuOpen, setIsMenuOpen }: NavbarProps) => {
           </div>
 
           <div
-            className={`hidden lg:flex items-center gap-1 bg-[#2d3748] backdrop-blur-xl rounded-full px-6 py-3 shadow-none border-none transition-all duration-500 ${isScrolled
-              ? "scale-95 translate-y-0"
-              : "scale-100 translate-y-2 opacity-90 hover:opacity-100"
+            className={`hidden lg:flex items-center gap-1 bg-[#2d3748] backdrop-blur-xl rounded-full px-6 py-3 shadow-none border-none transition-opacity duration-300 ${isScrolled
+              ? "opacity-100"
+              : "opacity-95 hover:opacity-100"
               }`}
           >
             <Link
