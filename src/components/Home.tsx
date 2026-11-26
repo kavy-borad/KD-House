@@ -19,6 +19,7 @@ import HeroArchitectureBg from "./home/HeroArchitectureBg";
 import HeroRightLoop from "./home/HeroRightLoop";
 import WhyChooseUsSection from "./home/WhyChooseUsSection";
 import CustomProjectBanner from "./home/CustomProjectBanner";
+import ServicesCircuitBg from "./home/ServicesCircuitBg";
 
 const CounterNumber = ({ value }: { value: string }) => {
   const ref = useRef<HTMLSpanElement>(null);
@@ -134,6 +135,7 @@ const Home = () => {
   const shouldReduceMotion = useReducedMotion();
   const [heroSlideIndex, setHeroSlideIndex] = useState(0);
   const heroSectionRef = useRef<HTMLDivElement>(null);
+  const servicesSectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     if (shouldReduceMotion) return;
@@ -346,6 +348,7 @@ const Home = () => {
       {/* Our Services Section - Professional Modern Design */}
       <section
         id="our-services"
+        ref={servicesSectionRef}
         className="py-12 md:py-16 px-4 relative overflow-hidden bg-gradient-to-b from-gray-50 via-white to-gray-50"
       >
         {/* Subtle Background Pattern */}
@@ -357,12 +360,8 @@ const Home = () => {
           }}
         ></div>
 
-        {/* Decorative Elements - Hidden on mobile */}
-        <div className="hidden md:block absolute top-20 right-10 w-72 h-72 bg-blue-100 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse"></div>
-        <div
-          className="hidden md:block absolute bottom-20 left-10 w-72 h-72 bg-purple-100 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse"
-          style={{ animationDelay: "2s" }}
-        ></div>
+        {/* Concentric Circular Circuit SVG Rotating Slowly on Scroll */}
+        <ServicesCircuitBg sectionRef={servicesSectionRef} />
 
         <div className="max-w-7xl mx-auto relative z-10">
           {/* Section Header */}
@@ -462,7 +461,7 @@ const Home = () => {
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 className="group h-full"
               >
-                <div className="relative h-full bg-white rounded-2xl shadow-none transition-all duration-500 overflow-hidden border border-slate-200/80 hover:border-blue-200 flex flex-col">
+                <div className="relative h-full bg-white/86 backdrop-blur-[2px] rounded-2xl shadow-none transition-all duration-500 overflow-hidden border border-slate-200/80 hover:border-blue-200 flex flex-col">
                   {/* Hover Gradient Overlay */}
                   <div
                     className={`absolute inset-0 ${service.bgColor} opacity-0 group-hover:opacity-100 transition-opacity duration-500`}
