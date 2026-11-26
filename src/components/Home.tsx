@@ -18,6 +18,7 @@ import MessageTicker from "./home/MessageTicker";
 import HeroArchitectureBg from "./home/HeroArchitectureBg";
 import HeroRightLoop from "./home/HeroRightLoop";
 import WhyChooseUsSection from "./home/WhyChooseUsSection";
+import CustomProjectBanner from "./home/CustomProjectBanner";
 
 const CounterNumber = ({ value }: { value: string }) => {
   const ref = useRef<HTMLSpanElement>(null);
@@ -522,50 +523,8 @@ const Home = () => {
             ))}
           </div>
 
-          {/* Bottom CTA Section */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-            className="mt-16 md:mt-20 text-center"
-          >
-            <div className="bg-[#001F3F] rounded-2xl md:rounded-3xl p-8 md:p-12 shadow-2xl relative overflow-hidden">
-              {/* Background Pattern */}
-              <div
-                className="absolute inset-0 opacity-10"
-                style={{
-                  backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-                }}
-              ></div>
-
-              <div className="relative z-10">
-                <h3 className="text-3xl md:text-4xl font-bold text-white mb-4">
-                  Have a Custom Project in Mind?
-                </h3>
-                <p className="text-blue-100 text-lg mb-8 max-w-2xl mx-auto">
-                  Let's discuss how we can bring your vision to life with our
-                  expertise and innovative solutions
-                </p>
-                <div className="flex flex-wrap gap-4 justify-center">
-                  <Link
-                    to="/contact"
-                    className="px-8 py-4 bg-white text-[#001F3F] rounded-xl font-bold hover:bg-gray-50 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 inline-flex items-center gap-2"
-                  >
-                    <span>Get Started Today</span>
-                    <i className="fas fa-arrow-right"></i>
-                  </Link>
-                  <Link
-                    to="/our-works"
-                    className="px-8 py-4 bg-white/10 backdrop-blur-sm text-white border-2 border-white/30 rounded-xl font-bold hover:bg-white/20 transition-all duration-300 inline-flex items-center gap-2"
-                  >
-                    <span>View Our Work</span>
-                    <i className="fas fa-briefcase"></i>
-                  </Link>
-                </div>
-              </div>
-            </div>
-          </motion.div>
+          {/* Bottom CTA Section - Smooth Left-to-Right ScrollTrigger Unveil */}
+          <CustomProjectBanner />
         </div>
       </section>
 
