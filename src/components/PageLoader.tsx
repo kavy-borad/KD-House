@@ -25,29 +25,23 @@ const PageLoader = ({ visible }: PageLoaderProps) => {
           }}
           className="fixed inset-0 z-[9999] bg-white flex flex-col items-center justify-center select-none pointer-events-auto"
         >
-          <div className="relative flex items-center justify-center w-24 h-24">
-            {/* Soft outer ambient halo */}
-            <div className="absolute inset-1 rounded-full bg-blue-50/90" />
-
-            {/* Smooth spinning architectural ring */}
-            <div
-              className={`absolute inset-0 rounded-full border-[2.5px] border-slate-100 border-t-[#2187CF] border-r-[#1A214D]/70 ${
-                shouldReduceMotion ? "" : "animate-spin"
-              }`}
-              style={{ animationDuration: "0.95s" }}
-            />
-
-            {/* Brand "K" logo mark */}
-            <motion.img
-              src={kLogo}
-              alt="Karmadude"
-              draggable={false}
-              initial={shouldReduceMotion ? false : { scale: 0.88, opacity: 0.7 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ duration: 0.35, ease: "easeOut" }}
-              className="relative z-10 w-11 h-11 object-contain"
-            />
-          </div>
+          {/* Brand "K" logo mark only (no surrounding circle/ring) */}
+          <motion.img
+            src={kLogo}
+            alt="Karmadude"
+            draggable={false}
+            initial={shouldReduceMotion ? false : { scale: 0.9, opacity: 0.6 }}
+            animate={
+              shouldReduceMotion
+                ? { scale: 1, opacity: 1 }
+                : { scale: [0.94, 1.04, 1], opacity: 1 }
+            }
+            transition={{
+              duration: 0.55,
+              ease: "easeOut",
+            }}
+            className="w-16 h-16 object-contain"
+          />
         </motion.div>
       )}
     </AnimatePresence>

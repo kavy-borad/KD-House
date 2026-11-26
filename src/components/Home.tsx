@@ -461,7 +461,7 @@ const Home = () => {
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 className="group h-full"
               >
-                <div className="relative h-full bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-500 overflow-hidden border border-gray-100 hover:border-gray-200 flex flex-col">
+                <div className="relative h-full bg-white rounded-2xl shadow-none transition-all duration-500 overflow-hidden border border-slate-200/80 hover:border-blue-200 flex flex-col">
                   {/* Hover Gradient Overlay */}
                   <div
                     className={`absolute inset-0 ${service.bgColor} opacity-0 group-hover:opacity-100 transition-opacity duration-500`}
@@ -709,7 +709,7 @@ const Home = () => {
                   <motion.div
                     key={index}
                     whileHover={{ y: -5 }}
-                    className="py-5 px-3.5 sm:p-6 bg-white border border-blue-100 rounded-xl sm:rounded-2xl shadow-sm hover:shadow-xl hover:border-blue-200 transition-all duration-300 flex flex-col items-center text-center group"
+                    className="py-5 px-3.5 sm:p-6 bg-white border border-blue-100 rounded-xl sm:rounded-2xl shadow-none hover:border-blue-200 transition-all duration-300 flex flex-col items-center text-center group"
                   >
                     <div className="mb-2 sm:mb-3 text-2xl md:text-3xl text-[#2f8ecd] transition-transform duration-300 group-hover:scale-110">
                       <i className={item.icon}></i>
@@ -781,7 +781,7 @@ const Home = () => {
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
                 whileHover={{ y: -5 }}
-                className={`relative overflow-hidden p-4 sm:p-8 rounded-2xl sm:rounded-3xl bg-white border-2 ${benefit.borderColor} transition-all duration-300 hover:shadow-xl group`}
+                className={`relative overflow-hidden p-4 sm:p-8 rounded-2xl sm:rounded-3xl bg-white border-2 ${benefit.borderColor} shadow-none transition-all duration-300 group`}
               >
                 {/* Decorative Gradient Splash */}
                 <div
@@ -921,7 +921,7 @@ const Home = () => {
                 transition={{ duration: 0.5, delay: index * 0.07 }}
                 className="group flex"
               >
-                <div className="flex flex-col w-full bg-white rounded-2xl shadow-sm hover:shadow-2xl hover:shadow-blue-500/10 hover:-translate-y-2 transition-all duration-500 overflow-hidden border border-slate-200/80 hover:border-[#2f8ecd]/50 relative">
+                <div className="flex flex-col w-full bg-white rounded-2xl shadow-none hover:-translate-y-2 transition-all duration-500 overflow-hidden border border-slate-200/80 hover:border-[#2f8ecd]/50 relative">
                   {/* Top Accent Color Bar */}
                   <div
                     className={`h-[3px] w-full bg-gradient-to-r ${item.accentGradient}`}

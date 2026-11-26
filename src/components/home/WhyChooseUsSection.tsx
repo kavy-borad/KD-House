@@ -68,97 +68,145 @@ const WhyChooseUsSection = () => {
     if (!section || shouldReduceMotion) return;
 
     const ctx = gsap.context(() => {
+      const mm = gsap.matchMedia();
       const cards = cardRefs.current.filter(Boolean) as HTMLDivElement[];
 
-      // Start completely hidden until the user scrolls into this section
-      if (outerArchRef.current) {
-        gsap.set(outerArchRef.current, {
-          scale: 0.3,
-          yPercent: 22,
-          opacity: 0,
-        });
-      }
-      if (innerArchRef.current) {
-        gsap.set(innerArchRef.current, {
-          scale: 0.22,
-          yPercent: 26,
-          opacity: 0,
-        });
-      }
-      if (headerRef.current) {
-        gsap.set(headerRef.current, { opacity: 0, y: 26 });
-      }
-      if (cards.length > 0) {
-        gsap.set(cards, { opacity: 0, y: 34, scale: 0.94 });
-      }
+      // Desktop: reveal header on entry, then pin section briefly while concentric circles rise & cards animate scroll-wise
+      mm.add("(min-width: 1024px)", () => {
+        if (outerArchRef.current) {
+          gsap.set(outerArchRef.current, {
+            scale: 0.08,
+            yPercent: 35,
+            opacity: 0,
+          });
+        }
+        if (innerArchRef.current) {
+          gsap.set(innerArchRef.current, {
+            scale: 0.05,
+            yPercent: 40,
+            opacity: 0,
+          });
+        }
+        if (headerRef.current) {
+          gsap.set(headerRef.current, { opacity: 0, y: 28 });
+          gsap.to(headerRef.current, {
+            opacity: 1,
+            y: 0,
+            ease: "power2.out",
+            scrollTrigger: {
+              trigger: section,
+              start: "top 82%",
+              end: "top 20%",
+              scrub: 0.6,
+              invalidateOnRefresh: true,
+              refreshPriority: 0,
+            },
+          });
+        }
+        if (cards.length > 0) {
+          gsap.set(cards, { opacity: 0, y: 44, scale: 0.93 });
+        }
 
-      // Unified scroll-scrubbed ScrollTrigger timeline:
-      // concentric half-circles expand first, followed smoothly by header & staggered cards
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: section,
-          start: "top 86%",
-          end: "top 14%",
-          scrub: 0.65,
-          invalidateOnRefresh: true,
-        },
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: section,
+            pin: section,
+            start: "top top",
+            end: "+=900",
+            scrub: 0.6,
+            anticipatePin: 1,
+            invalidateOnRefresh: true,
+            refreshPriority: 0,
+          },
+        });
+
+        if (outerArchRef.current) {
+          tl.to(
+            outerArchRef.current,
+            {
+              scale: 1,
+              yPercent: 0,
+              opacity: 1,
+              duration: 0.55,
+              ease: "power2.out",
+            },
+            0,
+          );
+        }
+
+        if (innerArchRef.current) {
+          tl.to(
+            innerArchRef.current,
+            {
+              scale: 1,
+              yPercent: 0,
+              opacity: 1,
+              duration: 0.58,
+              ease: "power2.out",
+            },
+            0.12,
+          );
+        }
+
+        if (cards.length > 0) {
+          tl.to(
+            cards,
+            {
+              opacity: 1,
+              y: 0,
+              scale: 1,
+              duration: 0.42,
+              stagger: 0.08,
+              ease: "power2.out",
+            },
+            0.26,
+          );
+        }
+
+        // Brief hold at end before unpinning cleanly to next section
+        tl.to({}, { duration: 0.15 });
       });
 
-      if (outerArchRef.current) {
-        tl.to(
-          outerArchRef.current,
-          {
-            scale: 1,
-            yPercent: 0,
-            opacity: 1,
-            duration: 0.55,
-            ease: "power2.out",
-          },
-          0,
-        );
-      }
+      // Mobile / Tablet: non-pinned scroll-scrubbed reveal
+      mm.add("(max-width: 1023px)", () => {
+        if (outerArchRef.current) {
+          gsap.set(outerArchRef.current, { scale: 0.25, yPercent: 25, opacity: 0 });
+        }
+        if (innerArchRef.current) {
+          gsap.set(innerArchRef.current, { scale: 0.18, yPercent: 30, opacity: 0 });
+        }
+        if (headerRef.current) {
+          gsap.set(headerRef.current, { opacity: 0, y: 24 });
+        }
+        if (cards.length > 0) {
+          gsap.set(cards, { opacity: 0, y: 32, scale: 0.95 });
+        }
 
-      if (innerArchRef.current) {
-        tl.to(
-          innerArchRef.current,
-          {
-            scale: 1,
-            yPercent: 0,
-            opacity: 1,
-            duration: 0.58,
-            ease: "power2.out",
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: section,
+            start: "top 84%",
+            end: "top 14%",
+            scrub: 0.6,
+            invalidateOnRefresh: true,
           },
-          0.12,
-        );
-      }
+        });
 
-      if (headerRef.current) {
-        tl.to(
-          headerRef.current,
-          {
-            opacity: 1,
-            y: 0,
-            duration: 0.35,
-            ease: "power2.out",
-          },
-          0.22,
-        );
-      }
+        if (outerArchRef.current) {
+          tl.to(outerArchRef.current, { scale: 1, yPercent: 0, opacity: 1, duration: 0.5, ease: "power2.out" }, 0);
+        }
+        if (innerArchRef.current) {
+          tl.to(innerArchRef.current, { scale: 1, yPercent: 0, opacity: 1, duration: 0.55, ease: "power2.out" }, 0.1);
+        }
+        if (headerRef.current) {
+          tl.to(headerRef.current, { opacity: 1, y: 0, duration: 0.35, ease: "power2.out" }, 0.18);
+        }
+        if (cards.length > 0) {
+          tl.to(cards, { opacity: 1, y: 0, scale: 1, duration: 0.4, stagger: 0.08, ease: "power2.out" }, 0.3);
+        }
+      });
 
-      if (cards.length > 0) {
-        tl.to(
-          cards,
-          {
-            opacity: 1,
-            y: 0,
-            scale: 1,
-            duration: 0.38,
-            stagger: 0.08,
-            ease: "power2.out",
-          },
-          0.34,
-        );
-      }
+      return () => mm.revert();
     }, section);
 
     const rafId = window.requestAnimationFrame(() => {
@@ -174,7 +222,7 @@ const WhyChooseUsSection = () => {
   return (
     <section
       ref={sectionRef}
-      className="relative bg-white pt-16 sm:pt-20 md:pt-24 pb-14 md:pb-20 overflow-hidden"
+      className="relative bg-white lg:min-h-screen flex items-center pt-16 sm:pt-20 lg:pt-24 pb-14 md:pb-16 overflow-hidden"
     >
       {/* Soft-Tone Concentric Half-Circle Dome Background */}
       <div
@@ -206,7 +254,7 @@ const WhyChooseUsSection = () => {
         {/* Clean Editorial Header Inside Dome */}
         <div ref={headerRef} className="text-center mb-10 md:mb-12">
           <div className="inline-block mb-4">
-            <span className="py-1.5 px-4 md:py-2 md:px-6 rounded-full bg-white/95 border border-slate-200/80 text-slate-600 font-bold text-xs md:text-sm tracking-widest uppercase inline-block shadow-xs">
+            <span className="py-1.5 px-4 md:py-2 md:px-6 rounded-full bg-white/90 border border-slate-200/80 text-slate-600 font-bold text-xs md:text-sm tracking-widest uppercase inline-block">
               Why Choose Us
             </span>
           </div>
@@ -230,7 +278,7 @@ const WhyChooseUsSection = () => {
               ref={(el) => {
                 cardRefs.current[index] = el;
               }}
-              className="group relative bg-white/92 backdrop-blur-sm rounded-2xl p-4 sm:p-6 md:p-7 border border-slate-200/80 hover:border-blue-200 shadow-[0_6px_20px_rgba(15,23,42,0.04)] hover:shadow-[0_14px_30px_rgba(47,142,205,0.09)] transition-all duration-300 hover:-translate-y-1 will-change-transform"
+              className="group relative bg-white/75 hover:bg-white/95 backdrop-blur-xs rounded-2xl p-4 sm:p-6 md:p-7 border border-blue-100/90 hover:border-blue-200 shadow-none transition-all duration-300 hover:-translate-y-1 will-change-transform"
             >
               <div
                 className={`text-xl sm:text-2xl md:text-3xl ${item.iconColor} mb-2.5 md:mb-4 inline-block transition-transform duration-300 group-hover:scale-110`}
