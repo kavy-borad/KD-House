@@ -6,6 +6,15 @@
   body {
     @apply font-sans;
     overflow-x: clip;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  html::-webkit-scrollbar,
+  body::-webkit-scrollbar {
+    display: none;
+    width: 0;
+    height: 0;
   }
 
   /* Ensure Lenis smooth scrolling overrides any inline CSS scroll-behavior: smooth */
@@ -139,23 +148,19 @@
   margin: 0.5rem 0;
 }
 
-/* Split-merge preloader keyframes for original K brand mark (compositor-thread 0-lag) */
+/* One-time merge preloader keyframes for original K brand mark (compositor-thread 0-lag) */
 @keyframes kdKStemSplitMerge {
   0% {
     transform: translate3d(-11px, 7px, 0) scale(0.94);
     opacity: 0.72;
   }
-  30% {
+  48% {
     transform: translate3d(0px, 0px, 0) scale(1.015);
     opacity: 1;
   }
-  58%, 82% {
+  75%, 100% {
     transform: translate3d(0px, 0px, 0) scale(1);
     opacity: 1;
-  }
-  100% {
-    transform: translate3d(-11px, 7px, 0) scale(0.94);
-    opacity: 0.72;
   }
 }
 
@@ -164,32 +169,28 @@
     transform: translate3d(13px, -7px, 0) scale(0.94);
     opacity: 0.72;
   }
-  18% {
+  25% {
     transform: translate3d(10px, -5.5px, 0) scale(0.95);
     opacity: 0.8;
   }
-  52% {
+  72% {
     transform: translate3d(-1px, 0.5px, 0) scale(1.015);
     opacity: 1;
   }
-  62%, 82% {
+  100% {
     transform: translate3d(0px, 0px, 0) scale(1);
     opacity: 1;
-  }
-  100% {
-    transform: translate3d(13px, -7px, 0) scale(0.94);
-    opacity: 0.72;
   }
 }
 
 @keyframes kdKAssembleSettle {
-  0%, 50% {
+  0%, 70% {
     transform: scale(1);
   }
-  60% {
+  85% {
     transform: scale(1.022);
   }
-  70%, 100% {
+  100% {
     transform: scale(1);
   }
 }
@@ -199,7 +200,7 @@
   width: 68px;
   height: 68px;
   will-change: transform;
-  animation: kdKAssembleSettle 0.95s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+  animation: kdKAssembleSettle 0.72s cubic-bezier(0.22, 1, 0.36, 1) 1 forwards;
 }
 
 @media (min-width: 640px) {
@@ -231,7 +232,7 @@
     37.6% 100%,
     0% 100%
   );
-  animation: kdKStemSplitMerge 0.95s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+  animation: kdKStemSplitMerge 0.72s cubic-bezier(0.22, 1, 0.36, 1) 1 forwards;
 }
 
 .kd-k-piece-blue {
@@ -246,7 +247,7 @@
     48.6% 21.8%,
     56.9% 13.9%
   );
-  animation: kdKWingSplitMerge 0.95s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+  animation: kdKWingSplitMerge 0.72s cubic-bezier(0.22, 1, 0.36, 1) 1 forwards;
 }
 
 @media (prefers-reduced-motion: reduce) {

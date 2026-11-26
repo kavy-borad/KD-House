@@ -158,7 +158,7 @@ export function useScrollBehavior({
       if (Math.abs(dy) < 0.45 && instantVelocity < 38) {
         lastY = nextY;
         lastTime = now;
-        if (activeScrolling && instantVelocity < 22) {
+        if (activeScrolling) {
           stopNow(now);
         }
         return;
@@ -219,6 +219,12 @@ export function useScrollBehavior({
     };
 
     const handleLenisScroll = (instance: Lenis) => {
+      // Ignore instant programmatic jumps (e.g. reload/route scroll restore when Lenis isn't actively scrolling)
+      if (!instance.isScrolling && !activeScrolling) {
+        lastY = instance.scroll;
+        lastTime = performance.now();
+        return;
+      }
       // Lenis `velocity` is displacement per frame; normalize to ~px/s for threshold stability
       const velPxSec = Math.abs(instance.velocity) * 60;
       const dir: ScrollDirection =
@@ -254,6 +260,19 @@ export function useScrollBehavior({
       }
       document.removeEventListener("visibilitychange", handleVisibilityChange);
       if (stopTimer) window.clearTimeout(stopTimer);
+      activeScrolling = false;
+      smoothedVelocity = 0;
+      liveTelemetryRef.current = {
+        velocity: 0,
+        direction: "none",
+        isScrolling: false,
+        lastScrollTimestamp: 0,
+      };
+      setSnapshot((prev) =>
+        prev.isScrolling || prev.speedBand !== "idle"
+          ? { ...prev, isScrolling: false, speedBand: "idle", velocity: 0 }
+          : prev,
+      );
     };
   }, [
     config,

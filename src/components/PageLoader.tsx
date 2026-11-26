@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import kLogo from "../assets/logo/KARMDUDE NEW.webp";
 
@@ -6,11 +7,44 @@ interface PageLoaderProps {
 }
 
 /**
- * Full-screen preloader using the original K logo split cleanly into its navy
- * stem and electric-blue wing, GPU-animated via global CSS keyframes in index.css.
+ * Full-screen preloader controller.
+ * Hands off seamlessly from the pre-hydration `#kd-boot-loader` rendered in
+ * `index.html` (so refresh shows the split-merge K immediately with 0 white
+ * screen delay), fading it out smoothly once React & initial layout are ready.
  */
 const PageLoader = ({ visible }: PageLoaderProps) => {
   const shouldReduceMotion = !!useReducedMotion();
+  const [hasBootLoader, setHasBootLoader] = useState<boolean>(() =>
+    typeof document !== "undefined"
+      ? Boolean(document.getElementById("kd-boot-loader"))
+      : false,
+  );
+
+  useEffect(() => {
+    const bootEl = document.getElementById("kd-boot-loader");
+    if (!bootEl) {
+      setHasBootLoader(false);
+      return;
+    }
+
+    if (visible) return;
+
+    bootEl.classList.add("is-fading");
+    const removeTimer = window.setTimeout(
+      () => {
+        bootEl.remove();
+        setHasBootLoader(false);
+      },
+      shouldReduceMotion ? 80 : 170,
+    );
+
+    return () => window.clearTimeout(removeTimer);
+  }, [shouldReduceMotion, visible]);
+
+  // While pre-hydration boot loader is handling the initial reveal, render nothing duplicate
+  if (hasBootLoader) {
+    return null;
+  }
 
   return (
     <AnimatePresence>

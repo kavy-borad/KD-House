@@ -249,6 +249,23 @@ const ScrollMascot = ({ config: overrides, hide = false }: ScrollMascotProps) =>
         lastDirRef.current = live.direction;
       }
 
+      // Inactivity watchdog prevents runner loop from ever locking if scroll timer was cleared
+      const staleMs = now - live.lastScrollTimestamp;
+      if (live.isScrolling && staleMs > config.scrollStopDelayMs + 75) {
+        live.isScrolling = false;
+        live.velocity = 0;
+        if (
+          stateRef.current === "running" ||
+          stateRef.current === "fastRunning"
+        ) {
+          setState("stopping");
+          window.clearTimeout(stopTransitionTimerRef.current);
+          stopTransitionTimerRef.current = window.setTimeout(() => {
+            setState("idle");
+          }, config.stoppingDurationMs);
+        }
+      }
+
       if (live.isScrolling) {
         stopIdleControls();
         const { cyclesPerSec, speedScalar } = velocityToCyclesPerSec(
