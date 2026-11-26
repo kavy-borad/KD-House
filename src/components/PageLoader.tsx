@@ -1,4 +1,4 @@
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import kLogo from "../assets/logo/KARMDUDE NEW.webp";
 
 interface PageLoaderProps {
@@ -6,7 +6,8 @@ interface PageLoaderProps {
 }
 
 /**
- * Clean full-screen refresh preloader centered around the Karmadude "K" mark.
+ * Full-screen preloader using the original K logo split cleanly into its navy
+ * stem and electric-blue wing, GPU-animated via global CSS keyframes in index.css.
  */
 const PageLoader = ({ visible }: PageLoaderProps) => {
   const shouldReduceMotion = !!useReducedMotion();
@@ -21,27 +22,30 @@ const PageLoader = ({ visible }: PageLoaderProps) => {
           initial={{ opacity: 1 }}
           exit={{
             opacity: 0,
-            transition: { duration: shouldReduceMotion ? 0.1 : 0.28, ease: "easeOut" },
+            transition: {
+              duration: shouldReduceMotion ? 0.1 : 0.2,
+              ease: "easeOut",
+            },
           }}
           className="fixed inset-0 z-[9999] bg-white flex flex-col items-center justify-center select-none pointer-events-auto"
         >
-          {/* Brand "K" logo mark only (no surrounding circle/ring) */}
-          <motion.img
-            src={kLogo}
-            alt="Karmadude"
-            draggable={false}
-            initial={shouldReduceMotion ? false : { scale: 0.9, opacity: 0.6 }}
-            animate={
-              shouldReduceMotion
-                ? { scale: 1, opacity: 1 }
-                : { scale: [0.94, 1.04, 1], opacity: 1 }
-            }
-            transition={{
-              duration: 0.55,
-              ease: "easeOut",
-            }}
-            className="w-16 h-16 object-contain"
-          />
+          <div className="kd-k-mark-stage">
+            <img
+              src={kLogo}
+              alt=""
+              aria-hidden="true"
+              draggable={false}
+              data-k-piece="navy-stem"
+              className="kd-k-piece kd-k-piece-navy"
+            />
+            <img
+              src={kLogo}
+              alt="Karmadude"
+              draggable={false}
+              data-k-piece="blue-wing"
+              className="kd-k-piece kd-k-piece-blue"
+            />
+          </div>
         </motion.div>
       )}
     </AnimatePresence>

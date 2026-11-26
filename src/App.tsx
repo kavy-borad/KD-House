@@ -233,14 +233,14 @@ function ScrollManager({ onInitialReady }: ScrollManagerProps) {
       }
     };
 
-    const minDelay = target !== null ? 380 : 340;
+    const minDelay = target !== null ? 240 : 200;
     const timer = window.setTimeout(() => {
       if (document.readyState === "complete") {
         finishRestore();
       } else {
         loadHandler = () => finishRestore();
         window.addEventListener("load", loadHandler, { once: true });
-        safetyTimer = window.setTimeout(finishRestore, 450);
+        safetyTimer = window.setTimeout(finishRestore, 260);
       }
     }, minDelay);
 

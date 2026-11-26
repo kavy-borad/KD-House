@@ -277,13 +277,50 @@ const MascotCharacter = ({
       className="kd-scroll-mascot-svg"
       aria-hidden="true"
     >
+      {/* Short blue ground track ("way") directly beneath mascot feet */}
+      <defs>
+        <linearGradient id="kdMascotWayRail" x1="-22" y1="125" x2="142" y2="125" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stopColor={colors.light} stopOpacity="0" />
+          <stop offset="16%" stopColor={colors.light} stopOpacity="0.45" />
+          <stop offset="84%" stopColor={colors.light} stopOpacity="0.45" />
+          <stop offset="100%" stopColor={colors.light} stopOpacity="0" />
+        </linearGradient>
+        <linearGradient id="kdMascotWayDots" x1="-20" y1="125" x2="140" y2="125" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stopColor={colors.primary} stopOpacity="0" />
+          <stop offset="14%" stopColor={colors.primary} stopOpacity="0.85" />
+          <stop offset="86%" stopColor={colors.primary} stopOpacity="0.85" />
+          <stop offset="100%" stopColor={colors.primary} stopOpacity="0" />
+        </linearGradient>
+      </defs>
+
+      <line
+        x1="-22"
+        y1="125"
+        x2="142"
+        y2="125"
+        stroke="url(#kdMascotWayRail)"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+      />
+      <line
+        data-mascot-way="true"
+        x1="-20"
+        y1="125"
+        x2="140"
+        y2="125"
+        stroke="url(#kdMascotWayDots)"
+        strokeWidth="2.8"
+        strokeLinecap="round"
+        strokeDasharray="3.2 8.8"
+      />
+
       {/* Dynamic ground shadow reacting continuously to airborne lift & compression */}
       <ellipse
         ref={shadowRef}
         cx="60"
-        cy="122"
+        cy="121.5"
         rx="24"
-        ry="4.2"
+        ry="3.8"
         fill={colors.facialDark}
         opacity="0.14"
       />
