@@ -1,4 +1,10 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
@@ -6,6 +12,7 @@ import {
   Routes,
   Route,
   useLocation,
+  useNavigationType,
   Navigate,
 } from "react-router-dom";
 import usePageViewTracking from "./lib/usePageViewTracking";
@@ -40,9 +47,44 @@ import GooglePlayTesting from "./components/GooglePlayTesting";
 gsap.registerPlugin(ScrollTrigger);
 
 const SCROLL_STORAGE_KEY = "kd_reload_scroll";
+const HISTORY_SCROLL_STORAGE_KEY = "kd_history_scroll_map";
+
+const historyScrollPositions = new Map<string, number>();
+
+const loadPersistedHistoryScrolls = () => {
+  if (typeof window === "undefined") return;
+  try {
+    const raw = sessionStorage.getItem(HISTORY_SCROLL_STORAGE_KEY);
+    if (!raw) return;
+    const entries = JSON.parse(raw) as Array<[string, number]>;
+    if (Array.isArray(entries)) {
+      entries.forEach(([k, y]) => {
+        if (typeof k === "string" && typeof y === "number" && Number.isFinite(y)) {
+          historyScrollPositions.set(k, y);
+        }
+      });
+    }
+  } catch {
+    // ignore storage errors
+  }
+};
+
+const persistHistoryScrolls = () => {
+  if (typeof window === "undefined") return;
+  try {
+    const entries = Array.from(historyScrollPositions.entries()).slice(-30);
+    sessionStorage.setItem(HISTORY_SCROLL_STORAGE_KEY, JSON.stringify(entries));
+  } catch {
+    // ignore storage quota errors
+  }
+};
 
 let pendingReloadRestore: { path: string; y: number } | null = null;
 if (typeof window !== "undefined") {
+  if ("scrollRestoration" in window.history) {
+    window.history.scrollRestoration = "manual";
+  }
+  loadPersistedHistoryScrolls();
   try {
     const nav = performance.getEntriesByType?.("navigation")?.[0] as
       | PerformanceNavigationTiming
@@ -50,9 +92,6 @@ if (typeof window !== "undefined") {
     const isReloadOrHistory =
       nav?.type === "reload" || nav?.type === "back_forward";
     if (isReloadOrHistory) {
-      if ("scrollRestoration" in window.history) {
-        window.history.scrollRestoration = "manual";
-      }
       const raw = sessionStorage.getItem(SCROLL_STORAGE_KEY);
       if (raw) {
         const parsed = JSON.parse(raw);
@@ -76,19 +115,70 @@ interface ScrollManagerProps {
 }
 
 function ScrollManager({ onInitialReady }: ScrollManagerProps) {
-  const { pathname } = useLocation();
-  const prevPathnameRef = useRef(pathname);
+  const { pathname, key } = useLocation();
+  const navigationType = useNavigationType();
+  const activeEntryRef = useRef({ pathname, key });
   const initialHandledRef = useRef(false);
+  const isRestoringScrollRef = useRef(false);
 
-  useEffect(() => {
-    // Route change inside SPA: scroll cleanly to top
-    if (prevPathnameRef.current !== pathname) {
-      pendingReloadRestore = null;
-      prevPathnameRef.current = pathname;
-      window.scrollTo({ top: 0, left: 0, behavior: "instant" as ScrollBehavior });
-      return;
+  useLayoutEffect(() => {
+    const prev = activeEntryRef.current;
+    if (prev.key === key && prev.pathname === pathname) return;
+
+    pendingReloadRestore = null;
+    activeEntryRef.current = { pathname, key };
+    isRestoringScrollRef.current = true;
+
+    const savedY =
+      navigationType === "POP" ? historyScrollPositions.get(key) : undefined;
+    const targetY =
+      typeof savedY === "number" && savedY > 0 ? savedY : 0;
+
+    let cancelled = false;
+    let raf1 = 0;
+    let raf2 = 0;
+    let settleTimer = 0;
+
+    const applyTargetScroll = () => {
+      if (cancelled) return;
+      ScrollTrigger.refresh();
+      window.scrollTo({
+        top: targetY,
+        left: 0,
+        behavior: "instant" as ScrollBehavior,
+      });
+    };
+
+    applyTargetScroll();
+
+    raf1 = window.requestAnimationFrame(() => {
+      applyTargetScroll();
+      raf2 = window.requestAnimationFrame(() => {
+        applyTargetScroll();
+        if (targetY === 0) {
+          isRestoringScrollRef.current = false;
+        }
+      });
+    });
+
+    // Re-apply once more for POP restores after lazy sections (e.g. TechStack Suspense) finish rendering
+    if (targetY > 0) {
+      settleTimer = window.setTimeout(() => {
+        applyTargetScroll();
+        isRestoringScrollRef.current = false;
+      }, 160);
     }
 
+    return () => {
+      cancelled = true;
+      window.cancelAnimationFrame(raf1);
+      window.cancelAnimationFrame(raf2);
+      if (settleTimer) window.clearTimeout(settleTimer);
+      isRestoringScrollRef.current = false;
+    };
+  }, [pathname, key, navigationType]);
+
+  useEffect(() => {
     if (initialHandledRef.current) return;
 
     let cancelled = false;
@@ -105,7 +195,8 @@ function ScrollManager({ onInitialReady }: ScrollManagerProps) {
       initialHandledRef.current = true;
 
       if (target !== null && target > 0) {
-        // Refresh GSAP ScrollTrigger pin-spacers first, then jump instantaneously (bypassing CSS smooth scroll)
+        isRestoringScrollRef.current = true;
+        // Refresh GSAP ScrollTrigger layout first, then jump instantaneously (bypassing CSS smooth scroll)
         ScrollTrigger.refresh();
         window.scrollTo({
           top: target,
@@ -113,7 +204,7 @@ function ScrollManager({ onInitialReady }: ScrollManagerProps) {
           behavior: "instant" as ScrollBehavior,
         });
 
-        // Second-frame verification after pin/layout settle
+        // Second-frame verification after layout settle
         rafId = window.requestAnimationFrame(() => {
           if (cancelled) return;
           ScrollTrigger.refresh();
@@ -122,7 +213,10 @@ function ScrollManager({ onInitialReady }: ScrollManagerProps) {
             left: 0,
             behavior: "instant" as ScrollBehavior,
           });
+          historyScrollPositions.set(key, target);
+          persistHistoryScrolls();
           pendingReloadRestore = null;
+          isRestoringScrollRef.current = false;
           onInitialReady();
         });
       } else {
@@ -149,15 +243,20 @@ function ScrollManager({ onInitialReady }: ScrollManagerProps) {
       if (rafId) window.cancelAnimationFrame(rafId);
       if (loadHandler) window.removeEventListener("load", loadHandler);
     };
-  }, [pathname, onInitialReady]);
+  }, [pathname, key, onInitialReady]);
 
   useEffect(() => {
     const saveScroll = () => {
-      if (pendingReloadRestore) return;
+      if (pendingReloadRestore || isRestoringScrollRef.current) return;
+      // Ignore stray async scroll events after React already moved to another route key
+      if (activeEntryRef.current.key !== key) return;
+      const y = window.scrollY;
+      historyScrollPositions.set(key, y);
+      persistHistoryScrolls();
       try {
         sessionStorage.setItem(
           SCROLL_STORAGE_KEY,
-          JSON.stringify({ path: pathname, y: window.scrollY }),
+          JSON.stringify({ path: pathname, y }),
         );
       } catch {
         // ignore storage quota errors
@@ -172,7 +271,7 @@ function ScrollManager({ onInitialReady }: ScrollManagerProps) {
       window.removeEventListener("pagehide", saveScroll);
       window.removeEventListener("beforeunload", saveScroll);
     };
-  }, [pathname]);
+  }, [pathname, key]);
 
   return null;
 }

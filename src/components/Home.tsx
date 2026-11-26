@@ -20,6 +20,7 @@ import HeroRightLoop from "./home/HeroRightLoop";
 import WhyChooseUsSection from "./home/WhyChooseUsSection";
 import CustomProjectBanner from "./home/CustomProjectBanner";
 import ServicesCircuitBg from "./home/ServicesCircuitBg";
+import GlitchSectionTitle, { GlitchWord } from "./home/GlitchSectionTitle";
 
 const CounterNumber = ({ value }: { value: string }) => {
   const ref = useRef<HTMLSpanElement>(null);
@@ -134,6 +135,7 @@ const HERO_SLIDES = [
 const Home = () => {
   const shouldReduceMotion = useReducedMotion();
   const [heroSlideIndex, setHeroSlideIndex] = useState(0);
+  const heroTrackRef = useRef<HTMLDivElement>(null);
   const heroSectionRef = useRef<HTMLDivElement>(null);
   const servicesSectionRef = useRef<HTMLElement>(null);
 
@@ -249,24 +251,25 @@ const Home = () => {
         `}
       </style>
 
-      {/* Hero Section - Light Architectural Bento Grid Layout */}
-      <div
-        ref={heroSectionRef}
-        data-hero-section="true"
-        className="relative min-h-[100dvh] w-full bg-white flex flex-col pt-28 sm:pt-32 md:pt-24 md:overflow-x-clip"
-      >
+      {/* Hero Section - Light Architectural Bento Grid Layout (sticky scroll track avoids GSAP pin-spacer DOM reparenting) */}
+      <div ref={heroTrackRef} className="relative min-h-[300dvh] lg:min-h-[320vh]">
+        <div
+          ref={heroSectionRef}
+          data-hero-section="true"
+          className="relative sticky top-0 min-h-[100dvh] w-full bg-white flex flex-col pt-20 sm:pt-24 lg:pt-24 overflow-x-clip"
+        >
         {/* Static Light Blueprint Grid & Crosshair Background */}
         <HeroArchitectureBg />
 
         {/* Main Content Area - Shifted Left on Desktop with Right Architectural Loop */}
-        <div className="flex-1 w-full max-w-7xl mx-auto px-4 py-4 md:px-8 md:py-6 flex items-start md:items-center justify-center relative z-10 pb-24 md:pb-0">
-          <div className="w-full max-w-7xl mx-auto flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8 xl:gap-14">
+        <div className="flex-1 w-full max-w-7xl mx-auto px-4 py-2 sm:py-4 md:px-8 md:py-6 flex items-center justify-center relative z-10 pb-20 sm:pb-24 lg:pb-0">
+          <div className="w-full max-w-7xl mx-auto flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3 sm:gap-5 lg:gap-8 xl:gap-14">
             {/* Main Hero Content */}
             <motion.div
               initial={shouldReduceMotion ? false : { opacity: 1, x: 0 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6, ease: "easeOut" }}
-              className="relative flex-1 min-w-0 flex flex-col justify-center py-6 md:py-10 px-2 md:px-2"
+              className="relative flex-1 min-w-0 flex flex-col justify-center py-2 sm:py-4 lg:py-10 px-1 sm:px-2 md:px-2"
             >
               <div className="relative z-20 max-w-3xl">
                 <motion.div
@@ -274,7 +277,7 @@ const Home = () => {
                   initial={shouldReduceMotion ? false : { opacity: 0, y: 16 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.15 }}
-                  className="inline-flex items-center gap-2 px-3 py-1.5 md:px-4 md:py-2 rounded-full bg-blue-50/75 border border-blue-200/70 text-slate-700 font-semibold text-xs md:text-sm mb-4 md:mb-6 backdrop-blur-[2px]"
+                  className="inline-flex items-center gap-2 px-3 py-1 md:px-4 md:py-2 rounded-full bg-blue-50/75 border border-blue-200/70 text-slate-700 font-semibold text-xs md:text-sm mb-2.5 sm:mb-4 md:mb-6 backdrop-blur-[2px]"
                 >
                   <span className="relative flex h-2.5 w-2.5 md:h-3 md:w-3">
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-500 opacity-75"></span>
@@ -296,8 +299,8 @@ const Home = () => {
                       }
                       transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
                     >
-                      <h1 className="text-4xl md:text-7xl font-bold text-slate-900 mb-4 md:mb-6 leading-[1.1] md:leading-[0.9] tracking-tight">
-                        <span className="block mb-2 md:mb-3">
+                      <h1 className="text-[32px] sm:text-5xl md:text-7xl font-bold text-slate-900 mb-2.5 sm:mb-4 md:mb-6 leading-[1.08] md:leading-[0.9] tracking-tight">
+                        <span className="block mb-1 sm:mb-2 md:mb-3">
                           {currentHeroSlide.line1}
                         </span>
                         <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-blue-500 to-purple-600">
@@ -305,7 +308,7 @@ const Home = () => {
                         </span>
                       </h1>
 
-                      <p className="text-base md:text-xl text-slate-700 mb-8 md:mb-10 font-normal leading-relaxed max-w-2xl">
+                      <p className="text-sm sm:text-base md:text-xl text-slate-700 mb-4 sm:mb-6 md:mb-10 font-normal leading-relaxed max-w-2xl">
                         {currentHeroSlide.description}
                       </p>
                     </motion.div>
@@ -314,18 +317,18 @@ const Home = () => {
 
                 <div
                   data-physics-obstacle="true"
-                  className="inline-flex flex-wrap gap-3 md:gap-4"
+                  className="inline-flex flex-wrap gap-2.5 sm:gap-3 md:gap-4"
                 >
                   <Link
                     to="/our-works"
                     onClick={scrollToServices}
-                    className="relative px-6 py-3 md:px-8 md:py-4 rounded-full bg-[#001F3F] text-white font-bold text-base md:text-lg hover:scale-105 active:scale-95 transition-all shadow-[0_10px_28px_rgba(0,31,63,0.2)]"
+                    className="relative px-5 py-2.5 sm:px-6 sm:py-3 md:px-8 md:py-4 rounded-full bg-[#001F3F] text-white font-bold text-sm sm:text-base md:text-lg hover:scale-105 active:scale-95 transition-all shadow-[0_10px_28px_rgba(0,31,63,0.2)]"
                   >
                     Start Your Project
                   </Link>
                   <Link
                     to="/contact"
-                    className="px-6 py-3 md:px-8 md:py-4 rounded-full border border-slate-300/90 bg-white/65 hover:bg-white/90 font-normal text-base md:text-lg text-slate-800 backdrop-blur-[2px] transition-all hover:border-slate-400 hover:scale-105 active:scale-95"
+                    className="px-5 py-2.5 sm:px-6 sm:py-3 md:px-8 md:py-4 rounded-full border border-slate-300/90 bg-white/65 hover:bg-white/90 font-normal text-sm sm:text-base md:text-lg text-slate-800 backdrop-blur-[2px] transition-all hover:border-slate-400 hover:scale-105 active:scale-95"
                   >
                     Get a Quote
                   </Link>
@@ -334,8 +337,9 @@ const Home = () => {
             </motion.div>
 
             {/* Right-Side Architectural Flow Loop */}
-            <HeroRightLoop heroRef={heroSectionRef} />
+            <HeroRightLoop heroRef={heroTrackRef} />
           </div>
+        </div>
         </div>
       </div>
 
@@ -379,9 +383,7 @@ const Home = () => {
               </span>
             </div>
 
-            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 tracking-tight">
-              Our <span className="text-[#2f8ecd]">Services</span>
-            </h2>
+            <GlitchSectionTitle leadText="Our" accentText="Services" />
 
             <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
               Comprehensive technology solutions designed to accelerate your
@@ -622,7 +624,8 @@ const Home = () => {
               transition={{ duration: 0.8 }}
             >
               <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 tracking-tight">
-                Why Choose <span className="text-[#2f8ecd]">Karma Dude?</span>
+                Why <GlitchWord word="Choose" />{" "}
+                <span className="text-[#2f8ecd]">Karma Dude?</span>
               </h2>
               <p className="text-lg text-gray-600 mb-12 leading-relaxed">
                 We provide unparalleled expertise and support for your project
@@ -788,7 +791,8 @@ const Home = () => {
               INDUSTRIES WE SERVE
             </div>
             <h2 className="text-4xl md:text-5xl font-bold text-slate-900 mb-4">
-              Tailored Solutions for Every{" "}
+              Tailored <GlitchWord word="Solutions" /> for{" "}
+              <GlitchWord word="Every" />{" "}
               <span className="text-[#2f8ecd]">Industry</span>
             </h2>
             <p className="text-lg text-slate-700 max-w-3xl mx-auto">
@@ -927,26 +931,71 @@ const Home = () => {
 
           {/* Bottom CTA */}
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 28 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.7, delay: 0.3 }}
-            className="mt-16 text-center bg-[#001F3F] rounded-2xl p-10 md:p-12"
+            transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
+            className="mt-16 relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#001833] via-[#001F3F] to-[#0a2f5c] border border-sky-300/20 px-6 py-9 sm:px-10 sm:py-11 lg:px-14 lg:py-12"
           >
-            <h3 className="text-3xl md:text-4xl font-bold text-white mb-4">
-              Don't See Your Industry?
-            </h3>
-            <p className="text-blue-100 text-lg mb-8 max-w-2xl mx-auto">
-              We specialize in creating custom solutions for any industry. Let's
-              discuss your unique needs.
-            </p>
-            <Link
-              to="/contact"
-              className="inline-flex items-center gap-2 px-8 py-4 bg-white text-[#001F3F] rounded-xl font-bold hover:bg-gray-50 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105"
-            >
-              <span>Get in Touch</span>
-              <i className="fas fa-arrow-right"></i>
-            </Link>
+            {/* Subtle Architectural Grid & Ambient Accent Glow */}
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-0 opacity-[0.07]"
+              style={{
+                backgroundImage:
+                  "linear-gradient(to right, rgba(255,255,255,0.45) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.45) 1px, transparent 1px)",
+                backgroundSize: "36px 36px",
+              }}
+            />
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute -top-24 -right-20 w-72 h-72 rounded-full opacity-25 blur-3xl"
+              style={{ backgroundColor: "#2f8ecd" }}
+            />
+
+            <div className="relative z-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8 text-center lg:text-left">
+              <div className="max-w-2xl">
+                <span className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/10 border border-sky-300/25 text-sky-200 text-xs font-bold tracking-widest uppercase mb-4">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#38bdf8]" />
+                  Custom Industry Solutions
+                </span>
+
+                <h3 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white tracking-tight mb-3">
+                  Don&apos;t See Your{" "}
+                  <span className="text-[#56b4f0]">Industry?</span>
+                </h3>
+
+                <p className="text-slate-200/90 text-sm sm:text-base lg:text-lg leading-relaxed mb-5 max-w-xl mx-auto lg:mx-0">
+                  We build tailored software, AI automation, and scalable digital
+                  platforms engineered specifically for your domain workflows.
+                </p>
+
+                <div className="flex flex-wrap items-center justify-center lg:justify-start gap-x-5 gap-y-2 text-xs sm:text-sm text-sky-100/85 font-medium">
+                  <span className="inline-flex items-center gap-1.5">
+                    <i className="fas fa-check-circle text-[#56b4f0]" />
+                    Bespoke Architecture
+                  </span>
+                  <span className="inline-flex items-center gap-1.5">
+                    <i className="fas fa-check-circle text-[#56b4f0]" />
+                    Dedicated Engineering
+                  </span>
+                  <span className="inline-flex items-center gap-1.5">
+                    <i className="fas fa-check-circle text-[#56b4f0]" />
+                    End-to-End Launch
+                  </span>
+                </div>
+              </div>
+
+              <div className="shrink-0">
+                <Link
+                  to="/contact"
+                  className="group w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-7 py-3.5 bg-white text-[#001F3F] rounded-xl font-bold text-sm sm:text-base hover:bg-sky-50 transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-0.5"
+                >
+                  <span>Get in Touch</span>
+                  <i className="fas fa-arrow-right text-xs transition-transform duration-300 group-hover:translate-x-1" />
+                </Link>
+              </div>
+            </div>
           </motion.div>
         </div>
       </section>

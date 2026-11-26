@@ -137,209 +137,211 @@ const HeroRightLoop = ({ heroRef }: HeroRightLoopProps) => {
     const stageEl = stageContainerRef.current;
     if (!heroEl || !stageEl || shouldReduceMotion) return;
 
-    const ctx = gsap.context(() => {
-      const mm = gsap.matchMedia();
+    const mm = gsap.matchMedia();
 
-      // Desktop: pin the hero so page stays fixed while big icons appear inside the rectangle & content below it
-      mm.add("(min-width: 1024px)", () => {
-        const icons = iconRefs.current.filter(Boolean) as HTMLDivElement[];
-        const contents = contentRefs.current.filter(
-          Boolean,
-        ) as HTMLDivElement[];
-        if (icons.length === 0 || contents.length === 0) return;
+    // All viewports: animate while CSS sticky keeps hero pinned (no GSAP pin-spacer DOM mutation)
+    mm.add("(min-width: 0px)", () => {
+      const icons = iconRefs.current.filter(Boolean) as HTMLDivElement[];
+      const contents = contentRefs.current.filter(
+        Boolean,
+      ) as HTMLDivElement[];
+      if (icons.length === 0 || contents.length === 0) return;
 
-        icons.forEach((el) => {
-          gsap.set(el, { opacity: 0, scale: 0.55, rotation: -16 });
+      icons.forEach((el) => {
+        gsap.set(el, { opacity: 0, scale: 0.55, rotation: -16 });
+      });
+      contents.forEach((el) => {
+        gsap.set(el, { opacity: 0, y: 26, pointerEvents: "none" });
+      });
+      if (physicsLayerRef.current) {
+        gsap.set(physicsLayerRef.current, {
+          opacity: 1,
+          scale: 1,
+          pointerEvents: "auto",
         });
-        contents.forEach((el) => {
-          gsap.set(el, { opacity: 0, y: 26, pointerEvents: "none" });
+      }
+      if (hintRef.current) {
+        gsap.set(hintRef.current, { opacity: 1, y: 0 });
+      }
+      if (progressWrapperRef.current) {
+        gsap.set(progressWrapperRef.current, {
+          opacity: 0,
+          y: 8,
+          pointerEvents: "none",
         });
-        if (physicsLayerRef.current) {
-          gsap.set(physicsLayerRef.current, {
-            opacity: 1,
-            scale: 1,
-            pointerEvents: "auto",
-          });
-        }
-        if (hintRef.current) {
-          gsap.set(hintRef.current, { opacity: 1, y: 0 });
-        }
-        if (progressWrapperRef.current) {
-          gsap.set(progressWrapperRef.current, {
-            opacity: 0,
-            y: 8,
-            pointerEvents: "none",
-          });
-        }
-        if (progressBarRef.current) {
-          gsap.set(progressBarRef.current, {
-            scaleX: 0,
-            transformOrigin: "left center",
-          });
-        }
+      }
+      if (progressBarRef.current) {
+        gsap.set(progressBarRef.current, {
+          scaleX: 0,
+          transformOrigin: "left center",
+        });
+      }
 
-        const tl = gsap.timeline({
-          scrollTrigger: {
-            trigger: heroEl,
-            pin: heroEl,
-            start: "top top",
-            end: () => `+=${TECH_ITEMS.length * 360}`,
-            scrub: 0.65,
-            anticipatePin: 1,
-            invalidateOnRefresh: true,
-            refreshPriority: 1,
-            onUpdate: (self) => {
-              const p = self.progress;
-              if (p < 0.025) {
-                setActiveIndex((prev) => (prev === -1 ? prev : -1));
-                return;
-              }
-              const normalized = (p - 0.025) / 0.975;
-              const nextIdx = Math.min(
-                TECH_ITEMS.length - 1,
-                Math.floor(normalized * TECH_ITEMS.length),
-              );
-              setActiveIndex((prev) => (prev === nextIdx ? prev : nextIdx));
-            },
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: heroEl,
+          start: "top top",
+          end: "bottom bottom",
+          scrub: 0.65,
+          invalidateOnRefresh: true,
+          refreshPriority: 1,
+          onUpdate: (self) => {
+            const p = self.progress;
+            if (p < 0.025) {
+              setActiveIndex((prev) => (prev === -1 ? prev : -1));
+              return;
+            }
+            const normalized = (p - 0.025) / 0.975;
+            const nextIdx = Math.min(
+              TECH_ITEMS.length - 1,
+              Math.floor(normalized * TECH_ITEMS.length),
+            );
+            setActiveIndex((prev) => (prev === nextIdx ? prev : nextIdx));
           },
-        });
+        },
+      });
 
-        scrollTriggerRef.current = tl.scrollTrigger ?? null;
+      scrollTriggerRef.current = tl.scrollTrigger ?? null;
 
-        // 1. Fade out physics tokens & scroll hint, bring big Icon 0 into the rectangle + Content 0 below
-        if (physicsLayerRef.current) {
-          tl.to(
-            physicsLayerRef.current,
-            {
-              opacity: 0,
-              scale: 0.92,
-              pointerEvents: "none",
-              duration: 0.25,
-              ease: "power2.out",
-            },
-            0,
-          );
-        }
-        if (hintRef.current) {
-          tl.to(
-            hintRef.current,
-            { opacity: 0, y: -10, duration: 0.22, ease: "power2.out" },
-            0,
-          );
-        }
-        if (progressWrapperRef.current) {
-          tl.to(
-            progressWrapperRef.current,
-            {
-              opacity: 1,
-              y: 0,
-              pointerEvents: "auto",
-              duration: 0.28,
-              ease: "power2.out",
-            },
-            0.08,
-          );
-        }
-
+      // 1. Fade out physics tokens & scroll hint, bring big Icon 0 into the rectangle + Content 0 below
+      if (physicsLayerRef.current) {
         tl.to(
-          icons[0],
+          physicsLayerRef.current,
           {
-            opacity: 1,
-            scale: 1,
-            rotation: 0,
-            duration: 0.44,
-            ease: "back.out(1.4)",
+            opacity: 0,
+            scale: 0.92,
+            pointerEvents: "none",
+            duration: 0.25,
+            ease: "power2.out",
           },
-          0.1,
+          0,
         );
+      }
+      if (hintRef.current) {
         tl.to(
-          contents[0],
+          hintRef.current,
+          { opacity: 0, y: -10, duration: 0.22, ease: "power2.out" },
+          0,
+        );
+      }
+      if (progressWrapperRef.current) {
+        tl.to(
+          progressWrapperRef.current,
           {
             opacity: 1,
             y: 0,
             pointerEvents: "auto",
-            duration: 0.4,
-            ease: "power3.out",
+            duration: 0.28,
+            ease: "power2.out",
           },
-          0.14,
+          0.08,
+        );
+      }
+
+      tl.to(
+        icons[0],
+        {
+          opacity: 1,
+          scale: 1,
+          rotation: 0,
+          duration: 0.44,
+          ease: "back.out(1.4)",
+        },
+        0.1,
+      );
+      tl.to(
+        contents[0],
+        {
+          opacity: 1,
+          y: 0,
+          pointerEvents: "auto",
+          duration: 0.4,
+          ease: "power3.out",
+        },
+        0.14,
+      );
+
+      tl.to({}, { duration: 0.35 });
+
+      // 2. Scrub cleanly through items 0 -> 1 -> 2 -> 3 -> 4 -> 5
+      for (let i = 0; i < TECH_ITEMS.length - 1; i++) {
+        const label = `step-${i}`;
+        tl.addLabel(label);
+
+        tl.to(
+          icons[i],
+          {
+            opacity: 0,
+            scale: 1.15,
+            rotation: 12,
+            duration: 0.35,
+            ease: "power2.in",
+          },
+          label,
+        );
+        tl.to(
+          contents[i],
+          {
+            opacity: 0,
+            y: -22,
+            pointerEvents: "none",
+            duration: 0.34,
+            ease: "power2.in",
+          },
+          label,
         );
 
-        tl.to({}, { duration: 0.35 });
+        tl.fromTo(
+          icons[i + 1],
+          { opacity: 0, scale: 0.56, rotation: -16 },
+          {
+            opacity: 1,
+            scale: 1,
+            rotation: 0,
+            duration: 0.46,
+            ease: "back.out(1.35)",
+          },
+          `${label}+=0.14`,
+        );
+        tl.fromTo(
+          contents[i + 1],
+          { opacity: 0, y: 24, pointerEvents: "none" },
+          {
+            opacity: 1,
+            y: 0,
+            pointerEvents: "auto",
+            duration: 0.42,
+            ease: "power3.out",
+          },
+          `${label}+=0.18`,
+        );
 
-        // 2. Scrub cleanly through items 0 -> 1 -> 2 -> 3 -> 4 -> 5
-        for (let i = 0; i < TECH_ITEMS.length - 1; i++) {
-          const label = `step-${i}`;
-          tl.addLabel(label);
+        tl.to({}, { duration: 0.36 });
+      }
 
-          tl.to(
-            icons[i],
-            {
-              opacity: 0,
-              scale: 1.15,
-              rotation: 12,
-              duration: 0.35,
-              ease: "power2.in",
-            },
-            label,
-          );
-          tl.to(
-            contents[i],
-            {
-              opacity: 0,
-              y: -22,
-              pointerEvents: "none",
-              duration: 0.34,
-              ease: "power2.in",
-            },
-            label,
-          );
+      const totalDuration = tl.duration();
+      if (progressBarRef.current) {
+        tl.to(
+          progressBarRef.current,
+          { scaleX: 1, ease: "none", duration: totalDuration },
+          0,
+        );
+      }
 
-          tl.fromTo(
-            icons[i + 1],
-            { opacity: 0, scale: 0.56, rotation: -16 },
-            {
-              opacity: 1,
-              scale: 1,
-              rotation: 0,
-              duration: 0.46,
-              ease: "back.out(1.35)",
-            },
-            `${label}+=0.14`,
-          );
-          tl.fromTo(
-            contents[i + 1],
-            { opacity: 0, y: 24, pointerEvents: "none" },
-            {
-              opacity: 1,
-              y: 0,
-              pointerEvents: "auto",
-              duration: 0.42,
-              ease: "power3.out",
-            },
-            `${label}+=0.18`,
-          );
+      return () => {
+        scrollTriggerRef.current = null;
+      };
+    });
 
-          tl.to({}, { duration: 0.36 });
-        }
+    const rafId = window.requestAnimationFrame(() => {
+      ScrollTrigger.refresh();
+    });
 
-        const totalDuration = tl.duration();
-        if (progressBarRef.current) {
-          tl.to(
-            progressBarRef.current,
-            { scaleX: 1, ease: "none", duration: totalDuration },
-            0,
-          );
-        }
-
-        return () => {
-          scrollTriggerRef.current = null;
-        };
-      });
-
-      return () => mm.revert();
-    }, heroEl);
-
-    return () => ctx.revert();
+    return () => {
+      window.cancelAnimationFrame(rafId);
+      scrollTriggerRef.current = null;
+      mm.revert();
+    };
   }, [heroRef, shouldReduceMotion]);
 
   const jumpToTech = (idx: number) => {
@@ -356,7 +358,7 @@ const HeroRightLoop = ({ heroRef }: HeroRightLoopProps) => {
   return (
     <div className="w-full lg:w-[420px] xl:w-[490px] 2xl:w-[530px] shrink-0 flex flex-col items-center">
       {/* Top Loop Rectangle: houses physics icons at rest AND big active scroll icon in center */}
-      <div className="relative flex items-center justify-center select-none w-full max-w-[330px] sm:max-w-[360px] lg:max-w-[380px] xl:max-w-[440px] 2xl:max-w-[480px]">
+      <div className="relative flex items-center justify-center select-none w-full max-w-[260px] sm:max-w-[330px] lg:max-w-[380px] xl:max-w-[440px] 2xl:max-w-[480px]">
         {/* Bounded Interior Arena */}
         <div
           className="absolute z-10 pointer-events-none"
@@ -374,7 +376,7 @@ const HeroRightLoop = ({ heroRef }: HeroRightLoopProps) => {
 
           {/* Big ScrollTrigger Icons rendered INSIDE the rounded rectangle */}
           {!shouldReduceMotion && (
-            <div className="hidden lg:flex absolute inset-0 items-center justify-center pointer-events-none">
+            <div className="flex absolute inset-0 items-center justify-center pointer-events-none">
               {TECH_ITEMS.map((item, idx) => (
                 <div
                   key={item.id}
@@ -387,10 +389,10 @@ const HeroRightLoop = ({ heroRef }: HeroRightLoopProps) => {
                     boxShadow:
                       "0 24px 48px -12px rgba(15, 23, 42, 0.14), inset 0 2px 0 rgba(255,255,255,0.95)",
                   }}
-                  className="absolute w-28 h-28 xl:w-32 xl:h-32 rounded-[2rem] border-2 flex items-center justify-center will-change-transform"
+                  className="opacity-0 pointer-events-none absolute w-20 h-20 sm:w-24 sm:h-24 lg:w-28 lg:h-28 xl:w-32 xl:h-32 rounded-2xl sm:rounded-3xl lg:rounded-[2rem] border-2 flex items-center justify-center will-change-transform"
                 >
                   <i
-                    className={`${item.icon} text-6xl xl:text-[68px] leading-none`}
+                    className={`${item.icon} text-4xl sm:text-5xl lg:text-6xl xl:text-[68px] leading-none`}
                     style={{ color: item.color }}
                   />
                 </div>
@@ -465,15 +467,15 @@ const HeroRightLoop = ({ heroRef }: HeroRightLoopProps) => {
       {!shouldReduceMotion && (
         <div
           ref={stageContainerRef}
-          className="hidden lg:block w-full mt-1 relative"
+          className="block w-full mt-0.5 lg:mt-1 relative"
         >
-          <div className="relative min-h-[144px] xl:min-h-[156px] flex items-center">
+          <div className="relative min-h-[118px] sm:min-h-[132px] lg:min-h-[144px] xl:min-h-[156px] flex items-center">
             {/* Initial quiet scroll cue tucked right below the downward arrow */}
             <div
               ref={hintRef}
-              className="absolute inset-x-0 top-2 flex flex-col items-center justify-start text-center pointer-events-none pl-10"
+              className="absolute inset-x-0 top-1 lg:top-2 flex flex-col items-center justify-start text-center pointer-events-none pl-6 lg:pl-10"
             >
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/85 border border-slate-200/80 text-slate-600 text-xs font-semibold shadow-xs backdrop-blur-xs">
+              <div className="inline-flex items-center gap-2 px-3 py-1 lg:px-3.5 lg:py-1.5 rounded-full bg-white/85 border border-slate-200/80 text-slate-600 text-[11px] lg:text-xs font-semibold shadow-xs backdrop-blur-xs">
                 <i className="fas fa-arrow-down text-blue-600 animate-bounce text-[10px]" />
                 <span>Scroll to explore each technology</span>
               </div>
@@ -486,10 +488,10 @@ const HeroRightLoop = ({ heroRef }: HeroRightLoopProps) => {
                 ref={(el) => {
                   contentRefs.current[idx] = el;
                 }}
-                className="absolute inset-0 flex flex-col items-center justify-center text-center px-3 will-change-transform"
+                className="opacity-0 pointer-events-none absolute inset-0 flex flex-col items-center justify-center text-center px-2 lg:px-3 will-change-transform"
               >
                 <span
-                  className="px-3 py-0.5 rounded-full text-[11px] font-bold uppercase tracking-wider mb-2"
+                  className="px-2.5 lg:px-3 py-0.5 rounded-full text-[10px] lg:text-[11px] font-bold uppercase tracking-wider mb-1 lg:mb-2"
                   style={{
                     backgroundColor: item.badgeBg,
                     color: item.color,
@@ -498,19 +500,19 @@ const HeroRightLoop = ({ heroRef }: HeroRightLoopProps) => {
                   {item.step} — {item.name}
                 </span>
 
-                <h3 className="text-xl xl:text-2xl font-bold text-slate-900 leading-tight mb-1.5">
+                <h3 className="text-base sm:text-lg lg:text-xl xl:text-2xl font-bold text-slate-900 leading-tight mb-1 lg:mb-1.5">
                   {item.headline}
                 </h3>
 
-                <p className="text-xs xl:text-sm text-slate-600 leading-relaxed mb-3 max-w-md">
+                <p className="text-[11px] sm:text-xs xl:text-sm text-slate-600 leading-snug lg:leading-relaxed mb-2 lg:mb-3 max-w-md">
                   {item.description}
                 </p>
 
-                <div className="flex flex-wrap justify-center gap-1.5">
+                <div className="flex flex-wrap justify-center gap-1 lg:gap-1.5">
                   {item.tags.map((tag) => (
                     <span
                       key={tag}
-                      className="px-2.5 py-0.5 rounded-full bg-white/90 border border-slate-200/90 text-[11px] font-semibold text-slate-700"
+                      className="px-2 lg:px-2.5 py-0.5 rounded-full bg-white/90 border border-slate-200/90 text-[10px] lg:text-[11px] font-semibold text-slate-700"
                     >
                       {tag}
                     </span>
@@ -523,12 +525,12 @@ const HeroRightLoop = ({ heroRef }: HeroRightLoopProps) => {
           {/* Slim step progress indicator (reveals on scroll) */}
           <div
             ref={progressWrapperRef}
-            className="mt-1.5 px-4 flex items-center gap-3 max-w-md mx-auto"
+            className="opacity-0 pointer-events-none mt-1.5 px-4 flex items-center gap-3 max-w-md mx-auto"
           >
             <div className="flex-1 h-1 bg-slate-200/75 rounded-full overflow-hidden">
               <div
                 ref={progressBarRef}
-                className="h-full w-full bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 rounded-full origin-left"
+                className="h-full w-full [transform:scaleX(0)] bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 rounded-full origin-left"
               />
             </div>
 

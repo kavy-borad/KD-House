@@ -1,7 +1,8 @@
-import { useEffect, useRef } from "react";
+import { useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useReducedMotion } from "framer-motion";
+import { GlitchWord } from "./GlitchSectionTitle";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -57,157 +58,153 @@ const WHY_FEATURES: WhyFeature[] = [
  */
 const WhyChooseUsSection = () => {
   const shouldReduceMotion = !!useReducedMotion();
+  const trackRef = useRef<HTMLDivElement>(null);
   const sectionRef = useRef<HTMLElement>(null);
   const outerArchRef = useRef<HTMLDivElement>(null);
   const innerArchRef = useRef<HTMLDivElement>(null);
   const headerRef = useRef<HTMLDivElement>(null);
   const cardRefs = useRef<Array<HTMLDivElement | null>>([]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
+    const track = trackRef.current;
     const section = sectionRef.current;
-    if (!section || shouldReduceMotion) return;
+    if (!track || !section || shouldReduceMotion) return;
 
-    const ctx = gsap.context(() => {
-      const mm = gsap.matchMedia();
-      const cards = cardRefs.current.filter(Boolean) as HTMLDivElement[];
+    const mm = gsap.matchMedia();
+    const cards = cardRefs.current.filter(Boolean) as HTMLDivElement[];
 
-      // Desktop: reveal header on entry, then pin section briefly while concentric circles rise & cards animate scroll-wise
-      mm.add("(min-width: 1024px)", () => {
-        if (outerArchRef.current) {
-          gsap.set(outerArchRef.current, {
-            scale: 0.08,
-            yPercent: 35,
-            opacity: 0,
-          });
-        }
-        if (innerArchRef.current) {
-          gsap.set(innerArchRef.current, {
-            scale: 0.05,
-            yPercent: 40,
-            opacity: 0,
-          });
-        }
-        if (headerRef.current) {
-          gsap.set(headerRef.current, { opacity: 0, y: 28 });
-          gsap.to(headerRef.current, {
-            opacity: 1,
-            y: 0,
-            ease: "power2.out",
-            scrollTrigger: {
-              trigger: section,
-              start: "top 82%",
-              end: "top 20%",
-              scrub: 0.6,
-              invalidateOnRefresh: true,
-              refreshPriority: 0,
-            },
-          });
-        }
-        if (cards.length > 0) {
-          gsap.set(cards, { opacity: 0, y: 44, scale: 0.93 });
-        }
-
-        const tl = gsap.timeline({
+    // Desktop: reveal header on entry, then animate inside CSS sticky track (avoids GSAP pin-spacer DOM mutation)
+    mm.add("(min-width: 1024px)", () => {
+      if (outerArchRef.current) {
+        gsap.set(outerArchRef.current, {
+          scale: 0.08,
+          yPercent: 35,
+          opacity: 0,
+        });
+      }
+      if (innerArchRef.current) {
+        gsap.set(innerArchRef.current, {
+          scale: 0.05,
+          yPercent: 40,
+          opacity: 0,
+        });
+      }
+      if (headerRef.current) {
+        gsap.set(headerRef.current, { opacity: 0, y: 28 });
+        gsap.to(headerRef.current, {
+          opacity: 1,
+          y: 0,
+          ease: "power2.out",
           scrollTrigger: {
-            trigger: section,
-            pin: section,
-            start: "top top",
-            end: "+=900",
+            trigger: track,
+            start: "top 82%",
+            end: "top 20%",
             scrub: 0.6,
-            anticipatePin: 1,
             invalidateOnRefresh: true,
             refreshPriority: 0,
           },
         });
+      }
+      if (cards.length > 0) {
+        gsap.set(cards, { opacity: 0, y: 44, scale: 0.93 });
+      }
 
-        if (outerArchRef.current) {
-          tl.to(
-            outerArchRef.current,
-            {
-              scale: 1,
-              yPercent: 0,
-              opacity: 1,
-              duration: 0.55,
-              ease: "power2.out",
-            },
-            0,
-          );
-        }
-
-        if (innerArchRef.current) {
-          tl.to(
-            innerArchRef.current,
-            {
-              scale: 1,
-              yPercent: 0,
-              opacity: 1,
-              duration: 0.58,
-              ease: "power2.out",
-            },
-            0.12,
-          );
-        }
-
-        if (cards.length > 0) {
-          tl.to(
-            cards,
-            {
-              opacity: 1,
-              y: 0,
-              scale: 1,
-              duration: 0.42,
-              stagger: 0.08,
-              ease: "power2.out",
-            },
-            0.26,
-          );
-        }
-
-        // Brief hold at end before unpinning cleanly to next section
-        tl.to({}, { duration: 0.15 });
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: track,
+          start: "top top",
+          end: "bottom bottom",
+          scrub: 0.6,
+          invalidateOnRefresh: true,
+          refreshPriority: 0,
+        },
       });
 
-      // Mobile / Tablet: non-pinned scroll-scrubbed reveal
-      mm.add("(max-width: 1023px)", () => {
-        if (outerArchRef.current) {
-          gsap.set(outerArchRef.current, { scale: 0.25, yPercent: 25, opacity: 0 });
-        }
-        if (innerArchRef.current) {
-          gsap.set(innerArchRef.current, { scale: 0.18, yPercent: 30, opacity: 0 });
-        }
-        if (headerRef.current) {
-          gsap.set(headerRef.current, { opacity: 0, y: 24 });
-        }
-        if (cards.length > 0) {
-          gsap.set(cards, { opacity: 0, y: 32, scale: 0.95 });
-        }
-
-        const tl = gsap.timeline({
-          scrollTrigger: {
-            trigger: section,
-            start: "top 84%",
-            end: "top 14%",
-            scrub: 0.6,
-            invalidateOnRefresh: true,
+      if (outerArchRef.current) {
+        tl.to(
+          outerArchRef.current,
+          {
+            scale: 1,
+            yPercent: 0,
+            opacity: 1,
+            duration: 0.55,
+            ease: "power2.out",
           },
-        });
+          0,
+        );
+      }
 
-        if (outerArchRef.current) {
-          tl.to(outerArchRef.current, { scale: 1, yPercent: 0, opacity: 1, duration: 0.5, ease: "power2.out" }, 0);
-        }
-        if (innerArchRef.current) {
-          tl.to(innerArchRef.current, { scale: 1, yPercent: 0, opacity: 1, duration: 0.55, ease: "power2.out" }, 0.1);
-        }
-        if (headerRef.current) {
-          tl.to(headerRef.current, { opacity: 1, y: 0, duration: 0.35, ease: "power2.out" }, 0.18);
-        }
-        if (cards.length > 0) {
-          tl.to(cards, { opacity: 1, y: 0, scale: 1, duration: 0.4, stagger: 0.08, ease: "power2.out" }, 0.3);
-        }
+      if (innerArchRef.current) {
+        tl.to(
+          innerArchRef.current,
+          {
+            scale: 1,
+            yPercent: 0,
+            opacity: 1,
+            duration: 0.58,
+            ease: "power2.out",
+          },
+          0.12,
+        );
+      }
+
+      if (cards.length > 0) {
+        tl.to(
+          cards,
+          {
+            opacity: 1,
+            y: 0,
+            scale: 1,
+            duration: 0.42,
+            stagger: 0.08,
+            ease: "power2.out",
+          },
+          0.26,
+        );
+      }
+
+      // Brief hold at end before sticky track completes to next section
+      tl.to({}, { duration: 0.15 });
+    });
+
+    // Mobile / Tablet: non-pinned scroll-scrubbed reveal
+    mm.add("(max-width: 1023px)", () => {
+      if (outerArchRef.current) {
+        gsap.set(outerArchRef.current, { scale: 0.25, yPercent: 25, opacity: 0 });
+      }
+      if (innerArchRef.current) {
+        gsap.set(innerArchRef.current, { scale: 0.18, yPercent: 30, opacity: 0 });
+      }
+      if (headerRef.current) {
+        gsap.set(headerRef.current, { opacity: 0, y: 24 });
+      }
+      if (cards.length > 0) {
+        gsap.set(cards, { opacity: 0, y: 32, scale: 0.95 });
+      }
+
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: section,
+          start: "top 84%",
+          end: "top 14%",
+          scrub: 0.6,
+          invalidateOnRefresh: true,
+        },
       });
 
-      return () => mm.revert();
-    }, section);
+      if (outerArchRef.current) {
+        tl.to(outerArchRef.current, { scale: 1, yPercent: 0, opacity: 1, duration: 0.5, ease: "power2.out" }, 0);
+      }
+      if (innerArchRef.current) {
+        tl.to(innerArchRef.current, { scale: 1, yPercent: 0, opacity: 1, duration: 0.55, ease: "power2.out" }, 0.1);
+      }
+      if (headerRef.current) {
+        tl.to(headerRef.current, { opacity: 1, y: 0, duration: 0.35, ease: "power2.out" }, 0.18);
+      }
+      if (cards.length > 0) {
+        tl.to(cards, { opacity: 1, y: 0, scale: 1, duration: 0.4, stagger: 0.08, ease: "power2.out" }, 0.3);
+      }
+    });
 
     const rafId = window.requestAnimationFrame(() => {
       ScrollTrigger.refresh();
@@ -215,15 +212,16 @@ const WhyChooseUsSection = () => {
 
     return () => {
       window.cancelAnimationFrame(rafId);
-      ctx.revert();
+      mm.revert();
     };
   }, [shouldReduceMotion]);
 
   return (
-    <section
-      ref={sectionRef}
-      className="relative bg-white lg:min-h-screen flex items-center pt-16 sm:pt-20 lg:pt-24 pb-14 md:pb-16 overflow-hidden"
-    >
+    <div ref={trackRef} className="relative lg:min-h-[200vh]">
+      <section
+        ref={sectionRef}
+        className="relative lg:sticky lg:top-0 bg-white lg:min-h-screen flex items-center pt-16 sm:pt-20 lg:pt-24 pb-14 md:pb-16 overflow-hidden"
+      >
       {/* Soft-Tone Concentric Half-Circle Dome Background */}
       <div
         aria-hidden="true"
@@ -260,7 +258,7 @@ const WhyChooseUsSection = () => {
           </div>
 
           <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-slate-900 mb-4 md:mb-5 tracking-tight leading-tight">
-            Elevate Your{" "}
+            Elevate <GlitchWord word="Your" />{" "}
             <span className="text-[#2f8ecd]">Digital Presence</span>
           </h2>
 
@@ -298,6 +296,7 @@ const WhyChooseUsSection = () => {
         </div>
       </div>
     </section>
+    </div>
   );
 };
 

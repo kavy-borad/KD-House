@@ -133,7 +133,7 @@ const TechStack = () => {
 
       {/* Right Column: Tech Grid in a White Canvas Container */}
       <div className="lg:col-span-8">
-        <div className="bg-white rounded-2xl lg:rounded-3xl border border-slate-200/80 shadow-xl shadow-slate-200/30 p-5 sm:p-7 lg:p-8 relative">
+        <div className="bg-white rounded-2xl lg:rounded-3xl border border-slate-200/80 shadow-none p-5 sm:p-7 lg:p-8 relative">
           {/* Header of Right Panel */}
           <div className="relative z-10 mb-5 lg:mb-6 flex flex-col md:flex-row items-start md:items-center justify-between border-b border-slate-100 pb-4 lg:pb-5 gap-3">
             <div className="flex items-center gap-3 lg:gap-4">
