@@ -391,58 +391,15 @@ const Quotation: React.FC = () => {
       // Start at 0 so bars sweep up cleanly when scrolled into view
       chart.setOption(buildOption([0, 0, 0, 0], [0, 0, 0, 0]));
 
-      let pulseTimer = 0;
-      let phase = 0;
-      let isInView = false;
-
-      const startPulse = () => {
-        if (pulseTimer) return;
-        pulseTimer = window.setInterval(() => {
-          if (!isInView || document.hidden) return;
-          phase = (phase + 1) % 2;
-          const nextAfter =
-            phase === 0
-              ? baseAfter
-              : [
-                  Math.min(98, baseAfter[0] + 6),
-                  Math.max(24, baseAfter[1] - 5),
-                  Math.min(92, baseAfter[2] + 7),
-                  Math.max(36, baseAfter[3] - 6),
-                ];
-          const nextBefore =
-            phase === 0
-              ? baseBefore
-              : [
-                  Math.max(18, baseBefore[0] - 4),
-                  Math.min(14, baseBefore[1] + 3),
-                  Math.max(28, baseBefore[2] - 4),
-                  Math.min(18, baseBefore[3] + 3),
-                ];
-          chart.setOption({
-            series: [{ data: nextBefore }, { data: nextAfter }],
-          });
-        }, 1600);
-      };
-
-      const stopPulse = () => {
-        if (pulseTimer) {
-          window.clearInterval(pulseTimer);
-          pulseTimer = 0;
-        }
-      };
-
+      let hasAnimated = false;
       const observer = new IntersectionObserver(
         (entries) => {
-          const visible = !!entries[0]?.isIntersecting;
-          isInView = visible;
-          if (visible) {
-            chart.setOption({
-              series: [{ data: baseBefore }, { data: baseAfter }],
-            });
-            startPulse();
-          } else {
-            stopPulse();
-          }
+          if (hasAnimated || !entries[0]?.isIntersecting) return;
+          hasAnimated = true;
+          observer.disconnect();
+          chart.setOption({
+            series: [{ data: baseBefore }, { data: baseAfter }],
+          });
         },
         { threshold: 0.25 },
       );
@@ -451,7 +408,6 @@ const Quotation: React.FC = () => {
       const resize = () => chart.resize();
       window.addEventListener("resize", resize);
       cleanups.push(() => {
-        stopPulse();
         observer.disconnect();
         chart.dispose();
         window.removeEventListener("resize", resize);
@@ -1028,7 +984,7 @@ const Quotation: React.FC = () => {
                 whileInView={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.6 }}
                 viewport={{ once: true }}
-                className="group relative bg-slate-900 rounded-[2rem] sm:rounded-[2.5rem] p-5 sm:p-10 overflow-hidden shadow-2xl transition-all duration-700 hover:-translate-y-2"
+                className="group relative bg-slate-900 rounded-[2rem] sm:rounded-[2.5rem] p-5 sm:p-10 overflow-hidden transition-all duration-700 hover:-translate-y-2"
               >
                 {/* Mesh Gradient Background */}
                 <div className="absolute top-0 right-0 w-full h-full bg-gradient-to-br from-[#2f8ecd]/40 via-transparent to-transparent opacity-50" />
@@ -1067,7 +1023,7 @@ const Quotation: React.FC = () => {
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: 0.1 }}
                   viewport={{ once: true }}
-                  className="bg-white border border-slate-100 rounded-[1.5rem] sm:rounded-[2rem] p-4 sm:p-8 shadow-sm hover:shadow-xl hover:border-[#2f8ecd]/20 transition-all duration-500 group relative overflow-hidden"
+                  className="bg-white border border-slate-100 rounded-[1.5rem] sm:rounded-[2rem] p-4 sm:p-8 hover:border-[#2f8ecd]/20 transition-all duration-500 group relative overflow-hidden"
                 >
                   <div className="relative z-10">
                     <div className="text-3xl sm:text-5xl font-bold text-slate-900 mb-2 sm:mb-3 group-hover:text-[#2f8ecd] transition-colors">
@@ -1094,7 +1050,7 @@ const Quotation: React.FC = () => {
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: 0.2 }}
                   viewport={{ once: true }}
-                  className="bg-[#2f8ecd] rounded-[1.5rem] sm:rounded-[2rem] p-4 sm:p-8 shadow-xl shadow-[#2f8ecd]/20 group hover:-translate-y-2 transition-all duration-500 relative overflow-hidden"
+                  className="bg-[#2f8ecd] rounded-[1.5rem] sm:rounded-[2rem] p-4 sm:p-8 group hover:-translate-y-2 transition-all duration-500 relative overflow-hidden"
                 >
                   <div className="relative z-10">
                     <div className="text-3xl sm:text-5xl font-bold text-white mb-2 sm:mb-3 tracking-tighter">
@@ -1115,7 +1071,7 @@ const Quotation: React.FC = () => {
                 whileInView={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.5, delay: 0.3 }}
                 viewport={{ once: true }}
-                className="bg-slate-50 border border-slate-100 rounded-[1.5rem] sm:rounded-[2rem] p-5 sm:p-8 relative overflow-hidden group hover:bg-white hover:shadow-xl transition-all duration-500"
+                className="bg-slate-50 border border-slate-100 rounded-[1.5rem] sm:rounded-[2rem] p-5 sm:p-8 relative overflow-hidden group hover:bg-white transition-all duration-500"
               >
                 <div className="absolute inset-0 bg-gradient-to-r from-[#2f8ecd]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                 <div className="relative z-10 flex items-center justify-between">
@@ -1149,7 +1105,7 @@ const Quotation: React.FC = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.7 }}
                 viewport={{ once: true }}
-                className="flex-1 bg-white rounded-[2rem] md:rounded-[2.5rem] p-6 md:p-10 shadow-[0_20px_50px_rgba(0,0,0,0.05)] border border-slate-50 relative overflow-hidden group"
+                className="flex-1 bg-white rounded-[2rem] md:rounded-[2.5rem] p-6 md:p-10 border border-slate-100 relative overflow-hidden group"
               >
                 <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-8 md:mb-10 gap-4 md:gap-0">
                   <div>
@@ -1194,7 +1150,7 @@ const Quotation: React.FC = () => {
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: 0.4 }}
                   viewport={{ once: true }}
-                  className="bg-white rounded-[2rem] p-8 shadow-lg border border-slate-50 relative overflow-hidden group"
+                  className="bg-white rounded-[2rem] p-8 border border-slate-100 relative overflow-hidden group"
                 >
                   <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#2f8ecd] to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                   <div className="flex items-center justify-between mb-8">
@@ -1254,7 +1210,7 @@ const Quotation: React.FC = () => {
         <section className="mb-28">
           <div className="flex justify-between items-end mb-12">
             <div>
-              <div className="inline-block mb-4 px-4 py-1.5 rounded-full bg-green-50 text-green-700 text-xs font-bold uppercase tracking-widest">
+              <div className="inline-block mb-4 text-green-700 text-xs font-bold uppercase tracking-widest">
                 Case Studies
               </div>
               <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-slate-900">
@@ -1400,7 +1356,7 @@ const Quotation: React.FC = () => {
                 <div className="absolute -top-10 -left-10 w-40 h-40 bg-[#2f8ecd]/10 rounded-full blur-3xl" />
 
                 <div className="relative">
-                  <div className="inline-block mb-4 px-4 py-1.5 rounded-full bg-purple-50 text-purple-700 text-xs font-bold uppercase tracking-widest">
+                  <div className="inline-block mb-4 text-purple-700 text-xs font-bold uppercase tracking-widest">
                     FAQ
                   </div>
                   <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-slate-900 mb-6">
@@ -1623,51 +1579,46 @@ const Quotation: React.FC = () => {
               </div>
             </div>
 
-            {/* Right Side Abstract Graphics */}
-            <div className="relative z-10 flex-shrink-0 hidden md:block">
-              <div className="relative w-64 h-64 opacity-90">
-                {/* Code Icon */}
-                <div className="absolute top-0 right-0 w-24 h-24 bg-white/5 backdrop-blur-md rounded-2xl flex items-center justify-center border border-white/10 animate-float">
-                  <i className="fas fa-code text-4xl text-[#2f8ecd]" />
-                </div>
-
-                {/* Graph Icon */}
-                <div
-                  className="absolute bottom-0 left-4 w-20 h-20 bg-white/5 backdrop-blur-md rounded-2xl flex items-center justify-center border border-white/10 animate-float"
-                  style={{ animationDelay: "2s" }}
-                >
-                  <i className="fas fa-chart-line text-3xl text-emerald-400" />
-                </div>
-
-                {/* Mobile Icon */}
-                <div
-                  className="absolute bottom-12 right-8 w-16 h-16 bg-white/5 backdrop-blur-md rounded-2xl flex items-center justify-center border border-white/10 animate-float"
-                  style={{ animationDelay: "1s" }}
-                >
-                  <i className="fas fa-mobile-alt text-2xl text-purple-400" />
-                </div>
-
-                {/* Connecting Lines */}
-                <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-30">
-                  <line
-                    x1="70%"
-                    y1="30%"
-                    x2="30%"
-                    y2="80%"
-                    stroke="white"
-                    strokeWidth="1"
-                    strokeDasharray="5,5"
-                  />
-                  <line
-                    x1="30%"
-                    y1="80%"
-                    x2="70%"
-                    y2="70%"
-                    stroke="white"
-                    strokeWidth="1"
-                    strokeDasharray="5,5"
-                  />
-                </svg>
+            {/* Right Side Architectural Delivery Specs */}
+            <div className="relative z-10 flex-shrink-0 hidden md:flex flex-col w-72 border-l border-white/15 pl-8">
+              <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#56b4f0] mb-4">
+                Engagement Standards
+              </div>
+              <div className="divide-y divide-white/10">
+                {[
+                  {
+                    step: "01",
+                    label: "Scope & Architecture",
+                    meta: "48h Turnaround",
+                  },
+                  {
+                    step: "02",
+                    label: "Agile Sprint Delivery",
+                    meta: "Weekly Builds",
+                  },
+                  {
+                    step: "03",
+                    label: "Production & Support",
+                    meta: "99.9% Uptime",
+                  },
+                ].map((row) => (
+                  <div
+                    key={row.step}
+                    className="py-3.5 first:pt-0 last:pb-0 flex items-center justify-between gap-4"
+                  >
+                    <div className="flex items-center gap-3">
+                      <span className="text-[11px] font-bold tabular-nums text-slate-500">
+                        {row.step}
+                      </span>
+                      <span className="text-sm font-semibold text-white">
+                        {row.label}
+                      </span>
+                    </div>
+                    <span className="text-[11px] font-medium text-slate-400 shrink-0">
+                      {row.meta}
+                    </span>
+                  </div>
+                ))}
               </div>
             </div>
           </div>

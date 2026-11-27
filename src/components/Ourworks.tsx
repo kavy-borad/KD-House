@@ -222,7 +222,7 @@ const WorkShowcase = () => {
         <div className="pointer-events-auto flex justify-start">
           <motion.div
             layout
-            className="w-full lg:w-fit lg:inline-flex bg-white/80 backdrop-blur-xl border border-gray-200 rounded-full shadow-lg shadow-gray-200/50 p-1.5 md:p-2 overflow-hidden"
+            className="w-full lg:w-fit lg:inline-flex bg-white/80 backdrop-blur-xl border border-gray-200 rounded-full p-1.5 md:p-2 overflow-hidden"
           >
             <div
               ref={scrollRef}
