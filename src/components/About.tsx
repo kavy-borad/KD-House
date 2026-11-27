@@ -876,13 +876,33 @@ const LifeAtKarmadudeTab = () => {
   );
 };
 
+const INTERNSHIP_OPPORTUNITY: Job = {
+  id: "internship-program",
+  title: "IT & Software Development Internship",
+  location: "Office",
+  type: "Internship • 3 & 6 Months",
+  department: "Training & Engineering",
+  description:
+    "Karmadude IT Solutions offers hands-on 3-month and 6-month on-site internship programs at our office! Work directly on live web, mobile, and AI projects with senior mentors to build production-grade engineering skills.",
+};
+
+let cachedCareersJobs: Job[] | null = null;
+
 const CareersTab = () => {
+  const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedJob, setSelectedJob] = useState<Job | null>(null);
-  const [activeJobs, setActiveJobs] = useState<Job[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [activeJobs, setActiveJobs] = useState<Job[]>(() => cachedCareersJobs ?? []);
+  const [loading, setLoading] = useState(() => cachedCareersJobs === null);
 
   const handleApply = (job: Job) => {
+    if (
+      job.id === "internship-program" ||
+      job.type?.toLowerCase().includes("internship")
+    ) {
+      navigate("/studentform");
+      return;
+    }
     setSelectedJob(job);
     setIsModalOpen(true);
   };
@@ -902,7 +922,9 @@ const CareersTab = () => {
   useEffect(() => {
     const fetchJobs = async () => {
       try {
-        setLoading(true);
+        if (cachedCareersJobs === null) {
+          setLoading(true);
+        }
         const response = await api.jobs.getAll();
         if (response.success && Array.isArray(response.data)) {
           const filtered = response.data
@@ -917,6 +939,7 @@ const CareersTab = () => {
               description: j.description,
               department: j.department,
             }));
+          cachedCareersJobs = filtered;
           setActiveJobs(filtered);
         }
       } catch (err) {
@@ -927,6 +950,8 @@ const CareersTab = () => {
     };
     fetchJobs();
   }, []);
+
+  const displayJobs = [...activeJobs, INTERNSHIP_OPPORTUNITY];
 
   if (loading) {
     return (
@@ -1023,7 +1048,7 @@ const CareersTab = () => {
       </div>
 
       {/* Modern Jobs Board */}
-      <div className="space-y-10 border border-gray-300 p-6">
+      <div className="space-y-10">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 border-b border-gray-100">
           <div className="space-y-4">
             <h3 className="text-4xl font-black text-gray-900 tracking-tight uppercase">
@@ -1034,10 +1059,10 @@ const CareersTab = () => {
               Live Pipeline • Updated daily
             </p>
           </div>
-          <div className="px-8 py-4 bg-white shadow-lg shadow-gray-100 rounded-3xl border border-gray-50 flex items-center gap-4">
+          <div className="px-8 py-4 bg-white rounded-3xl border border-gray-100 flex items-center gap-4">
             <div className="flex flex-col">
               <span className="text-2xl font-black text-gray-900 leading-none">
-                {activeJobs.length}
+                {displayJobs.length}
               </span>
               <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest mt-1">
                 Positions
@@ -1055,16 +1080,16 @@ const CareersTab = () => {
           </div>
         </div>
 
-        {activeJobs.length > 0 ? (
+        {displayJobs.length > 0 ? (
           <div className="grid grid-cols-1 gap-8">
-            {activeJobs.map((job, idx) => (
+            {displayJobs.map((job, idx) => (
               <motion.div
                 key={idx}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ delay: idx * 0.05, duration: 0.5 }}
                 viewport={{ once: true }}
-                className="group relative bg-white p-10 md:p-12 rounded-[3.5rem] border border-transparent hover:border-blue-100 transition-all duration-500 hover:shadow-[0_40px_80px_rgba(47,142,205,0.08)] overflow-hidden flex flex-col md:flex-row md:items-center justify-between gap-12"
+                className="group relative bg-white p-10 md:p-12 rounded-[3.5rem] border border-gray-100 hover:border-blue-100 transition-all duration-500 overflow-hidden flex flex-col md:flex-row md:items-center justify-between gap-12"
               >
                 {/* Visual Accent */}
                 <div className="absolute top-0 left-0 w-2 h-0 group-hover:h-full bg-[#2f8ecd] transition-all duration-500"></div>
@@ -1113,7 +1138,7 @@ const CareersTab = () => {
             ))}
           </div>
         ) : (
-          <div className="py-32 text-center bg-white rounded-[4rem] border border-gray-100 shadow-xl shadow-gray-50 flex flex-col items-center px-8">
+          <div className="py-32 text-center bg-white rounded-[4rem] border border-gray-100 flex flex-col items-center px-8">
             <div className="w-24 h-24 bg-blue-50 rounded-[2.5rem] flex items-center justify-center mb-8 rotate-12 group-hover:rotate-0 transition-transform">
               <i className="fas fa-rocket text-[#2f8ecd] text-4xl"></i>
             </div>
@@ -1199,12 +1224,12 @@ const About = () => {
 
         <div className="relative z-10 max-w-7xl mx-auto">
           {/* Header & Nav */}
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 md:gap-8 mb-8 md:mb-16">
+          <div className="flex flex-col items-start gap-8 md:gap-10 mb-10 md:mb-16">
             <div>
               <motion.div
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="inline-block text-[#2f8ecd] text-xs font-bold tracking-widest uppercase mb-2 sm:mb-4"
+                className="inline-block text-[#2f8ecd] text-xs font-bold tracking-widest uppercase mb-4 sm:mb-6"
               >
                 Who We Are
               </motion.div>
@@ -1212,15 +1237,17 @@ const About = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 }}
-                className="text-5xl md:text-7xl font-bold text-gray-900 tracking-tight leading-[0.9]"
+                className="text-[clamp(3.5rem,13vw,11rem)] leading-[0.95] font-bold text-gray-900 tracking-tighter"
               >
-                We Build <br />{" "}
-                <span className="text-[#2f8ecd]">The Future.</span>
+                We Build <br />
+                <span className="inline-block md:pl-[8vw] mt-2 sm:mt-3 md:mt-4 font-serif italic font-light text-[#2f8ecd] tracking-tighter">
+                  The Future.
+                </span>
               </motion.h1>
             </div>
 
             {/* Minimal Pill Navigation */}
-            <div className="bg-white p-1.5 rounded-full shadow-sm border border-gray-200 inline-flex overflow-x-auto max-w-full scrollbar-hide self-center md:self-auto">
+            <div className="bg-white p-1.5 rounded-full shadow-sm border border-gray-200 inline-flex overflow-x-auto max-w-full scrollbar-hide self-start">
               {tabs.map((tab) => (
                 <button
                   key={tab.id}
@@ -1249,15 +1276,8 @@ const About = () => {
             </div>
           </div>
 
-          {/* Main Content Card (Frosted Glassmorphism) */}
-          <div
-            data-about-glass-card="true"
-            className="relative overflow-hidden bg-white/55 backdrop-blur-2xl rounded-[3rem] p-6 md:p-12 lg:p-16 border border-white/80 shadow-[0_24px_60px_-15px_rgba(37,99,235,0.12),inset_0_1px_1px_rgba(255,255,255,0.9)] min-h-[600px]"
-          >
-            <div
-              aria-hidden="true"
-              className="pointer-events-none absolute inset-0 bg-gradient-to-br from-white/70 via-white/25 to-blue-100/30"
-            />
+          {/* Main Tab Content */}
+          <div className="relative min-h-[600px]">
             <div key={activeTab} className="relative z-10 animate-fade-in-up">
               {renderContent()}
             </div>
