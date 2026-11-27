@@ -965,7 +965,7 @@ const CareersTab = () => {
   }
 
   return (
-    <div className="max-w-6xl mx-auto py-8">
+    <div className="max-w-6xl mx-auto py-2 md:py-4">
       {/* Careers Hero Section */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center mb-32">
         <div className="space-y-10">
@@ -1224,7 +1224,7 @@ const About = () => {
 
         <div className="relative z-10 max-w-7xl mx-auto">
           {/* Header & Nav */}
-          <div className="flex flex-col items-start gap-8 md:gap-10 mb-10 md:mb-16">
+          <div className="flex flex-col items-start gap-8 md:gap-10 mb-10 md:mb-14">
             <div>
               <motion.div
                 initial={{ opacity: 0, y: -10 }}

@@ -280,7 +280,7 @@ const Internship: React.FC = () => {
                       <img
                         src={tech.logo}
                         alt={`${tech.name} logo`}
-                        className="w-14 h-14 sm:w-16 sm:h-16 object-contain drop-shadow-sm mix-blend-multiply group-hover:scale-110 group-hover:rotate-6 transition-all duration-500"
+                        className="w-14 h-14 sm:w-16 sm:h-16 object-contain mix-blend-multiply group-hover:scale-110 group-hover:rotate-6 transition-all duration-500"
                         loading="lazy"
                       />
                       <h3 className="text-xl sm:text-2xl font-bold tracking-tight text-gray-900 group-hover:text-[#2f8ecd] transition-colors">

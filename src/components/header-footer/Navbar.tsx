@@ -49,7 +49,7 @@ const menuItems = [
   { to: "/our-works", label: "Our Works", icon: Briefcase },
   { to: "/quotation", label: "Quotation", icon: FileText },
   { to: "/google-play-testing", label: "Google Play Testing", icon: Smartphone },
-  // { to: "/internships", label: "Internships", icon: GraduationCap },
+  { to: "/internships", label: "Internships", icon: GraduationCap },
   { to: "/about", label: "About Us", icon: Info },
   { to: "/contact", label: "Contact", icon: Send },
 ];

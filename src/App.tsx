@@ -38,7 +38,7 @@ import PrivacyPolicy from "./components/Services-Pages/Privacy";
 import BMIPrivacyPolicy from "./components/Services-Pages/BMI-Privacy-Policy";
 import BuddyBankPrivacyPolicy from "./components/Services-Pages/BuddyBank-Privacy-Policy";
 import Quotation from "./components/Quotation";
-// import Internship from "./components/Internship";
+import Internship from "./components/Internship";
 import Slidesportfolio from "./components/Slidesportfolio";
 import Ourworks from "./components/Ourworks";
 import Studentform from "./components/StudentForm";
@@ -366,7 +366,7 @@ function Layout() {
               element={<BuddyBankPrivacyPolicy />}
             />
             <Route path="/quotation" element={<Quotation />} />
-            {/* <Route path="/internships" element={<Internship />} /> */}
+            <Route path="/internships" element={<Internship />} />
             <Route path="/portfolio" element={<Slidesportfolio />} />
             <Route path="/studentform" element={<Studentform />} />
             <Route path="/onboarding" element={<Onboarding />} />

@@ -90,12 +90,15 @@ const ScrollHideTicker = () => {
       animate={hidden ? "hidden" : "visible"}
       transition={{ duration: 0.35, ease: "easeInOut" }}
       data-offer-banner-hidden={hidden ? "true" : "false"}
-      className={`fixed bottom-2.5 md:bottom-4 inset-x-0 mx-auto z-40 w-[calc(100%-1.5rem)] max-w-[740px] bg-gradient-to-r from-blue-950/95 via-indigo-900/95 to-blue-950/95 backdrop-blur-xl border border-blue-400/30 rounded-2xl md:rounded-full min-h-11 md:h-[52px] py-2 md:py-0 flex items-center justify-center shadow-[0_10px_30px_rgba(15,23,42,0.35),0_0_20px_rgba(59,130,246,0.2)] ${hidden ? "pointer-events-none" : ""
+      className={`fixed bottom-2.5 md:bottom-4 inset-x-0 mx-auto z-40 w-[calc(100%-1.5rem)] md:w-fit md:max-w-[740px] bg-gradient-to-r from-blue-950/95 via-indigo-900/95 to-blue-950/95 backdrop-blur-xl border border-blue-400/30 rounded-2xl md:rounded-full min-h-11 md:h-[52px] py-2 md:py-0 flex items-center justify-center shadow-[0_10px_30px_rgba(15,23,42,0.35),0_0_20px_rgba(59,130,246,0.2)] ${hidden ? "pointer-events-none" : ""
         }`}
     >
-      <div className="w-full px-4 md:px-6 relative h-full flex items-center justify-center overflow-hidden">
+      <Link
+        to="/internships"
+        className="w-full px-4 md:px-6 relative h-full flex items-center justify-center overflow-hidden cursor-pointer"
+      >
         <MessageTicker />
-      </div>
+      </Link>
     </motion.div>
   );
 };

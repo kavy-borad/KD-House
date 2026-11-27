@@ -3,11 +3,10 @@ import { motion, AnimatePresence } from "framer-motion";
 
 const MessageTicker = () => {
   const messages = [
-    "Online in 5 days. Just $499. No stress, no hidden fees — just your business, live.",
-    "Why wait? Get a custom website that means business — only $499, delivered fast.",
-    "Turn clicks into clients. your website, built in 5 days for just $499.",
-    "From idea to online. launch your site in 5 days, starting at just $499.",
-    "Smart-Simple-Stunning. Your website for $499 — live in just 5 days.",
+    "3 & 6-Month IT Internships — Hands-on office mentorship.",
+    "Build live React, Mobile & AI apps with senior engineers.",
+    "Kickstart your tech career! Office internships open now.",
+    "From classroom to production — apply for our IT internship.",
   ];
 
   const [currentMessageIndex, setCurrentMessageIndex] = useState(0);
@@ -31,7 +30,7 @@ const MessageTicker = () => {
       >
         <div className="inline-flex items-center justify-center gap-2.5 md:gap-3">
           <span className="hidden md:inline-flex shrink-0 items-center justify-center bg-blue-500 text-white text-[10px] font-bold tracking-wider px-2.5 py-0.5 rounded-full uppercase shadow-[0_0_10px_rgba(59,130,246,0.5)]">
-            Limited Offer
+            Internship Open
           </span>
           <span className="text-gray-100 text-xs sm:text-sm md:text-[15px] font-semibold tracking-normal drop-shadow-sm leading-snug md:whitespace-nowrap">
             {messages[currentMessageIndex]}
