@@ -172,7 +172,7 @@ export const Footer = () => {
               <div className="-mt-2">
                 <a
                   href="mailto:kanak@karmadude.in"
-                  className="group inline-flex items-center gap-2.5 px-4 py-2.5 rounded-xl bg-white border border-slate-200/90 text-slate-800 text-sm font-semibold hover:border-[#2f8ecd] hover:text-[#2f8ecd] hover:bg-blue-50/40 shadow-xs transition-all duration-300"
+                  className="group inline-flex items-center gap-2.5 px-4 py-2.5 rounded-xl bg-white border border-slate-200/90 text-slate-800 text-sm font-semibold hover:border-[#2f8ecd] hover:text-[#2f8ecd] hover:bg-blue-50/40 transition-all duration-300"
                 >
                   <Mail size={16} className="text-[#2f8ecd] shrink-0" />
                   <span>kanak@karmadude.in</span>

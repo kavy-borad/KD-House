@@ -1109,7 +1109,7 @@ export const GooglePlayTesting: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-5 gap-5 mb-5">
             {/* Wide Rectangle Card — col-span-3 */}
             <div className="group md:col-span-3 p-8 md:p-10 rounded-3xl bg-[#001F3F] text-white border border-[#001F3F] shadow-xl hover:bg-[#2f8ecd] hover:border-[#2f8ecd] hover:shadow-2xl transition-all duration-500 flex flex-col justify-between min-h-[200px] cursor-default">
-              <div className="w-14 h-14 rounded-2xl bg-white/10 group-hover:bg-white/20 flex items-center justify-center text-white mb-6 transition-all duration-500">
+              <div className="text-white mb-6 transition-transform duration-500 group-hover:scale-110 w-fit">
                 <Award className="w-7 h-7" />
               </div>
               <div>
@@ -1120,7 +1120,7 @@ export const GooglePlayTesting: React.FC = () => {
 
             {/* Square Card — col-span-2 */}
             <div className="group md:col-span-2 p-8 rounded-3xl bg-white border border-gray-200/80 shadow-xs hover:bg-gray-900 hover:border-gray-900 hover:shadow-2xl transition-all duration-500 flex flex-col justify-between min-h-[200px] cursor-default">
-              <div className="w-14 h-14 rounded-2xl bg-blue-50 group-hover:bg-white/10 flex items-center justify-center text-[#2f8ecd] group-hover:text-white transition-all duration-500">
+              <div className="text-[#2f8ecd] group-hover:text-white mb-6 transition-all duration-500 group-hover:scale-110 w-fit">
                 <ShieldCheck className="w-7 h-7" />
               </div>
               <div>
@@ -1134,7 +1134,7 @@ export const GooglePlayTesting: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-5 gap-5 mb-5">
             {/* Square Card — col-span-2 */}
             <div className="group md:col-span-2 p-8 rounded-3xl bg-blue-50 border border-blue-100 shadow-xs hover:bg-[#2f8ecd] hover:border-[#2f8ecd] hover:shadow-2xl transition-all duration-500 flex flex-col justify-between min-h-[200px] cursor-default">
-              <div className="w-14 h-14 rounded-2xl bg-white group-hover:bg-white/20 flex items-center justify-center text-[#2f8ecd] group-hover:text-white transition-all duration-500">
+              <div className="text-[#2f8ecd] group-hover:text-white mb-6 transition-all duration-500 group-hover:scale-110 w-fit">
                 <Users className="w-7 h-7" />
               </div>
               <div>
@@ -1145,7 +1145,7 @@ export const GooglePlayTesting: React.FC = () => {
 
             {/* Wide Rectangle Card — col-span-3 */}
             <div className="group md:col-span-3 p-8 md:p-10 rounded-3xl bg-white border border-gray-200/80 shadow-xs hover:bg-gray-900 hover:border-gray-900 hover:shadow-2xl transition-all duration-500 flex flex-col justify-between min-h-[200px] cursor-default">
-              <div className="w-14 h-14 rounded-2xl bg-blue-50 group-hover:bg-white/10 flex items-center justify-center text-[#2f8ecd] group-hover:text-white transition-all duration-500">
+              <div className="text-[#2f8ecd] group-hover:text-white mb-6 transition-all duration-500 group-hover:scale-110 w-fit">
                 <Clock className="w-7 h-7" />
               </div>
               <div>
@@ -1159,7 +1159,7 @@ export const GooglePlayTesting: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             {/* Rectangle Card */}
             <div className="group p-8 md:p-10 rounded-3xl bg-gray-50 border border-gray-200/80 shadow-xs hover:bg-[#2f8ecd] hover:border-[#2f8ecd] hover:shadow-2xl transition-all duration-500 flex flex-col justify-between min-h-[180px] cursor-default">
-              <div className="w-14 h-14 rounded-2xl bg-blue-50 group-hover:bg-white/20 flex items-center justify-center text-[#2f8ecd] group-hover:text-white transition-all duration-500">
+              <div className="text-[#2f8ecd] group-hover:text-white mb-6 transition-all duration-500 group-hover:scale-110 w-fit">
                 <FileText className="w-7 h-7" />
               </div>
               <div>
@@ -1170,7 +1170,7 @@ export const GooglePlayTesting: React.FC = () => {
 
             {/* Rectangle Card */}
             <div className="group p-8 md:p-10 rounded-3xl bg-white border border-gray-200/80 shadow-xs hover:bg-gray-900 hover:border-gray-900 hover:shadow-2xl transition-all duration-500 flex flex-col justify-between min-h-[180px] cursor-default">
-              <div className="w-14 h-14 rounded-2xl bg-emerald-50 group-hover:bg-white/10 flex items-center justify-center text-emerald-600 group-hover:text-emerald-400 transition-all duration-500">
+              <div className="text-emerald-600 group-hover:text-emerald-400 mb-6 transition-all duration-500 group-hover:scale-110 w-fit">
                 <Headphones className="w-7 h-7" />
               </div>
               <div>
