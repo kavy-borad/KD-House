@@ -254,6 +254,191 @@ const Quotation: React.FC = () => {
   };
 
   useEffect(() => {
+    const cleanups: Array<() => void> = [];
+
+    // 1. Before / After Growth Chart: animate on scroll into view + smooth up/down pulse while visible
+    if (chartRef.current) {
+      const el = chartRef.current;
+      const chart = echarts.init(el);
+      const baseBefore = [25, 8, 35, 12];
+      const baseAfter = [89, 32, 78, 45];
+
+      const buildOption = (beforeData: number[], afterData: number[]) => ({
+        animation: true,
+        animationDuration: 1200,
+        animationDurationUpdate: 1100,
+        animationEasing: "cubicOut",
+        animationEasingUpdate: "cubicInOut",
+        tooltip: {
+          trigger: "axis",
+          axisPointer: { type: "none" },
+          backgroundColor: "rgba(255, 255, 255, 0.95)",
+          borderWidth: 0,
+          padding: [12, 16],
+          textStyle: { fontFamily: "Outfit, Inter", color: "#1e293b" },
+          shadowBlur: 30,
+          shadowColor: "rgba(0,0,0,0.1)",
+          formatter: (params: any) => {
+            let html = `<div style="font-weight:700;margin-bottom:8px;font-size:14px;color:#0f172a">${params[0].name}</div>`;
+            params.forEach((p: any) => {
+              const val = p.value;
+              html += `<div style="display:flex;align-items:center;gap:12px;margin-top:4px">
+                <div style="width:10px;height:10px;border-radius:3px;background:${p.color}"></div>
+                <span style="color:#64748b;font-size:12px">${p.seriesName}:</span>
+                <span style="font-weight:700;margin-left:auto;color:#0f172a">${val}%${p.seriesName === "After" ? `<span style="color:#10b981;font-size:10px;margin-left:4px">↑</span>` : ""}</span>
+              </div>`;
+            });
+            return html;
+          },
+        },
+        legend: {
+          top: "0%",
+          right: "5%",
+          icon: "circle",
+          itemGap: 25,
+          textStyle: { color: "#64748b", fontWeight: 600, fontSize: 12 },
+        },
+        grid: {
+          left: "3%",
+          right: "10%",
+          bottom: "5%",
+          top: "15%",
+          containLabel: true,
+        },
+        xAxis: {
+          type: "value",
+          max: 100,
+          splitLine: {
+            lineStyle: { color: "#f8fafc", type: "solid" },
+          },
+          axisLine: { show: false },
+          axisLabel: { color: "#94a3b8", fontSize: 11, fontWeight: 500 },
+        },
+        yAxis: {
+          type: "category",
+          data: [
+            "Website Traffic",
+            "Conversion Rate",
+            "Customer Retention",
+            "Revenue Growth",
+          ],
+          axisLine: { show: false },
+          axisTick: { show: false },
+          axisLabel: {
+            color: "#475569",
+            fontSize: 13,
+            fontWeight: 600,
+            margin: 20,
+          },
+        },
+        series: [
+          {
+            name: "Before",
+            type: "bar",
+            data: beforeData,
+            itemStyle: {
+              color: "#e2e8f0",
+              borderRadius: [0, 20, 20, 0],
+            },
+            barWidth: 14,
+            emphasis: { itemStyle: { color: "#cbd5e1" } },
+          },
+          {
+            name: "After",
+            type: "bar",
+            data: afterData,
+            itemStyle: {
+              color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
+                { offset: 0, color: "#0f172a" },
+                { offset: 1, color: "#2f8ecd" },
+              ]),
+              borderRadius: [0, 20, 20, 0],
+              shadowBlur: 10,
+              shadowColor: "rgba(47, 142, 205, 0.2)",
+            },
+            barWidth: 14,
+            emphasis: {
+              itemStyle: {
+                color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
+                  { offset: 0, color: "#1e293b" },
+                  { offset: 1, color: "#3ba8ee" },
+                ]),
+              },
+            },
+          },
+        ],
+      });
+
+      // Start at 0 so bars sweep up cleanly when scrolled into view
+      chart.setOption(buildOption([0, 0, 0, 0], [0, 0, 0, 0]));
+
+      let pulseTimer = 0;
+      let phase = 0;
+      let isInView = false;
+
+      const startPulse = () => {
+        if (pulseTimer) return;
+        pulseTimer = window.setInterval(() => {
+          if (!isInView || document.hidden) return;
+          phase = (phase + 1) % 2;
+          const nextAfter =
+            phase === 0
+              ? baseAfter
+              : [
+                  Math.min(98, baseAfter[0] + 6),
+                  Math.max(24, baseAfter[1] - 5),
+                  Math.min(92, baseAfter[2] + 7),
+                  Math.max(36, baseAfter[3] - 6),
+                ];
+          const nextBefore =
+            phase === 0
+              ? baseBefore
+              : [
+                  Math.max(18, baseBefore[0] - 4),
+                  Math.min(14, baseBefore[1] + 3),
+                  Math.max(28, baseBefore[2] - 4),
+                  Math.min(18, baseBefore[3] + 3),
+                ];
+          chart.setOption({
+            series: [{ data: nextBefore }, { data: nextAfter }],
+          });
+        }, 1600);
+      };
+
+      const stopPulse = () => {
+        if (pulseTimer) {
+          window.clearInterval(pulseTimer);
+          pulseTimer = 0;
+        }
+      };
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          const visible = !!entries[0]?.isIntersecting;
+          isInView = visible;
+          if (visible) {
+            chart.setOption({
+              series: [{ data: baseBefore }, { data: baseAfter }],
+            });
+            startPulse();
+          } else {
+            stopPulse();
+          }
+        },
+        { threshold: 0.25 },
+      );
+      observer.observe(el);
+
+      const resize = () => chart.resize();
+      window.addEventListener("resize", resize);
+      cleanups.push(() => {
+        stopPulse();
+        observer.disconnect();
+        chart.dispose();
+        window.removeEventListener("resize", resize);
+      });
+    }
+
     const initChart = (
       ref: React.RefObject<HTMLDivElement | null>,
       option: any,
@@ -269,109 +454,6 @@ const Quotation: React.FC = () => {
         };
       }
     };
-
-    const cleanup1 = initChart(chartRef, {
-      animation: true,
-      animationDuration: 1500,
-      tooltip: {
-        trigger: "axis",
-        axisPointer: { type: "none" },
-        backgroundColor: "rgba(255, 255, 255, 0.95)",
-        borderWidth: 0,
-        padding: [12, 16],
-        textStyle: { fontFamily: "Outfit, Inter", color: "#1e293b" },
-        shadowBlur: 30,
-        shadowColor: "rgba(0,0,0,0.1)",
-        formatter: (params: any) => {
-          let html = `<div style="font-weight:700;margin-bottom:8px;font-size:14px;color:#0f172a">${params[0].name}</div>`;
-          params.forEach((p: any) => {
-            const val = p.value;
-            html += `<div style="display:flex;align-items:center;gap:12px;margin-top:4px">
-              <div style="width:10px;height:10px;border-radius:3px;background:${p.color}"></div>
-              <span style="color:#64748b;font-size:12px">${p.seriesName}:</span>
-              <span style="font-weight:700;margin-left:auto;color:#0f172a">${val}%${p.seriesName === "After" ? `<span style="color:#10b981;font-size:10px;margin-left:4px">↑</span>` : ""}</span>
-            </div>`;
-          });
-          return html;
-        },
-      },
-      legend: {
-        top: "0%",
-        right: "5%",
-        icon: "circle",
-        itemGap: 25,
-        textStyle: { color: "#64748b", fontWeight: 600, fontSize: 12 },
-      },
-      grid: {
-        left: "3%",
-        right: "10%",
-        bottom: "5%",
-        top: "15%",
-        containLabel: true,
-      },
-      xAxis: {
-        type: "value",
-        max: 100,
-        splitLine: {
-          lineStyle: { color: "#f8fafc", type: "solid" },
-        },
-        axisLine: { show: false },
-        axisLabel: { color: "#94a3b8", fontSize: 11, fontWeight: 500 },
-      },
-      yAxis: {
-        type: "category",
-        data: [
-          "Website Traffic",
-          "Conversion Rate",
-          "Customer Retention",
-          "Revenue Growth",
-        ],
-        axisLine: { show: false },
-        axisTick: { show: false },
-        axisLabel: {
-          color: "#475569",
-          fontSize: 13,
-          fontWeight: 600,
-          margin: 20,
-        },
-      },
-      series: [
-        {
-          name: "Before",
-          type: "bar",
-          data: [25, 8, 35, 12],
-          itemStyle: {
-            color: "#e2e8f0",
-            borderRadius: [0, 20, 20, 0],
-          },
-          barWidth: 14,
-          emphasis: { itemStyle: { color: "#cbd5e1" } },
-        },
-        {
-          name: "After",
-          type: "bar",
-          data: [89, 32, 78, 45],
-          itemStyle: {
-            color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
-              { offset: 0, color: "#0f172a" },
-              { offset: 1, color: "#2f8ecd" },
-            ]),
-            borderRadius: [0, 20, 20, 0],
-            shadowBlur: 10,
-            shadowColor: "rgba(47, 142, 205, 0.2)",
-          },
-          barWidth: 14,
-          emphasis: {
-            itemStyle: {
-              color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
-                { offset: 0, color: "#1e293b" },
-                { offset: 1, color: "#3ba8ee" },
-              ]),
-            },
-          },
-        },
-      ],
-    });
 
     const cleanup2 = initChart(satisfactionChartRef, {
       animation: true,
@@ -404,7 +486,7 @@ const Quotation: React.FC = () => {
     });
 
     return () => {
-      cleanup1 && cleanup1();
+      cleanups.forEach((fn) => fn());
       cleanup2 && cleanup2();
     };
   }, []);

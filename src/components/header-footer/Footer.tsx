@@ -104,9 +104,9 @@ export const Footer = () => {
                 <li key={index}>
                   <Link
                     to={link.href}
-                    className="text-slate-500 hover:text-[#2f8ecd] transition-all duration-300 text-sm lg:text-[15px] font-medium flex items-center group gap-2"
+                    className="relative text-slate-500 hover:text-[#2f8ecd] transition-all duration-300 text-sm lg:text-[15px] font-medium flex items-center group"
                   >
-                    <ChevronRight className="w-4 h-4 text-[#2f8ecd] opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 hidden lg:block" />
+                    <ChevronRight className="hidden lg:block absolute -left-5 w-4 h-4 text-[#2f8ecd] opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" />
                     {link.name}
                   </Link>
                 </li>
@@ -124,9 +124,9 @@ export const Footer = () => {
                 <li key={index}>
                   <Link
                     to={link.href}
-                    className="text-slate-500 hover:text-[#2f8ecd] transition-all duration-300 text-sm lg:text-[15px] font-medium flex items-center group gap-2"
+                    className="relative text-slate-500 hover:text-[#2f8ecd] transition-all duration-300 text-sm lg:text-[15px] font-medium flex items-center group"
                   >
-                    <ChevronRight className="w-4 h-4 text-[#2f8ecd] opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 hidden lg:block" />
+                    <ChevronRight className="hidden lg:block absolute -left-5 w-4 h-4 text-[#2f8ecd] opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" />
                     {link.name}
                   </Link>
                 </li>

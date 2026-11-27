@@ -62,6 +62,7 @@ const Contact: React.FC = () => {
   const contactInfo = [
     {
       icon: <MapPin className="w-6 h-6" />,
+      bgIcon: <MapPin className="w-36 h-36 text-blue-500/[0.08]" strokeWidth={1.5} />,
       title: "Global Offices",
       details: [
         "Nikol-Ahmedabad, Gujarat, India",
@@ -69,33 +70,36 @@ const Contact: React.FC = () => {
         "31 Elmgrove Road, HA1 2AR, UK",
         "142 Marylinn Dr Milpitas CA 95035, California, USA",
       ],
-      color: "bg-blue-50 text-blue-600",
+      color: "text-blue-600",
     },
     {
       icon: <Phone className="w-6 h-6" />,
+      bgIcon: <Phone className="w-36 h-36 text-indigo-500/[0.08]" strokeWidth={1.5} />,
       title: "Phone Numbers",
       details: [
         { label: "India", value: "+91 74348 22022, +91 74358 22022" },
         { label: "Canada", value: "+1 289 888 3877" },
         { label: "UK", value: "+44 077 7004 2843" },
       ],
-      color: "bg-indigo-50 text-indigo-600",
+      color: "text-indigo-600",
     },
     {
       icon: <Mail className="w-6 h-6" />,
+      bgIcon: <Mail className="w-36 h-36 text-sky-500/[0.08]" strokeWidth={1.5} />,
       title: "Email Addresses",
       details: ["kanak@karmadude.in", "karmadudeenterprise@gmail.com"],
-      color: "bg-sky-50 text-sky-600",
+      color: "text-sky-600",
     },
     {
       icon: <Clock className="w-6 h-6" />,
+      bgIcon: <Clock className="w-36 h-36 text-slate-500/[0.08]" strokeWidth={1.5} />,
       title: "Business Hours",
       details: [
         "Mon - Fri: 9:00 AM - 7:00 PM",
         "Sat: 10:00 AM - 5:00 PM",
         "Sunday: Closed",
       ],
-      color: "bg-slate-50 text-slate-600",
+      color: "text-slate-700",
     },
   ];
 
@@ -169,34 +173,37 @@ const Contact: React.FC = () => {
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ delay: idx * 0.1 }}
                     viewport={{ once: true }}
-                    className="p-6 bg-white -mx-6 sm:mx-0 rounded-none sm:rounded-[2rem] border-x-0 sm:border border-slate-100 shadow-sm hover:shadow-xl hover:shadow-blue-900/5 transition-all duration-500 group"
+                    className="relative overflow-hidden py-4 px-2 sm:p-5 group"
                   >
                     <div
-                      className={`w-12 h-12 rounded-2xl ${info.color} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}
+                      aria-hidden="true"
+                      className="pointer-events-none select-none absolute -bottom-5 -right-5 rotate-12 transition-transform duration-500 group-hover:scale-110 group-hover:rotate-6"
                     >
-                      {info.icon}
+                      {info.bgIcon}
                     </div>
-                    <h3 className="text-lg font-bold text-slate-900 mb-4">
-                      {info.title}
-                    </h3>
-                    <div className="space-y-2">
-                      {info.details.map((detail, dIdx) => (
-                        <p
-                          key={dIdx}
-                          className="text-sm text-slate-500 leading-relaxed"
-                        >
-                          {typeof detail === "string" ? (
-                            detail
-                          ) : (
-                            <>
-                              <span className="font-semibold text-slate-700">
-                                {detail.label}:{" "}
-                              </span>
-                              {detail.value}
-                            </>
-                          )}
-                        </p>
-                      ))}
+                    <div className="relative z-10">
+                      <h3 className="text-lg sm:text-xl font-bold text-slate-900 mb-3.5">
+                        {info.title}
+                      </h3>
+                      <div className="space-y-2">
+                        {info.details.map((detail, dIdx) => (
+                          <p
+                            key={dIdx}
+                            className="text-sm sm:text-[15px] text-slate-600 leading-relaxed"
+                          >
+                            {typeof detail === "string" ? (
+                              detail
+                            ) : (
+                              <>
+                                <span className="font-semibold text-slate-700">
+                                  {detail.label}:{" "}
+                                </span>
+                                {detail.value}
+                              </>
+                            )}
+                          </p>
+                        ))}
+                      </div>
                     </div>
                   </motion.div>
                 ))}
@@ -241,7 +248,7 @@ const Contact: React.FC = () => {
                 initial={{ opacity: 0, x: 20 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
-                className="lg:col-span-7 bg-white -mx-6 sm:mx-0 rounded-none sm:rounded-[2.5rem] border-x-0 sm:border border-slate-100 shadow-lg shadow-slate-200/50 p-5 sm:p-8 md:p-12 relative overflow-hidden"
+                className="lg:col-span-7 bg-gradient-to-br from-blue-50/75 via-slate-50/85 to-indigo-50/65 -mx-6 sm:mx-0 rounded-none sm:rounded-[2.5rem] border-x-0 sm:border border-blue-100/80 shadow-lg shadow-blue-900/5 p-5 sm:p-8 md:p-12 relative overflow-hidden"
               >
                 <div className="relative z-10">
                   <div className="mb-6 sm:mb-10">
@@ -292,7 +299,7 @@ const Contact: React.FC = () => {
                               value={formData.name}
                               onChange={handleChange}
                               placeholder="John Carter"
-                              className="w-full px-6 py-4 bg-slate-50 border border-transparent rounded-2xl focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all outline-none"
+                              className="w-full px-6 py-4 bg-white/90 border border-blue-100/80 rounded-2xl focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all outline-none"
                             />
                           </div>
                           <div className="space-y-2">
@@ -306,7 +313,7 @@ const Contact: React.FC = () => {
                               value={formData.email}
                               onChange={handleChange}
                               placeholder="john@example.com"
-                              className="w-full px-6 py-4 bg-slate-50 border border-transparent rounded-2xl focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all outline-none"
+                              className="w-full px-6 py-4 bg-white/90 border border-blue-100/80 rounded-2xl focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all outline-none"
                             />
                           </div>
                         </div>
@@ -322,7 +329,7 @@ const Contact: React.FC = () => {
                               onChange={handleChange}
                               placeholder="123 456 7890"
                               maxLength={10}
-                              className="w-full px-6 py-4 bg-slate-50 border border-transparent rounded-2xl focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all outline-none"
+                              className="w-full px-6 py-4 bg-white/90 border border-blue-100/80 rounded-2xl focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all outline-none"
                             />
                           </div>
                           <div className="space-y-2">
@@ -335,7 +342,7 @@ const Contact: React.FC = () => {
                                 name="subject"
                                 value={formData.subject}
                                 onChange={handleChange}
-                                className="w-full px-6 py-4 bg-slate-50 border border-transparent rounded-2xl focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all outline-none appearance-none"
+                                className="w-full px-6 py-4 bg-white/90 border border-blue-100/80 rounded-2xl focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all outline-none appearance-none"
                               >
                                 <option value="" disabled>
                                   Select inquiry type
@@ -370,7 +377,7 @@ const Contact: React.FC = () => {
                             onChange={handleChange}
                             placeholder="Tell us about your project, goals, and timeline..."
                             rows={5}
-                            className="w-full px-6 py-4 bg-slate-50 border border-transparent rounded-2xl focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all outline-none resize-none"
+                            className="w-full px-6 py-4 bg-white/90 border border-blue-100/80 rounded-2xl focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all outline-none resize-none"
                           />
                         </div>
 
@@ -492,7 +499,7 @@ const Contact: React.FC = () => {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-slate-200/80 border-y border-slate-200/80">
               {[
                 {
                   q: "How fast can we start?",
@@ -510,21 +517,27 @@ const Contact: React.FC = () => {
                   icon: <Globe2 className="w-5 h-5 text-sky-600" />,
                 },
               ].map((faq, idx) => (
-                <motion.div
+                <div
                   key={idx}
-                  whileHover={{ y: -5 }}
-                  className="p-5 sm:p-8 bg-white border border-slate-100 rounded-2xl sm:rounded-3xl shadow-sm"
+                  className="py-6 sm:py-8 md:px-8 first:md:pl-0 last:md:pr-0 flex flex-col justify-between group"
                 >
-                  <div className="w-9 h-9 sm:w-10 sm:h-10 bg-slate-50 rounded-xl flex items-center justify-center mb-3 sm:mb-6">
-                    {faq.icon}
+                  <div>
+                    <div className="flex items-center justify-between mb-4 sm:mb-5">
+                      <span className="inline-flex items-center transition-transform duration-200 group-hover:scale-110">
+                        {faq.icon}
+                      </span>
+                      <span className="text-xs font-bold tracking-widest text-slate-300 tabular-nums">
+                        {String(idx + 1).padStart(2, "0")}
+                      </span>
+                    </div>
+                    <h3 className="text-base sm:text-lg font-bold text-slate-900 mb-2 sm:mb-3 group-hover:text-[#2f8ecd] transition-colors">
+                      {faq.q}
+                    </h3>
+                    <p className="text-slate-500 text-xs sm:text-sm leading-relaxed">
+                      {faq.a}
+                    </p>
                   </div>
-                  <h3 className="text-base sm:text-lg font-bold text-slate-900 mb-2 sm:mb-4">
-                    {faq.q}
-                  </h3>
-                  <p className="text-slate-500 text-xs sm:text-sm leading-relaxed">
-                    {faq.a}
-                  </p>
-                </motion.div>
+                </div>
               ))}
             </div>
           </div>
