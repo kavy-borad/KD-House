@@ -27,11 +27,11 @@ export const DEFAULT_MASCOT_CONFIG: MascotConfig = {
     // Bottom-left stage clear of FloatingContactIcons on bottom-right
     desktopSize: 120,
     tabletSize: 96,
-    mobileSize: 74,
+    mobileSize: 64,
     desktopLeft: 24,
     desktopBottom: 22,
-    mobileLeft: 14,
-    mobileBottom: 72,
+    mobileLeft: 10,
+    mobileBottom: 2,
   },
   colors: {
     primary: "#3B82F6",

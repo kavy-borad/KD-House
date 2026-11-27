@@ -1,8 +1,8 @@
 /* Scroll-Reactive Blue Mascot responsive left-side positioning & CSS variables */
 .kd-scroll-mascot-layer {
-  --mascot-size: 74px;
-  --mascot-left: 14px;
-  --mascot-bottom: 72px;
+  --mascot-size: 64px;
+  --mascot-left: 10px;
+  --mascot-bottom: calc(2px + env(safe-area-inset-bottom, 0px));
   --mascot-intensity: 0.8;
 
   position: fixed;

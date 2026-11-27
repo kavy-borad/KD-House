@@ -24,7 +24,33 @@ export default function FloatingContactIcons({
   hide = false,
 }: FloatingContactIconsProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const [isScrollingMobile, setIsScrollingMobile] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+
+  // Hide floating message button while scrolling on mobile (< 768px)
+  useEffect(() => {
+    let stopTimer = 0;
+
+    const handleScroll = () => {
+      if (window.innerWidth >= 768) {
+        setIsScrollingMobile((prev) => (prev ? false : prev));
+        return;
+      }
+      setIsScrollingMobile((prev) => (prev ? prev : true));
+      setIsOpen((prev) => (prev ? false : prev));
+      if (stopTimer) window.clearTimeout(stopTimer);
+      stopTimer = window.setTimeout(() => {
+        stopTimer = 0;
+        setIsScrollingMobile(false);
+      }, 300);
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => {
+      if (stopTimer) window.clearTimeout(stopTimer);
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
 
   // Close when clicking outside
   useEffect(() => {
@@ -47,7 +73,11 @@ export default function FloatingContactIcons({
   return (
     <div
       ref={containerRef}
-      className="fixed right-6 bottom-8 z-[100] flex flex-col items-center"
+      className={`fixed right-6 bottom-8 z-[100] flex flex-col items-center transition-all duration-200 ${
+        isScrollingMobile
+          ? "opacity-0 scale-90 pointer-events-none md:opacity-100 md:scale-100 md:pointer-events-auto"
+          : "opacity-100 scale-100"
+      }`}
     >
       {/* Animated Pop-up List of Contact Icons */}
       <AnimatePresence>
