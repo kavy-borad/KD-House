@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import * as echarts from "echarts";
 import { useNavigate } from "react-router-dom";
 import { api } from "../lib/apiClient";
+import { useLenis } from "./SmoothScrollProvider";
 import {
   motion,
   AnimatePresence,
@@ -51,6 +52,24 @@ const Counter = ({
 
 const Quotation: React.FC = () => {
   const [showModal, setShowModal] = useState<boolean>(false);
+  const lenis = useLenis();
+
+  // Lock background page & Lenis smooth scroll while Project Details modal is open
+  useEffect(() => {
+    if (!showModal) return;
+
+    const prevHtmlOverflow = document.documentElement.style.overflow;
+    const prevBodyOverflow = document.body.style.overflow;
+    document.documentElement.style.overflow = "hidden";
+    document.body.style.overflow = "hidden";
+    lenis?.stop();
+
+    return () => {
+      document.documentElement.style.overflow = prevHtmlOverflow;
+      document.body.style.overflow = prevBodyOverflow;
+      lenis?.start();
+    };
+  }, [showModal, lenis]);
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
   const [formData, setFormData] = useState({
     clientName: "",
@@ -1664,7 +1683,8 @@ const Quotation: React.FC = () => {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.25, ease: "easeOut" }}
             onClick={() => setShowModal(false)}
-            className="fixed inset-0 bg-slate-950/40 backdrop-blur-[2px] z-[200] flex items-center justify-center p-3 sm:p-6 overflow-y-auto"
+            data-lenis-prevent
+            className="fixed inset-0 bg-slate-950/40 backdrop-blur-[2px] z-[200] flex items-center justify-center p-3 sm:p-6 overflow-y-auto overscroll-contain [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
             role="dialog"
             aria-modal="true"
             aria-labelledby="modal-title"
@@ -1676,7 +1696,8 @@ const Quotation: React.FC = () => {
               exit={{ opacity: 0, scale: 0.98, y: 8 }}
               transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
               onClick={(e) => e.stopPropagation()}
-              className="bg-white w-[93vw] max-w-[660px] max-h-[90vh] h-fit rounded-[24px] border border-[#EEF2F7] shadow-[0_24px_60px_rgba(15,23,42,0.12)] p-6 sm:p-8 relative overflow-hidden flex flex-col my-auto"
+              data-lenis-prevent
+              className="bg-white w-[94vw] max-w-[880px] max-h-[90vh] h-fit rounded-[24px] border border-[#EEF2F7] shadow-[0_24px_60px_rgba(15,23,42,0.12)] p-6 sm:p-8 md:p-10 relative overflow-hidden flex flex-col my-auto overscroll-contain"
             >
               {/* Minimal Circular Close Button */}
               <button
@@ -1731,7 +1752,7 @@ const Quotation: React.FC = () => {
                   {/* Scrollable Form Body */}
                   <form
                     onSubmit={handleSubmit}
-                    className="flex-1 overflow-y-auto pr-1.5 -mr-1.5 space-y-4 custom-scrollbar pb-6"
+                    className="flex-1 overflow-y-auto space-y-3.5 pb-2 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
                   >
                     {/* Row 1: Your name & Company */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">

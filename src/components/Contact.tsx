@@ -248,7 +248,7 @@ const Contact: React.FC = () => {
                 initial={{ opacity: 0, x: 20 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
-                className="lg:col-span-7 bg-gradient-to-br from-blue-50/75 via-slate-50/85 to-indigo-50/65 -mx-6 sm:mx-0 rounded-none sm:rounded-[2.5rem] border-x-0 sm:border border-blue-100/80 shadow-lg shadow-blue-900/5 p-5 sm:p-8 md:p-12 relative overflow-hidden"
+                className="lg:col-span-7 bg-gradient-to-br from-blue-50/75 via-slate-50/85 to-indigo-50/65 -mx-6 sm:mx-0 rounded-none sm:rounded-[2.5rem] border-x-0 sm:border border-blue-100/80 p-5 sm:p-8 md:p-12 relative overflow-hidden"
               >
                 <div className="relative z-10">
                   <div className="mb-6 sm:mb-10">
