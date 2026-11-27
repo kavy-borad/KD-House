@@ -194,60 +194,72 @@ const IndustriesShowcase = () => {
         </div>
       </div>
 
-      {/* Right: Clean 2x4 Interactive Industry Directory Grid */}
-      <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3">
+      {/* Right: Architectural Editorial Index List (Non-Card) */}
+      <div className="lg:col-span-7 divide-y divide-slate-200/80 border-y border-slate-200/80">
         {INDUSTRIES_DATA.map((item, index) => {
           const isActive = index === activeIndex;
           return (
             <button
               key={item.title}
               type="button"
+              aria-pressed={isActive}
               onClick={() => setActiveIndex(index)}
-              onMouseEnter={() => setActiveIndex(index)}
-              className={`group text-left rounded-xl p-3 sm:p-3.5 border transition-all duration-250 cursor-pointer flex flex-col justify-between ${
-                isActive
-                  ? "bg-white border-[#2f8ecd] ring-2 ring-[#2f8ecd]/15"
-                  : "bg-white/80 hover:bg-white border-slate-200/85 hover:border-slate-300"
+              className={`group relative w-full text-left px-3 sm:px-5 py-3.5 sm:py-4 transition-colors duration-200 cursor-pointer flex items-center justify-between gap-4 ${
+                isActive ? "bg-white/65" : "hover:bg-white/40"
               }`}
             >
-              <div>
-                <div className="flex items-center justify-between gap-2 mb-2">
-                  <div className="flex items-center gap-2 min-w-0">
-                    <div
-                      className={`w-7 h-7 rounded-lg ${item.iconBg} ${item.iconColor} flex items-center justify-center text-xs shrink-0 transition-transform duration-200 ${
-                        isActive ? "scale-105" : "group-hover:scale-105"
-                      }`}
-                    >
-                      <i className={item.icon} />
-                    </div>
-                    <span className="text-[9px] font-bold uppercase tracking-wider text-slate-400 truncate">
-                      {item.category}
-                    </span>
-                  </div>
+              {/* Left Accent Bar */}
+              <span
+                aria-hidden="true"
+                className={`absolute left-0 top-1/2 -translate-y-1/2 w-[3px] rounded-full transition-all duration-250 ${
+                  isActive
+                    ? "h-7 bg-[#2f8ecd] opacity-100"
+                    : "h-0 bg-slate-300 opacity-0 group-hover:h-4 group-hover:opacity-60"
+                }`}
+              />
 
-                  <span
-                    className={`text-[11px] font-bold tabular-nums shrink-0 transition-colors ${
-                      isActive ? "text-[#2f8ecd]" : "text-slate-300"
-                    }`}
-                  >
-                    {String(index + 1).padStart(2, "0")}
-                  </span>
-                </div>
-
-                <h4
-                  className={`text-sm sm:text-[15px] font-bold tracking-tight leading-snug mb-1 transition-colors ${
+              <div className="flex items-center gap-3.5 sm:gap-5 min-w-0">
+                <span
+                  className={`text-xs font-bold tabular-nums w-5 shrink-0 transition-colors ${
                     isActive
-                      ? "text-[#001F3F]"
-                      : "text-slate-900 group-hover:text-[#2f8ecd]"
+                      ? "text-[#2f8ecd]"
+                      : "text-slate-400 group-hover:text-slate-600"
                   }`}
                 >
-                  {item.title}
-                </h4>
+                  {String(index + 1).padStart(2, "0")}
+                </span>
 
-                <p className="text-[11px] sm:text-xs text-slate-500 leading-snug line-clamp-2">
-                  {item.desc}
-                </p>
+                <span
+                  className={`text-base sm:text-lg w-6 text-center shrink-0 transition-transform duration-200 ${
+                    item.iconColor
+                  } ${isActive ? "scale-110" : "opacity-80 group-hover:opacity-100 group-hover:scale-105"}`}
+                >
+                  <i className={item.icon} />
+                </span>
+
+                <div className="min-w-0 flex items-baseline gap-3">
+                  <h4
+                    className={`text-sm sm:text-base font-bold tracking-tight truncate transition-colors ${
+                      isActive
+                        ? "text-[#001F3F]"
+                        : "text-slate-800 group-hover:text-[#2f8ecd]"
+                    }`}
+                  >
+                    {item.title}
+                  </h4>
+                  <span className="hidden sm:inline-block text-[10px] font-semibold uppercase tracking-wider text-slate-400 shrink-0">
+                    {item.category}
+                  </span>
+                </div>
               </div>
+
+              <i
+                className={`fas fa-arrow-right text-xs shrink-0 transition-all duration-200 ${
+                  isActive
+                    ? "text-[#2f8ecd] translate-x-0 opacity-100"
+                    : "text-slate-300 -translate-x-1 opacity-0 group-hover:opacity-80 group-hover:translate-x-0"
+                }`}
+              />
             </button>
           );
         })}

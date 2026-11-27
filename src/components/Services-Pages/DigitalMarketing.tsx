@@ -321,7 +321,7 @@ const DigitalMarketing = React.memo(() => {
             </div>
 
             <div className="relative z-10 flex flex-col h-full">
-              <div className="w-12 h-12 bg-emerald-50 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-white/20 transition-all text-xl">
+              <div className="inline-block mb-6 group-hover:scale-110 transition-transform text-2xl">
                 <i className="fas fa-globe text-[#10b981] group-hover:text-white transition-colors"></i>
               </div>
               <h3 className="text-2xl font-bold text-gray-900 mb-3 group-hover:text-white transition-colors">
@@ -531,7 +531,7 @@ const DigitalMarketing = React.memo(() => {
                 >
                   {/* Timeline Node (Centered on Line) */}
                   <div
-                    className={`absolute left-0 top-0 w-20 h-20 rounded-full bg-white flex items-center justify-center z-10 group-hover:scale-110 transition-transform duration-300 shadow-[0_0_30px_rgba(0,0,0,0.05)]`}
+                    className={`absolute left-0 top-0 w-20 h-20 flex items-center justify-center z-10 group-hover:scale-110 transition-transform duration-300`}
                   >
                     <div
                       className={`w-14 h-14 rounded-full ${item.bg} flex items-center justify-center text-xl`}

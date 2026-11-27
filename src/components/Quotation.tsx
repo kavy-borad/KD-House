@@ -591,7 +591,7 @@ const Quotation: React.FC = () => {
               <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/60 to-transparent group-hover:from-slate-900/90 transition-all duration-500" />
 
               <div className="absolute inset-0 p-6 md:p-10 flex flex-col justify-end">
-                <div className="w-16 h-16 bg-gradient-to-br from-[#2f8ecd] to-blue-500 rounded-2xl flex items-center justify-center mb-6 text-white text-2xl shadow-xl group-hover:scale-110 transition-transform">
+                <div className="mb-6 text-[#2f8ecd] text-3xl group-hover:scale-110 transition-transform inline-block w-fit">
                   <i className="fas fa-code" />
                 </div>
                 <h3 className="text-4xl md:text-5xl font-bold text-white mb-4 group-hover:text-[#2f8ecd] transition-colors">
@@ -694,7 +694,7 @@ const Quotation: React.FC = () => {
 
               <div className="relative h-full flex flex-col md:flex-row items-start md:items-center justify-between p-6 md:px-10 py-6 md:py-0 gap-6 md:gap-0">
                 <div className="flex flex-col md:flex-row items-start md:items-center gap-4 md:gap-8">
-                  <div className="w-14 h-14 md:w-20 md:h-20 bg-gradient-to-br from-[#2f8ecd] to-blue-500 rounded-2xl flex items-center justify-center text-white text-2xl md:text-3xl shadow-lg group-hover:scale-110 transition-transform shrink-0">
+                  <div className="text-[#2f8ecd] text-3xl md:text-4xl group-hover:scale-110 transition-transform shrink-0">
                     <i className="fas fa-lightbulb" />
                   </div>
                   <div>
@@ -800,7 +800,7 @@ const Quotation: React.FC = () => {
                   <motion.div
                     whileHover={{ y: -8, scale: 1.02 }}
                     transition={{ duration: 0.3 }}
-                    className={`w-[45%] bg-white/80 backdrop-blur-sm rounded-3xl p-10 shadow-2xl border border-slate-200/60 hover:shadow-[#2f8ecd]/20 hover:border-[#2f8ecd]/40 transition-all duration-500 group relative overflow-hidden ${
+                    className={`w-[45%] bg-white/80 backdrop-blur-sm rounded-3xl p-10 border border-slate-200/60 hover:border-[#2f8ecd]/40 transition-all duration-500 group relative overflow-hidden ${
                       step.align === "right" ? "ml-auto" : ""
                     }`}
                   >
@@ -809,7 +809,7 @@ const Quotation: React.FC = () => {
 
                     <div className="relative z-10">
                       <div className="flex items-start gap-6 mb-6">
-                        <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#2f8ecd] to-blue-500 flex items-center justify-center text-white text-2xl shadow-xl group-hover:shadow-2xl group-hover:shadow-[#2f8ecd]/40 group-hover:scale-110 transition-all duration-300">
+                        <div className="text-[#2f8ecd] text-3xl group-hover:scale-110 transition-transform duration-300 pt-2">
                           <i className={`fas ${step.icon}`} />
                         </div>
                         <span className="text-7xl font-normal text-slate-100 group-hover:text-[#2f8ecd]/20 transition-colors duration-500">
@@ -864,10 +864,10 @@ const Quotation: React.FC = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ delay: idx * 0.1 }}
                 viewport={{ once: true }}
-                className="bg-white rounded-3xl p-4 sm:p-8 shadow-lg border border-slate-100 flex flex-col h-full"
+                className="bg-white rounded-3xl p-4 sm:p-8 border border-slate-100 flex flex-col h-full"
               >
                 <div className="flex items-center justify-between gap-2 sm:gap-4 mb-3 sm:mb-4">
-                  <div className="w-10 h-10 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-gradient-to-br from-[#2f8ecd] to-blue-400 flex items-center justify-center text-white text-base sm:text-xl shadow-lg shrink-0">
+                  <div className="text-[#2f8ecd] text-2xl sm:text-3xl shrink-0">
                     <i className={`fas ${step.icon}`} />
                   </div>
                   <span className="text-3xl sm:text-5xl font-normal text-slate-100 leading-none">

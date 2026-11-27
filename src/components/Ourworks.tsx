@@ -278,13 +278,13 @@ const WorkShowcase = () => {
             return (
               <motion.div
                 key={product.id}
-                initial={{ opacity: 0, y: 50 }}
+                initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-10%" }}
-                transition={{ duration: 0.8, ease: "easeOut" }}
-                className="group flex flex-col bg-white border border-gray-100 rounded-3xl overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-500 col-span-1"
+                viewport={{ once: true, amount: 0.08 }}
+                transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+                className="group col-span-1 will-change-transform"
               >
-                <div className="flex flex-col h-full">
+                <div className="flex flex-col h-full bg-white border border-gray-100 rounded-3xl overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1.5 transition-[transform,box-shadow] duration-300">
                   {/* Image Section */}
                   <div className="relative overflow-hidden aspect-[16/10] bg-gray-50 border-b border-gray-100 flex items-center justify-center">
                     {displaySection.image_url ? (

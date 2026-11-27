@@ -1,4 +1,4 @@
-import { RefObject, useEffect, useRef, useState } from "react";
+import { RefObject, useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { motion, useReducedMotion } from "framer-motion";
@@ -142,9 +142,6 @@ const HeroRightLoop = ({ heroRef }: HeroRightLoopProps) => {
   const progressBarRef = useRef<HTMLDivElement>(null);
   const iconRefs = useRef<Array<HTMLDivElement | null>>([]);
   const contentRefs = useRef<Array<HTMLDivElement | null>>([]);
-  const scrollTriggerRef = useRef<ScrollTrigger | null>(null);
-
-  const [activeIndex, setActiveIndex] = useState(-1);
 
   useEffect(() => {
     const heroEl = heroRef.current;
@@ -199,23 +196,8 @@ const HeroRightLoop = ({ heroRef }: HeroRightLoopProps) => {
           scrub: 0.65,
           invalidateOnRefresh: true,
           refreshPriority: 1,
-          onUpdate: (self) => {
-            const p = self.progress;
-            if (p < 0.025) {
-              setActiveIndex((prev) => (prev === -1 ? prev : -1));
-              return;
-            }
-            const normalized = (p - 0.025) / 0.975;
-            const nextIdx = Math.min(
-              TECH_ITEMS.length - 1,
-              Math.floor(normalized * TECH_ITEMS.length),
-            );
-            setActiveIndex((prev) => (prev === nextIdx ? prev : nextIdx));
-          },
         },
       });
-
-      scrollTriggerRef.current = tl.scrollTrigger ?? null;
 
       // 1. Fade out physics tokens & scroll hint, bring big Icon 0 into the rectangle + Content 0 below
       if (physicsLayerRef.current) {
@@ -341,10 +323,6 @@ const HeroRightLoop = ({ heroRef }: HeroRightLoopProps) => {
           0,
         );
       }
-
-      return () => {
-        scrollTriggerRef.current = null;
-      };
     });
 
     const rafId = window.requestAnimationFrame(() => {
@@ -353,21 +331,9 @@ const HeroRightLoop = ({ heroRef }: HeroRightLoopProps) => {
 
     return () => {
       window.cancelAnimationFrame(rafId);
-      scrollTriggerRef.current = null;
       mm.revert();
     };
   }, [heroRef, shouldReduceMotion]);
-
-  const jumpToTech = (idx: number) => {
-    const st = scrollTriggerRef.current;
-    if (!st) return;
-    const targetProgress =
-      0.04 + (idx / Math.max(1, TECH_ITEMS.length - 1)) * 0.9;
-    window.scrollTo({
-      top: st.start + (st.end - st.start) * targetProgress,
-      behavior: "smooth",
-    });
-  };
 
   return (
     <div className="w-full lg:w-[420px] xl:w-[490px] 2xl:w-[530px] shrink-0 flex flex-col items-center">
@@ -509,9 +475,8 @@ const HeroRightLoop = ({ heroRef }: HeroRightLoopProps) => {
                 className="opacity-0 pointer-events-none absolute inset-0 flex flex-col items-center justify-center text-center px-2 lg:px-3 will-change-transform"
               >
                 <span
-                  className="px-2.5 lg:px-3 py-0.5 rounded-full text-[10px] lg:text-[11px] font-bold uppercase tracking-wider mb-1 lg:mb-2"
+                  className="text-[10px] lg:text-[11px] font-bold uppercase tracking-wider mb-1 lg:mb-2"
                   style={{
-                    backgroundColor: item.badgeBg,
                     color: item.color,
                   }}
                 >
@@ -543,29 +508,13 @@ const HeroRightLoop = ({ heroRef }: HeroRightLoopProps) => {
           {/* Slim step progress indicator (reveals on scroll) */}
           <div
             ref={progressWrapperRef}
-            className="opacity-0 pointer-events-none mt-1.5 px-4 flex items-center gap-3 max-w-md mx-auto"
+            className="opacity-0 pointer-events-none mt-1.5 px-4 flex items-center max-w-md mx-auto"
           >
             <div className="flex-1 h-1 bg-slate-200/75 rounded-full overflow-hidden">
               <div
                 ref={progressBarRef}
                 className="h-full w-full [transform:scaleX(0)] bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 rounded-full origin-left"
               />
-            </div>
-
-            <div className="flex items-center gap-1.5">
-              {TECH_ITEMS.map((item, idx) => (
-                <button
-                  key={item.id}
-                  type="button"
-                  onClick={() => jumpToTech(idx)}
-                  aria-label={`Show ${item.name}`}
-                  className={`h-1.5 rounded-full transition-all duration-200 cursor-pointer ${
-                    activeIndex === idx
-                      ? "w-5 bg-slate-900"
-                      : "w-1.5 bg-slate-300 hover:bg-slate-400"
-                  }`}
-                />
-              ))}
             </div>
           </div>
         </div>

@@ -9,6 +9,7 @@ import {
   MapPin,
   Globe,
   ChevronRight,
+  ArrowUpRight,
 } from "lucide-react";
 
 export const Footer = () => {
@@ -140,7 +141,7 @@ export const Footer = () => {
             </h4>
             <div className="space-y-6 lg:space-y-8">
               <div className="flex items-start gap-3 lg:gap-4 group">
-                <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center text-[#2f8ecd] shrink-0 transition-transform group-hover:scale-110 duration-300">
+                <div className="mt-0.5 text-[#2f8ecd] shrink-0 transition-transform group-hover:scale-110 duration-300">
                   <MapPin size={20} />
                 </div>
                 <div>
@@ -154,7 +155,7 @@ export const Footer = () => {
               </div>
 
               <div className="flex items-start gap-3 lg:gap-4 group">
-                <div className="w-10 h-10 rounded-xl bg-indigo-50 flex items-center justify-center text-indigo-600 shrink-0 transition-transform group-hover:scale-110 duration-300">
+                <div className="mt-0.5 text-indigo-600 shrink-0 transition-transform group-hover:scale-110 duration-300">
                   <Globe size={20} />
                 </div>
                 <div>
@@ -170,10 +171,14 @@ export const Footer = () => {
               <div className="-mt-2">
                 <a
                   href="mailto:kanak@karmadude.in"
-                  className="inline-flex items-center gap-3 px-6 py-3 lg:px-8 lg:py-3.5 bg-slate-900 text-white rounded-full text-sm font-bold hover:bg-[#2f8ecd] hover:shadow-xl transition-all duration-300"
+                  className="group inline-flex items-center gap-2.5 px-4 py-2.5 rounded-xl bg-white border border-slate-200/90 text-slate-800 text-sm font-semibold hover:border-[#2f8ecd] hover:text-[#2f8ecd] hover:bg-blue-50/40 shadow-xs transition-all duration-300"
                 >
-                  <Mail size={16} />
-                  kanak@karmadude.in
+                  <Mail size={16} className="text-[#2f8ecd] shrink-0" />
+                  <span>kanak@karmadude.in</span>
+                  <ArrowUpRight
+                    size={15}
+                    className="text-slate-400 group-hover:text-[#2f8ecd] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-200 shrink-0"
+                  />
                 </a>
               </div>
             </div>

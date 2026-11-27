@@ -661,39 +661,53 @@ const Home = () => {
                     icon: "fas fa-history",
                     value: "15+",
                     label: "Years of Experience",
+                    iconColor: "text-blue-600",
+                    borderColor: "border-blue-100 hover:border-blue-200",
                   },
                   {
                     icon: "fas fa-users",
                     value: "30+",
                     label: "Team Strength",
+                    iconColor: "text-purple-600",
+                    borderColor: "border-purple-100 hover:border-purple-200",
                   },
                   {
                     icon: "fas fa-microchip",
                     value: "20+",
                     label: "Technology Expertise",
+                    iconColor: "text-cyan-600",
+                    borderColor: "border-cyan-100 hover:border-cyan-200",
                   },
                   {
                     icon: "fas fa-globe",
                     value: "100+",
                     label: "Global Clients",
+                    iconColor: "text-emerald-600",
+                    borderColor: "border-emerald-100 hover:border-emerald-200",
                   },
                   {
                     icon: "fas fa-check-circle",
                     value: "250+",
                     label: "Projects Delivered",
+                    iconColor: "text-amber-500",
+                    borderColor: "border-amber-100 hover:border-amber-200",
                   },
                   {
                     icon: "fas fa-box-open",
                     value: "10+",
                     label: "Products",
+                    iconColor: "text-rose-500",
+                    borderColor: "border-rose-100 hover:border-rose-200",
                   },
                 ].map((item, index) => (
                   <motion.div
                     key={index}
                     whileHover={{ y: -5 }}
-                    className="py-5 px-3.5 sm:p-6 bg-white border border-blue-100 rounded-xl sm:rounded-2xl shadow-none hover:border-blue-200 transition-all duration-300 flex flex-col items-center text-center group"
+                    className={`py-5 px-3.5 sm:p-6 bg-white border ${item.borderColor} rounded-xl sm:rounded-2xl shadow-none transition-all duration-300 flex flex-col items-center text-center group`}
                   >
-                    <div className="mb-2 sm:mb-3 text-2xl md:text-3xl text-[#2f8ecd] transition-transform duration-300 group-hover:scale-110">
+                    <div
+                      className={`mb-2 sm:mb-3 text-2xl md:text-3xl ${item.iconColor} transition-transform duration-300 group-hover:scale-110`}
+                    >
                       <i className={item.icon}></i>
                     </div>
                     <h3 className="text-3xl font-bold text-gray-900 mb-1 group-hover:text-[#001F3F] transition-colors">
