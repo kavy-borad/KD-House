@@ -1,4 +1,4 @@
-import { Suspense, lazy, useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Helmet } from "react-helmet-async";
 // import "@fortawesome/fontawesome-free/css/all.min.css"; // Removed as it is imported globally
 // import * as echarts from "echarts"; // Removed for performance
@@ -23,6 +23,7 @@ import ServicesCircuitBg from "./home/ServicesCircuitBg";
 import GlitchSectionTitle, { GlitchWord } from "./home/GlitchSectionTitle";
 import RewriteParagraph from "./home/RewriteParagraph";
 import IndustriesShowcase from "./home/IndustriesShowcase";
+import TechStack from "./home/TechStack";
 import heroCircuitRight from "../assets/hero_image/hero-circuit-right.png";
 
 const CounterNumber = ({ value }: { value: string }) => {
@@ -60,8 +61,6 @@ const CounterNumber = ({ value }: { value: string }) => {
   );
 };
 
-const TechStack = lazy(() => import("./home/TechStack"));
-
 const ScrollHideTicker = () => {
   const { scrollY } = useScroll();
   const [hidden, setHidden] = useState(false);
@@ -69,9 +68,9 @@ const ScrollHideTicker = () => {
   useMotionValueEvent(scrollY, "change", (latest) => {
     const previous = scrollY.getPrevious() || 0;
     if (latest > previous && latest > 100) {
-      setHidden(true);
+      setHidden((prev) => (prev ? prev : true));
     } else if (latest < previous || latest <= 100) {
-      setHidden(false);
+      setHidden((prev) => (prev ? false : prev));
     }
   });
 
@@ -559,15 +558,7 @@ const Home = () => {
         id="tech-section"
       >
         <div className="max-w-7xl mx-auto px-6 relative z-10">
-          <Suspense
-            fallback={
-              <div className="h-64 flex items-center justify-center">
-                <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
-              </div>
-            }
-          >
-            <TechStack />
-          </Suspense>
+          <TechStack />
         </div>
       </section>
 

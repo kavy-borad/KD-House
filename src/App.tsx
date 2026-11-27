@@ -251,12 +251,9 @@ function ScrollManager({ onInitialReady }: ScrollManagerProps) {
   }, [pathname, key, onInitialReady]);
 
   useEffect(() => {
-    const saveScroll = () => {
-      if (pendingReloadRestore || isRestoringScrollRef.current) return;
-      // Ignore stray async scroll events after React already moved to another route key
-      if (activeEntryRef.current.key !== key) return;
-      const y = window.scrollY;
-      historyScrollPositions.set(key, y);
+    let persistTimer = 0;
+
+    const flushPersist = (y: number) => {
       persistHistoryScrolls();
       try {
         sessionStorage.setItem(
@@ -268,13 +265,41 @@ function ScrollManager({ onInitialReady }: ScrollManagerProps) {
       }
     };
 
+    const saveScroll = () => {
+      if (pendingReloadRestore || isRestoringScrollRef.current) return;
+      // Ignore stray async scroll events after React already moved to another route key
+      if (activeEntryRef.current.key !== key) return;
+      const y = window.scrollY;
+      historyScrollPositions.set(key, y);
+      if (persistTimer) window.clearTimeout(persistTimer);
+      persistTimer = window.setTimeout(() => {
+        persistTimer = 0;
+        flushPersist(y);
+      }, 250);
+    };
+
+    const handleUnload = () => {
+      if (pendingReloadRestore || isRestoringScrollRef.current) return;
+      if (activeEntryRef.current.key !== key) return;
+      if (persistTimer) {
+        window.clearTimeout(persistTimer);
+        persistTimer = 0;
+      }
+      const y = window.scrollY;
+      historyScrollPositions.set(key, y);
+      flushPersist(y);
+    };
+
     window.addEventListener("scroll", saveScroll, { passive: true });
-    window.addEventListener("pagehide", saveScroll);
-    window.addEventListener("beforeunload", saveScroll);
+    window.addEventListener("pagehide", handleUnload);
+    window.addEventListener("beforeunload", handleUnload);
     return () => {
+      if (persistTimer) {
+        window.clearTimeout(persistTimer);
+      }
       window.removeEventListener("scroll", saveScroll);
-      window.removeEventListener("pagehide", saveScroll);
-      window.removeEventListener("beforeunload", saveScroll);
+      window.removeEventListener("pagehide", handleUnload);
+      window.removeEventListener("beforeunload", handleUnload);
     };
   }, [pathname, key]);
 

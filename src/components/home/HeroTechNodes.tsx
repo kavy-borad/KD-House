@@ -291,7 +291,7 @@ const HeroTechNodes = () => {
                 boxShadow:
                   "0 6px 16px rgba(15, 23, 42, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.95)",
               }}
-              className={`absolute top-0 left-0 rounded-full border flex items-center justify-center will-change-transform select-none backdrop-blur-[2px] ${
+              className={`absolute top-0 left-0 rounded-full border flex items-center justify-center will-change-transform select-none ${
                 isMobile
                   ? "pointer-events-none"
                   : "pointer-events-auto cursor-grab active:cursor-grabbing hover:shadow-md transition-shadow"

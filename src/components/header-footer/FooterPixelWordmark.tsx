@@ -1,9 +1,6 @@
 import { useEffect, useMemo, useRef } from "react";
 import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useReducedMotion } from "framer-motion";
-
-gsap.registerPlugin(ScrollTrigger);
 
 // 5-row rounded-square pixel matrices for clean legibility
 const GLYPHS: Record<string, number[][]> = {
@@ -182,6 +179,9 @@ const SVG_HEIGHT = 248;
 const FooterPixelWordmark = () => {
   const shouldReduceMotion = !!useReducedMotion();
   const wrapRef = useRef<HTMLDivElement>(null);
+  const row1GroupRef = useRef<SVGGElement>(null);
+  const row2GroupRef = useRef<SVGGElement>(null);
+  const sparksGroupRef = useRef<SVGGElement>(null);
 
   const { row1Tiles, row2Tiles, sparkTiles } = useMemo(() => {
     const r1 = layoutWordRow(
@@ -220,80 +220,53 @@ const FooterPixelWordmark = () => {
 
   useEffect(() => {
     const wrap = wrapRef.current;
-    if (!wrap || shouldReduceMotion) return;
+    const row1 = row1GroupRef.current;
+    const row2 = row2GroupRef.current;
+    const sparks = sparksGroupRef.current;
+    if (!wrap || !row1 || !row2 || !sparks || shouldReduceMotion) return;
 
-    const ctx = gsap.context(() => {
-      const mainTiles = wrap.querySelectorAll("[data-kd-tile]");
-      const subTiles = wrap.querySelectorAll("[data-kd-subtile]");
-      const sparks = wrap.querySelectorAll("[data-kd-spark]");
+    // Animate the 3 SVG groups on GPU instead of 220+ individual rect getBBox() tweens
+    gsap.set([row1, row2, sparks], { opacity: 0, y: 12, force3D: true });
 
-      gsap.fromTo(
-        mainTiles,
-        { opacity: 0, scale: 0.55, y: 10, transformOrigin: "50% 50%" },
-        {
+    let played = false;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (played || !entries[0]?.isIntersecting) return;
+        played = true;
+        observer.disconnect();
+
+        gsap.to(row1, {
           opacity: 1,
-          scale: 1,
           y: 0,
           duration: 0.5,
-          stagger: { amount: 0.5, from: "start" },
-          ease: "back.out(1.45)",
-          scrollTrigger: {
-            trigger: wrap,
-            start: "top 92%",
-            toggleActions: "play none none none",
-            invalidateOnRefresh: true,
-            refreshPriority: 0,
-          },
-        },
-      );
-
-      gsap.fromTo(
-        subTiles,
-        { opacity: 0, scale: 0.65, y: 6, transformOrigin: "50% 50%" },
-        {
+          ease: "power3.out",
+          force3D: true,
+        });
+        gsap.to(row2, {
           opacity: 1,
-          scale: 1,
           y: 0,
           duration: 0.45,
-          stagger: { amount: 0.35, from: "center" },
+          delay: 0.08,
           ease: "power2.out",
-          scrollTrigger: {
-            trigger: wrap,
-            start: "top 90%",
-            toggleActions: "play none none none",
-            invalidateOnRefresh: true,
-            refreshPriority: 0,
-          },
-        },
-      );
-
-      gsap.fromTo(
-        sparks,
-        { opacity: 0, scale: 0.4 },
-        {
+          force3D: true,
+        });
+        gsap.to(sparks, {
           opacity: 1,
-          scale: 1,
-          duration: 0.6,
-          stagger: 0.08,
+          y: 0,
+          duration: 0.5,
+          delay: 0.14,
           ease: "power2.out",
-          scrollTrigger: {
-            trigger: wrap,
-            start: "top 90%",
-            toggleActions: "play none none none",
-            invalidateOnRefresh: true,
-            refreshPriority: 0,
-          },
-        },
-      );
-    }, wrap);
+          force3D: true,
+        });
+      },
+      { threshold: 0.15 },
+    );
 
-    const rafId = window.requestAnimationFrame(() => {
-      ScrollTrigger.refresh();
-    });
+    observer.observe(wrap);
 
     return () => {
-      window.cancelAnimationFrame(rafId);
-      ctx.revert();
+      observer.disconnect();
+      gsap.killTweensOf([row1, row2, sparks]);
     };
   }, [shouldReduceMotion]);
 
@@ -339,7 +312,7 @@ const FooterPixelWordmark = () => {
         </defs>
 
         {/* Primary KARMADUDE rounded pixel blocks */}
-        <g>
+        <g ref={row1GroupRef}>
           {row1Tiles.map((tile, idx) => (
             <rect
               key={`r1-${idx}`}
@@ -356,7 +329,7 @@ const FooterPixelWordmark = () => {
         </g>
 
         {/* Secondary IT SOLUTIONS rounded pixel blocks */}
-        <g>
+        <g ref={row2GroupRef}>
           {row2Tiles.map((tile, idx) => (
             <rect
               key={`r2-${idx}`}
@@ -374,7 +347,7 @@ const FooterPixelWordmark = () => {
         </g>
 
         {/* Subtle corner accent tiles */}
-        <g>
+        <g ref={sparksGroupRef}>
           {sparkTiles.map((tile, idx) => (
             <rect
               key={`sp-${idx}`}
