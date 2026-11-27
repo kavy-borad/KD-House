@@ -430,7 +430,7 @@ const Quotation: React.FC = () => {
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.3 }}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-blue-100 bg-blue-50 text-[#2f8ecd] font-bold text-xs uppercase tracking-widest"
+              className="inline-flex items-center gap-2 text-[#2f8ecd] font-bold text-xs uppercase tracking-widest"
             >
               <i className="fas fa-star text-[10px]" />
               <span>Premium Development Agency</span>
@@ -901,7 +901,7 @@ const Quotation: React.FC = () => {
               initial={{ opacity: 0, y: 10 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="inline-flex items-center gap-2 mb-6 px-4 py-2 rounded-full bg-white shadow-sm border border-slate-100 text-[#2f8ecd] text-xs font-bold uppercase tracking-[0.2em]"
+              className="inline-flex items-center gap-2 mb-6 text-[#2f8ecd] text-xs font-bold uppercase tracking-[0.2em]"
             >
               <span className="w-2 h-2 bg-[#2f8ecd] rounded-full animate-ping" />
               Proven Results

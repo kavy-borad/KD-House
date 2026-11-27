@@ -300,7 +300,7 @@ const Home = () => {
                     initial={shouldReduceMotion ? false : { opacity: 0, y: 16 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.15 }}
-                    className="inline-flex items-center gap-2 px-3 py-1 md:px-4 md:py-2 rounded-full bg-blue-50/75 border border-blue-200/70 text-slate-700 font-semibold text-xs md:text-sm mb-2.5 sm:mb-4 md:mb-6 backdrop-blur-[2px]"
+                    className="inline-flex items-center gap-2 text-slate-700 font-semibold text-xs md:text-sm mb-2.5 sm:mb-4 md:mb-6"
                   >
                     <span className="relative flex h-2.5 w-2.5 md:h-3 md:w-3">
                       <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-500 opacity-75"></span>
@@ -399,7 +399,7 @@ const Home = () => {
             transition={{ duration: 0.6 }}
             className="text-center mb-12 md:mb-16"
           >
-            <div className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-100 mb-6">
+            <div className="inline-flex items-center gap-2 mb-6">
               <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
               <span className="text-blue-700 font-semibold text-sm tracking-wide">
                 WHAT WE OFFER
@@ -823,7 +823,7 @@ const Home = () => {
             transition={{ duration: 0.6 }}
             className="text-center mb-16"
           >
-            <div className="inline-block px-4 py-2 bg-white/95 text-[#2f8ecd] rounded-full font-bold text-sm mb-4">
+            <div className="inline-block text-[#2f8ecd] font-bold text-sm mb-4">
               INDUSTRIES WE SERVE
             </div>
             <h2 className="text-4xl md:text-5xl font-bold text-slate-900 mb-4">
@@ -866,7 +866,7 @@ const Home = () => {
 
             <div className="relative z-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8 text-center lg:text-left">
               <div className="max-w-2xl">
-                <span className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/10 border border-sky-300/25 text-sky-200 text-xs font-bold tracking-widest uppercase mb-4">
+                <span className="inline-flex items-center gap-2 text-sky-200 text-xs font-bold tracking-widest uppercase mb-4">
                   <span className="w-1.5 h-1.5 rounded-full bg-[#38bdf8]" />
                   Custom Industry Solutions
                 </span>

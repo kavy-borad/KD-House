@@ -400,7 +400,7 @@ const OurStoryTab = () => {
           </p>
 
           {/* Modern Stats Bar */}
-          <div className="flex flex-row justify-around md:grid md:grid-cols-3 gap-4 md:gap-8 py-4 lg:py-8 border-y border-gray-100">
+          <div className="flex flex-row justify-around md:grid md:grid-cols-3 gap-4 md:gap-8 py-4 lg:py-8 border-y border-slate-200/70">
             <div className="text-center md:text-left">
               <div className="text-3xl md:text-4xl font-bold text-gray-900">5+</div>
               <div className="text-[10px] font-bold text-[#2f8ecd] uppercase tracking-widest mt-1">
@@ -1182,15 +1182,29 @@ const About = () => {
         <title>About Us | KarmaDude</title>
       </Helmet>
 
-      <div className="min-h-screen bg-[#fafafa] pt-20 md:pt-32 pb-12 md:pb-20 px-4 md:px-8">
-        <div className="max-w-7xl mx-auto">
+      <div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-slate-50 via-[#f3f8fe] to-slate-50 pt-20 md:pt-32 pb-12 md:pb-20 px-4 md:px-8">
+        {/* Soft ambient light blobs behind the frosted glass card */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute -top-24 left-1/4 w-[420px] h-[420px] rounded-full bg-blue-300/25 blur-3xl"
+        />
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute top-[280px] -left-24 w-[460px] h-[460px] rounded-full bg-sky-200/40 blur-3xl"
+        />
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute top-[240px] -right-20 w-[480px] h-[480px] rounded-full bg-indigo-200/35 blur-3xl"
+        />
+
+        <div className="relative z-10 max-w-7xl mx-auto">
           {/* Header & Nav */}
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 md:gap-8 mb-8 md:mb-16">
             <div>
               <motion.div
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="inline-block px-3 py-1 rounded-full bg-blue-100 text-[#2f8ecd] text-xs font-bold tracking-widest uppercase mb-2 sm:mb-4"
+                className="inline-block text-[#2f8ecd] text-xs font-bold tracking-widest uppercase mb-2 sm:mb-4"
               >
                 Who We Are
               </motion.div>
@@ -1235,20 +1249,16 @@ const About = () => {
             </div>
           </div>
 
-          {/* Main Content Card */}
-          <div className="bg-white rounded-[3rem] p-6 md:p-12 lg:p-16 shadow-2xl shadow-gray-200 border border-gray-100 min-h-[600px]">
-            {/* <AnimatePresence mode="wait">
-              <motion.div
-                key={activeTab}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.3, ease: "easeInOut" }}
-              >
-                {renderContent()}
-              </motion.div>
-            </AnimatePresence> */}
-            <div key={activeTab} className="animate-fade-in-up">
+          {/* Main Content Card (Frosted Glassmorphism) */}
+          <div
+            data-about-glass-card="true"
+            className="relative overflow-hidden bg-white/55 backdrop-blur-2xl rounded-[3rem] p-6 md:p-12 lg:p-16 border border-white/80 shadow-[0_24px_60px_-15px_rgba(37,99,235,0.12),inset_0_1px_1px_rgba(255,255,255,0.9)] min-h-[600px]"
+          >
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-0 bg-gradient-to-br from-white/70 via-white/25 to-blue-100/30"
+            />
+            <div key={activeTab} className="relative z-10 animate-fade-in-up">
               {renderContent()}
             </div>
           </div>

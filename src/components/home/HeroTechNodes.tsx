@@ -1,6 +1,59 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useId, useMemo, useRef, useState } from "react";
 import { useReducedMotion } from "framer-motion";
 import { useHeroPhysics, PhysicsBodyConfig } from "./useHeroPhysics";
+
+export const NextJsSymbol = ({ className }: { className?: string }) => {
+  const uid = useId().replace(/:/g, "");
+  const maskId = `nextjs-mask-${uid}`;
+  const lineGradId = `nextjs-line-${uid}`;
+  const barGradId = `nextjs-bar-${uid}`;
+
+  return (
+    <svg
+      viewBox="0 0 180 180"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
+      aria-hidden="true"
+    >
+      <defs>
+        <mask id={maskId} maskUnits="userSpaceOnUse">
+          <circle cx="90" cy="90" r="78" fill="#ffffff" />
+        </mask>
+        <linearGradient
+          id={lineGradId}
+          x1="109"
+          y1="116"
+          x2="144"
+          y2="160"
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop offset="0%" stopColor="#ffffff" />
+          <stop offset="100%" stopColor="#ffffff" stopOpacity="0" />
+        </linearGradient>
+        <linearGradient
+          id={barGradId}
+          x1="121"
+          y1="54"
+          x2="121"
+          y2="112"
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop offset="0%" stopColor="#ffffff" />
+          <stop offset="100%" stopColor="#ffffff" stopOpacity="0" />
+        </linearGradient>
+      </defs>
+      <circle cx="90" cy="90" r="78" fill="#0F172A" />
+      <g mask={`url(#${maskId})`}>
+        <path
+          d="M 149 157 L 69 54 H 54 V 126 H 66 V 69 L 139.5 164.5 L 149 157 Z"
+          fill={`url(#${lineGradId})`}
+        />
+        <rect x="115" y="54" width="12" height="58" fill={`url(#${barGradId})`} />
+      </g>
+    </svg>
+  );
+};
 
 interface TechTokenMeta {
   id: string;
@@ -81,6 +134,19 @@ const ALL_TECH_TOKENS: TechTokenMeta[] = [
     initialNx: 0.26,
     initialNy: 0.42,
     initialVx: 65,
+  },
+  {
+    id: "nextjs",
+    label: "Next.js",
+    icon: "custom-nextjs",
+    color: "#0F172A",
+    bgTint: "rgba(248, 250, 252, 0.96)",
+    borderTint: "rgba(148, 163, 184, 0.85)",
+    mass: 1.0,
+    restitution: 0.52,
+    initialNx: 0.5,
+    initialNy: 0.16,
+    initialVx: 18,
   },
   {
     id: "aws",
@@ -231,6 +297,15 @@ const HeroTechNodes = () => {
                   : "pointer-events-auto cursor-grab active:cursor-grabbing hover:shadow-md transition-shadow"
               }`}
             >
+              {token.id === "nextjs" ? (
+                <NextJsSymbol
+                  className={
+                    radius <= 20
+                      ? "w-[24px] h-[24px]"
+                      : "w-[28px] h-[28px]"
+                  }
+                />
+              ) : (
               <i
                 className={`${token.icon} ${
                   radius <= 20
@@ -241,6 +316,7 @@ const HeroTechNodes = () => {
                 }`}
                 style={{ color: token.color }}
               />
+              )}
             </div>
           );
         })}

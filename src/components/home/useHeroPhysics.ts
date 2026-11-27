@@ -247,6 +247,55 @@ export function useHeroPhysics({
       }
     };
 
+    const clampToBounds = (
+      b: InternalBody,
+      bounds: ReturnType<typeof getBounds>,
+      subDt: number,
+      applyBounce: boolean,
+    ) => {
+      if (b.x - b.radius < bounds.left) {
+        b.x = bounds.left + b.radius;
+        if (applyBounce && b.vx < 0) {
+          b.vx = -b.vx * (Math.abs(b.vx) > 30 ? b.restitution : 0);
+          b.vy *= Math.pow(SURFACE_FRICTION_PER_SEC, subDt);
+          b.omega = -(b.vy / b.radius) * 0.6;
+        } else if (!applyBounce && b.vx < 0) {
+          b.vx = 0;
+        }
+      } else if (b.x + b.radius > bounds.right) {
+        b.x = bounds.right - b.radius;
+        if (applyBounce && b.vx > 0) {
+          b.vx = -b.vx * (Math.abs(b.vx) > 30 ? b.restitution : 0);
+          b.vy *= Math.pow(SURFACE_FRICTION_PER_SEC, subDt);
+          b.omega = (b.vy / b.radius) * 0.6;
+        } else if (!applyBounce && b.vx > 0) {
+          b.vx = 0;
+        }
+      }
+
+      if (b.y - b.radius < bounds.top) {
+        b.y = bounds.top + b.radius;
+        if (applyBounce && b.vy < 0) {
+          b.vy = -b.vy * (Math.abs(b.vy) > 30 ? b.restitution : 0);
+          b.vx *= Math.pow(SURFACE_FRICTION_PER_SEC, subDt);
+          b.omega = -(b.vx / b.radius) * 0.6;
+        } else if (!applyBounce && b.vy < 0) {
+          b.vy = 0;
+        }
+      } else if (b.y + b.radius > bounds.bottom) {
+        b.y = bounds.bottom - b.radius;
+        if (applyBounce && b.vy > 0) {
+          b.vy = -b.vy * (Math.abs(b.vy) > 32 ? b.restitution : 0);
+          b.vx *= Math.pow(SURFACE_FRICTION_PER_SEC, subDt);
+          b.omega = (b.vx / b.radius) * 0.72;
+        } else if (!applyBounce && b.vy > 0) {
+          b.vy = 0;
+        }
+      }
+
+      clampToRoundedCorners(b, bounds, subDt, applyBounce);
+    };
+
     const measureObstacles = () => {
       if (obstacleSelectors.length === 0) {
         obstaclesRef.current = [];
@@ -394,6 +443,7 @@ export function useHeroPhysics({
           dragTargetY: spawnY,
         };
         pushOutOfObstacles(body);
+        clampToBounds(body, bounds, 0, false);
         return body;
       });
 
@@ -470,40 +520,8 @@ export function useHeroPhysics({
           b.y += b.vy * subDt;
           b.angle += b.omega * subDt;
 
-          // 2. Boundary collisions (left, right, top, bottom)
-          if (b.x - b.radius < bounds.left) {
-            b.x = bounds.left + b.radius;
-            if (b.vx < 0) {
-              b.vx = -b.vx * (Math.abs(b.vx) > 30 ? b.restitution : 0);
-              b.vy *= Math.pow(SURFACE_FRICTION_PER_SEC, subDt);
-              b.omega = -(b.vy / b.radius) * 0.6;
-            }
-          } else if (b.x + b.radius > bounds.right) {
-            b.x = bounds.right - b.radius;
-            if (b.vx > 0) {
-              b.vx = -b.vx * (Math.abs(b.vx) > 30 ? b.restitution : 0);
-              b.vy *= Math.pow(SURFACE_FRICTION_PER_SEC, subDt);
-              b.omega = (b.vy / b.radius) * 0.6;
-            }
-          }
-
-          if (b.y - b.radius < bounds.top) {
-            b.y = bounds.top + b.radius;
-            if (b.vy < 0) {
-              b.vy = -b.vy * (Math.abs(b.vy) > 30 ? b.restitution : 0);
-              b.vx *= Math.pow(SURFACE_FRICTION_PER_SEC, subDt);
-              b.omega = -(b.vx / b.radius) * 0.6;
-            }
-          } else if (b.y + b.radius > bounds.bottom) {
-            b.y = bounds.bottom - b.radius;
-            if (b.vy > 0) {
-              b.vy = -b.vy * (Math.abs(b.vy) > 32 ? b.restitution : 0);
-              b.vx *= Math.pow(SURFACE_FRICTION_PER_SEC, subDt);
-              b.omega = (b.vx / b.radius) * 0.72;
-            }
-          }
-
-          clampToRoundedCorners(b, bounds, subDt, true);
+          // 2. Boundary collisions (left, right, top, bottom + rounded corners)
+          clampToBounds(b, bounds, subDt, true);
 
           // 3. Protected content obstacle collisions
           pushOutOfObstacles(b);
@@ -577,6 +595,13 @@ export function useHeroPhysics({
               }
             }
           }
+        }
+
+        // 4b. Re-clamp after pairwise separation so crowded tokens never escape the box
+        for (let i = 0; i < bodies.length; i++) {
+          const b = bodies[i];
+          if (b.isDragging) continue;
+          clampToBounds(b, bounds, subDt, false);
         }
       }
 

@@ -2,7 +2,7 @@ import { RefObject, useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { motion, useReducedMotion } from "framer-motion";
-import HeroTechNodes from "./HeroTechNodes";
+import HeroTechNodes, { NextJsSymbol } from "./HeroTechNodes";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -39,8 +39,22 @@ const TECH_ITEMS: TechItem[] = [
     tags: ["Design Systems", "Core Web Vitals", "Real-Time UI"],
   },
   {
-    id: "python",
+    id: "nextjs",
     step: "02",
+    name: "Next.js",
+    headline: "Full-Stack App Architecture",
+    description:
+      "Server-rendered React applications, edge middleware, and SEO-first architectures built for instant global delivery.",
+    icon: "custom-nextjs",
+    color: "#0F172A",
+    bgTint: "rgba(248, 250, 252, 0.98)",
+    borderTint: "rgba(148, 163, 184, 0.85)",
+    badgeBg: "rgba(15, 23, 42, 0.08)",
+    tags: ["App Router", "SSR & ISR", "Edge Ready"],
+  },
+  {
+    id: "python",
+    step: "03",
     name: "Python & AI / ML",
     headline: "Intelligent Automation",
     description:
@@ -54,7 +68,7 @@ const TECH_ITEMS: TechItem[] = [
   },
   {
     id: "js",
-    step: "03",
+    step: "04",
     name: "JavaScript & TS",
     headline: "Type-Safe App Architecture",
     description:
@@ -68,7 +82,7 @@ const TECH_ITEMS: TechItem[] = [
   },
   {
     id: "node",
-    step: "04",
+    step: "05",
     name: "Node.js & APIs",
     headline: "Low-Latency Backends",
     description:
@@ -82,7 +96,7 @@ const TECH_ITEMS: TechItem[] = [
   },
   {
     id: "docker",
-    step: "05",
+    step: "06",
     name: "Docker & DevOps",
     headline: "Containerized Delivery",
     description:
@@ -96,7 +110,7 @@ const TECH_ITEMS: TechItem[] = [
   },
   {
     id: "aws",
-    step: "06",
+    step: "07",
     name: "AWS Cloud Scale",
     headline: "Enterprise Cloud Infra",
     description:
@@ -391,10 +405,14 @@ const HeroRightLoop = ({ heroRef }: HeroRightLoopProps) => {
                   }}
                   className="opacity-0 pointer-events-none absolute w-20 h-20 sm:w-24 sm:h-24 lg:w-28 lg:h-28 xl:w-32 xl:h-32 rounded-2xl sm:rounded-3xl lg:rounded-[2rem] border-2 flex items-center justify-center will-change-transform"
                 >
+                  {item.id === "nextjs" ? (
+                    <NextJsSymbol className="w-11 h-11 sm:w-14 sm:h-14 lg:w-16 lg:h-16 xl:w-[74px] xl:h-[74px]" />
+                  ) : (
                   <i
                     className={`${item.icon} text-4xl sm:text-5xl lg:text-6xl xl:text-[68px] leading-none`}
                     style={{ color: item.color }}
                   />
+                  )}
                 </div>
               ))}
             </div>

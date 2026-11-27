@@ -252,7 +252,7 @@ const WhyChooseUsSection = () => {
         {/* Clean Editorial Header Inside Dome */}
         <div ref={headerRef} className="text-center mb-10 md:mb-12">
           <div className="inline-block mb-4">
-            <span className="py-1.5 px-4 md:py-2 md:px-6 rounded-full bg-white/90 border border-slate-200/80 text-slate-600 font-bold text-xs md:text-sm tracking-widest uppercase inline-block">
+            <span className="text-slate-600 font-bold text-xs md:text-sm tracking-widest uppercase inline-block">
               Why Choose Us
             </span>
           </div>

@@ -49,7 +49,7 @@ const TechStack = () => {
             initial={{ opacity: 0, y: -10 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="inline-flex items-center gap-2 px-3 py-1.5 md:px-4 md:py-2 rounded-full bg-white border border-blue-100 shadow-sm text-blue-600 text-[10px] font-extrabold uppercase tracking-widest mb-2 md:mb-8"
+            className="inline-flex items-center gap-2 text-blue-600 text-[10px] font-extrabold uppercase tracking-widest mb-2 md:mb-8"
           >
             <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse"></span>
             Our Tech Stack
